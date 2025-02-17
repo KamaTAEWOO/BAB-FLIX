@@ -1,4 +1,4 @@
-package com.meronacompany.bob_flix
+package com.meronacompany.bab_flix
 
 import org.junit.Test
 

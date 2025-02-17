@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.meronacompany.bob_flix"
+    namespace = "com.meronacompany.bab_flix"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.meronacompany.bob_flix"
+        applicationId = "com.meronacompany.bab_flix"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

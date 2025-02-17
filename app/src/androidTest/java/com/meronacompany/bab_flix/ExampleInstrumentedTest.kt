@@ -1,4 +1,4 @@
-package com.meronacompany.bob_flix
+package com.meronacompany.bab_flix
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.meronacompany.bob_flix", appContext.packageName)
+        assertEquals("com.meronacompany.bab_flix", appContext.packageName)
     }
 }
