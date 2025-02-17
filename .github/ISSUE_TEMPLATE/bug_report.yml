@@ -1,0 +1,31 @@
+name: "🐛 Bug Report"
+description: "버그를 신고하여 개선에 도움을 주세요."
+labels: ["bug"]
+assignees: ["KamaTAEWOO"]
+body:
+  - type: textarea
+    attributes:
+      label: "🐞 버그 설명"
+      description: "발생한 문제에 대해 간단하고 명확하게 설명해 주세요."
+      placeholder: "문제를 요약해서 작성해 주세요."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "🔍 재현 절차"
+      description: "문제가 발생하는 과정을 단계별로 작성해 주세요."
+      placeholder: "1. 첫 번째 단계\n2. 두 번째 단계\n..."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "📋 예상 결과"
+      description: "기대했던 결과를 작성해 주세요."
+      placeholder: "기대했던 동작이나 결과를 작성해 주세요."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "📎 추가 정보"
+      description: "문제 해결에 도움이 될 만한 추가 정보를 작성해 주세요."
+      placeholder: "스크린샷, 로그 파일, 기타 정보 등을 추가해 주세요."

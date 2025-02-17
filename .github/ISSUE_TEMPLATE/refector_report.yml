@@ -1,0 +1,42 @@
+name: "🔧 Refactor Report"
+description: "리팩토링 작업에 대한 상세한 내용을 보고해 주세요. 변경 사항, 개선된 코드 구조 및 성능 향상 등을 기록합니다."
+labels: ["refactor"]
+assignees: ["KamaTAEWOO"]
+body:
+  - type: textarea
+    attributes:
+      label: "🔄 리팩토링 내용"
+      description: "리팩토링된 코드의 주요 변경 사항과 목표를 간략하게 설명해주세요."
+      placeholder: "예: 함수 분할, 중복 코드 제거, 성능 최적화 등"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "🛠 리팩토링 이유"
+      description: "왜 이 리팩토링 작업이 필요한지, 문제를 해결한 방법에 대해 설명해주세요."
+      placeholder: "예: 코드 가독성 향상, 유지 보수 용이성 증가, 성능 개선"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "📊 성능 향상"
+      description: "리팩토링 후 성능 개선이 이루어진 부분을 구체적으로 작성해주세요."
+      placeholder: "예: 처리 속도 개선, 메모리 사용 감소, API 응답 시간 단축 등"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "🔍 테스트 및 검증"
+      description: "리팩토링 후 코드의 기능이 정상적으로 동작하는지 확인하기 위한 테스트 방법을 작성해주세요."
+      placeholder: "예: 유닛 테스트, 통합 테스트, 기능 테스트 등"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "📋 기타 변경 사항"
+      description: "리팩토링 작업과 관련된 기타 중요한 변경 사항이나 고려사항을 작성해주세요."
+      placeholder: "예: 외부 라이브러리 업데이트, 코드 스타일 개선 등"
