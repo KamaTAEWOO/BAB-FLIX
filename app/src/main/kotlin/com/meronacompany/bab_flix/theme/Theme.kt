@@ -1,4 +1,4 @@
-package com.meronacompany.bab_flix.ui.theme
+package com.meronacompany.bab_flix.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -51,7 +51,12 @@ fun BAB_FLIXTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
         content = content
     )
+}
+
+object BAB_FLIXTheme {
+    val typography: BobFlixTypography
+        @Composable
+        get() = LocalBabFlixTypography.current
 }
