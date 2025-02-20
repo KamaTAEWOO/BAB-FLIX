@@ -21,3 +21,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "BAB_FLIX"
 include(":app")
+include(":core")
+include(":common")
+include(":data")
+include(":design")
+include(":domain")
+include(":feature")
