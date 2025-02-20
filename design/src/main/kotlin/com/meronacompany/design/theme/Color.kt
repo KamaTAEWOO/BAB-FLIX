@@ -1,4 +1,4 @@
-package com.meronacompany.bab_flix.theme
+package com.meronacompany.design.theme
 
 import androidx.compose.ui.graphics.Color
 
