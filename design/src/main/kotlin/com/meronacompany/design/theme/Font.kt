@@ -1,10 +1,10 @@
-package com.meronacompany.bab_flix.theme
+package com.meronacompany.design.theme
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.meronacompany.bab_flix.R
+import com.meronacompany.design.R
 
 // Define Roboto FontFamily with different weights and styles
 val roboto = FontFamily(

@@ -1,4 +1,4 @@
-package com.meronacompany.bab_flix.extensions
+package com.meronacompany.design.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
