@@ -14,7 +14,8 @@ android {
 
 dependencies {
     implementation(project(":design"))
-    implementation(project(":core"))
+    implementation(project(":feature"))
+    implementation(project(":common"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
