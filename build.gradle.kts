@@ -15,10 +15,5 @@ allprojects {
     afterEvaluate {
         // Apply common configurations
         apply(from = "$rootDir/gradle/common.gradle")
-
-//        detekt {
-//            buildUponDefaultConfig = true
-//            config.setFrom(files("$rootDir/detekt-config.yml"))
-//        }
     }
 }
