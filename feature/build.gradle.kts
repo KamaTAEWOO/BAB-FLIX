@@ -13,6 +13,10 @@ android {
 }
 
 dependencies {
+    project(":design")
+    project(":domain")
+    project(":core")
+    project(":common")
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -20,6 +24,10 @@ dependencies {
 
     implementation(libs.timber)
 
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
