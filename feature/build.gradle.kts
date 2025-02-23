@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
 
@@ -13,17 +12,22 @@ android {
 }
 
 dependencies {
-    project(":design")
-    project(":domain")
-    project(":core")
-    project(":common")
+    implementation(project(":design"))
+    implementation(project(":domain"))
+    implementation(project(":core"))
+    implementation(project(":common"))
+    implementation(project(":data"))
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.runtime.ktx)
 
     implementation(libs.timber)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.gson)
+
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
