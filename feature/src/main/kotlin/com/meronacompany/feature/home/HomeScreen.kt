@@ -11,16 +11,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.meronacompany.data.repository.HomeRepositoryImpl
-import com.meronacompany.feature.di.HomeViewModelFactory
+import com.meronacompany.feature.di.ViewModelFactory
 
 @Composable
 fun HomeScreen() {
     // HomeRepositoryImpl을 직접 생성 (혹은 의존성 주입)
-    val repository = remember { HomeRepositoryImpl() }
+    val homeRepositoryImpl = remember { HomeRepositoryImpl() }
 
     // ViewModelFactory를 통해 ViewModel을 생성
     val homeViewModel: HomeViewModel = viewModel(
-        factory = HomeViewModelFactory(repository)
+        factory = ViewModelFactory(
+            HomeViewModel::class.java,
+            homeRepositoryImpl
+        ) { HomeViewModel(it) }
     )
 
     LaunchedEffect("Unit") {
