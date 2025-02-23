@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
     implementation(project(":common"))
+    implementation(project(":data"))
 
     implementation(libs.androidx.navigation.runtime.ktx)
 
