@@ -1,4 +1,3 @@
 package com.meronacompany.common.base
 
-class dummy {
-}
+interface BaseEvent

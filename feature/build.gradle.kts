@@ -12,19 +12,16 @@ android {
 }
 
 dependencies {
-
-    project(":design")
-    project(":domain")
-    project(":core")
-    project(":common")
+    implementation(project(":design"))
+    implementation(project(":domain"))
+    implementation(project(":core"))
+    implementation(project(":common"))
 
     implementation(libs.androidx.navigation.runtime.ktx)
 
     implementation(libs.timber)
 
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.ui.tooling.preview.android)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
