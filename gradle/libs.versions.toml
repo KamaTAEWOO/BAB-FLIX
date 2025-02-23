@@ -15,6 +15,11 @@ compose-ui = "1.2.0"
 
 # logging
 timber = "5.0.1"
+
+## network
+retrofit = "2.9.0"
+logging-interceptor = "4.11.0"
+
 navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
 uiToolingPreviewAndroid = "1.7.8"
@@ -41,6 +46,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 # logging
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
+# network
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
@@ -52,4 +62,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+[bundles]
+retrofit = ["retrofit", "converter-gson", "logging-interceptor"]
 
