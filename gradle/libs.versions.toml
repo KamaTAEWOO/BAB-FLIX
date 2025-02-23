@@ -19,6 +19,7 @@ timber = "5.0.1"
 ## network
 retrofit = "2.9.0"
 logging-interceptor = "4.11.0"
+gson = "2.8.8"
 
 navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
@@ -50,6 +51,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -62,6 +64,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
-[bundles]
-retrofit = ["retrofit", "converter-gson", "logging-interceptor"]
 

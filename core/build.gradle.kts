@@ -12,8 +12,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
 
     implementation(libs.timber)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.gson)
 
     implementation(libs.androidx.ui)
     implementation(libs.androidx.core.ktx)
