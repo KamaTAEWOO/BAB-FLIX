@@ -1,3 +1,5 @@
+import java.util.Properties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 
 plugins {
@@ -7,8 +9,20 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val properties = Properties()
+properties.load(project.rootProject.file("local.properties").inputStream())
+val apiKey: String = properties.getProperty("TMDB_API_KEY")
+
 android {
     namespace = "com.meronacompany.core"
+
+    defaultConfig {
+        buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
