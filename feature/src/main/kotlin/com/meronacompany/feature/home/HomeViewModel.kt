@@ -6,7 +6,6 @@ import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
 import com.meronacompany.common.base.BaseViewModelFactory
 import com.meronacompany.domain.repository.HomeRepository
-import com.meronacompany.feature.di.ViewModelFactory
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
