@@ -1,19 +1,18 @@
-package com.meronacompany.feature.di
+package com.meronacompany.common.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlin.reflect.KClass
 
-class ViewModelFactory<T : ViewModel>(
+class BaseViewModelFactory<T : ViewModel>(
     private val viewModelClass: KClass<T>,
     private val creator: () -> T
 ) : ViewModelProvider.Factory {
-
-    override fun <U : ViewModel> create(modelClass: Class<U>): U {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(viewModelClass.java)) {
             @Suppress("UNCHECKED_CAST")
-            return creator() as U
+            return creator() as T
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }

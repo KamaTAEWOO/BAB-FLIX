@@ -1,7 +1,10 @@
 package com.meronacompany.feature.home
 
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
+import com.meronacompany.common.base.BaseViewModelFactory
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -29,5 +32,13 @@ class HomeViewModel(
                 Timber.e(it)
             }
             .launchIn(viewModelScope)
+    }
+
+    companion object {
+        fun provideFactory(): ViewModelProvider.Factory {
+            return BaseViewModelFactory(HomeViewModel::class) {
+                HomeViewModel(BaseInjection.homeRepository)
+            }
+        }
     }
 }
