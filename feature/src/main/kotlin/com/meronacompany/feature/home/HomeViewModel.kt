@@ -34,6 +34,17 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun requestPopularMovies() {
+        homeRepository.requestPopularMovies(pageNumber = 1)
+            .onEach {
+                Timber.d("requestPopularMovies: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     companion object {
         fun provideFactory(): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {

@@ -16,6 +16,7 @@ fun HomeScreen() {
 
     LaunchedEffect("Unit") {
         homeViewModel.requestIsApiKey()
+        homeViewModel.requestPopularMovies()
     }
 
     Scaffold(
