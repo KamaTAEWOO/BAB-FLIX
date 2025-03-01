@@ -1,7 +1,6 @@
 package com.meronacompany.data.repository
 
 import com.meronacompany.core.network.service.HomeService
-import com.meronacompany.domain.model.RequestLanguagesData
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,7 +13,4 @@ class HomeRepositoryImpl(
         emit(homeService.requestIsApiKey().toModel().success)
     }
 
-    override fun requestGetLanguages(): Flow<RequestLanguagesData> = flow {
-        emit(homeService.requestGetLanguages().toModel())
-    }
 }

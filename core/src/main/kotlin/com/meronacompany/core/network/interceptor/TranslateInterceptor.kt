@@ -11,7 +11,7 @@ import com.google.gson.stream.JsonReader
 import timber.log.Timber
 import java.io.StringReader
 
-class JsonResponseInterceptor : Interceptor {
+class TranslateInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         val body = response.body?.string()

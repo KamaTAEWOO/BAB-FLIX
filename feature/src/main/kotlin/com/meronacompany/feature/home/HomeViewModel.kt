@@ -34,17 +34,6 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestGetLanguages() {
-        homeRepository.requestGetLanguages()
-            .onEach {
-                Timber.d("requestGetLanguages: $it")
-            }
-            .catch {
-                Timber.e(it)
-            }
-            .launchIn(viewModelScope)
-    }
-
     companion object {
         fun provideFactory(): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {

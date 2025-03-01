@@ -16,7 +16,6 @@ fun HomeScreen() {
 
     LaunchedEffect("Unit") {
         homeViewModel.requestIsApiKey()
-        homeViewModel.requestGetLanguages()
     }
 
     Scaffold(
