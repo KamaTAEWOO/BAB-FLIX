@@ -15,7 +15,7 @@ interface HomeService {
     @GET("movie/popular")
     suspend fun requestPopularMovies(
         @Query("language") language: String = Locales.KO_KR,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int
     ): ResponsePopularMovieDto
 
 }

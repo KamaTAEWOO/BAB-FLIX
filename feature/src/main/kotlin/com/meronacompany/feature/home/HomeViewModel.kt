@@ -16,6 +16,8 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
+    private var currentPage = 1
+    private var isLastPage = false
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState {
         return when (event) {
@@ -35,11 +37,19 @@ class HomeViewModel(
     }
 
     fun requestPopularMovies() {
-        homeRepository.requestPopularMovies(pageNumber = 1)
+        if (isLastPage) return
+
+        homeRepository.requestPopularMovies(pageNumber = currentPage)
             .onEach {
                 Timber.d("requestPopularMovies: $it")
+                if (currentPage == 1) {
+                    isLastPage = true
+                    return@onEach
+                }
+                currentPage++
             }
             .catch {
+                isLastPage = true
                 Timber.e(it)
             }
             .launchIn(viewModelScope)
