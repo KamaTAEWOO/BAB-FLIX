@@ -2,6 +2,7 @@ package com.meronacompany.data.repository
 
 import com.meronacompany.core.network.service.HomeService
 import com.meronacompany.domain.model.ResponsePopularData
+import com.meronacompany.domain.model.ResponseWatchProvidersData
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,6 +21,10 @@ class HomeRepositoryImpl(
 
     override fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularData> = flow {
         emit(homeService.requestPopularTVs(page = pageNumber).toModel())
+    }
+
+    override fun requestWatchProviders(movieId: Int): Flow<ResponseWatchProvidersData> = flow {
+        emit(homeService.requestWatchProviders(movieId = movieId).toModel())
     }
 
 }

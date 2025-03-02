@@ -2,8 +2,10 @@ package com.meronacompany.core.network.service
 
 import com.meronacompany.core.model.dto.CommonDto
 import com.meronacompany.core.model.dto.ResponsePopularDto
+import com.meronacompany.core.model.dto.ResponseWatchProvidersDto
 import com.meronacompany.core.utility.Locales
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface HomeService {
@@ -22,5 +24,11 @@ interface HomeService {
         @Query("language") language: String = Locales.KO_KR,
         @Query("page") page: Int
     ): ResponsePopularDto
+
+    @GET("movie/{movie_id}/watch/providers")
+    suspend fun requestWatchProviders(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = Locales.KO_KR
+    ): ResponseWatchProvidersDto
 
 }

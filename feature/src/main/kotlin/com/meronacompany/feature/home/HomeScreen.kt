@@ -15,9 +15,10 @@ fun HomeScreen() {
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory())
 
     LaunchedEffect("Unit") {
-        homeViewModel.requestIsApiKey()
-        homeViewModel.requestPopularMovies()
-        homeViewModel.requestPopularTVs()
+//        homeViewModel.requestIsApiKey()
+//        homeViewModel.requestPopularMovies()
+//        homeViewModel.requestPopularTVs()
+        homeViewModel.requestWatchProviders()
     }
 
     Scaffold(
