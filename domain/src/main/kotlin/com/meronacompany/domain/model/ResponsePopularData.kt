@@ -1,6 +1,6 @@
 package com.meronacompany.domain.model
 
-data class ResponsePopularMovieData(
+data class ResponsePopularData(
     val page: Int,
     val results: List<Movie>
 )

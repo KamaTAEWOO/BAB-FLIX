@@ -1,9 +1,8 @@
 package com.meronacompany.core.network.service
 
-import androidx.compose.ui.text.intl.Locale
-import com.meronacompany.core.utility.Locales
 import com.meronacompany.core.model.dto.CommonDto
-import com.meronacompany.core.model.dto.ResponsePopularMovieDto
+import com.meronacompany.core.model.dto.ResponsePopularDto
+import com.meronacompany.core.utility.Locales
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,6 +15,12 @@ interface HomeService {
     suspend fun requestPopularMovies(
         @Query("language") language: String = Locales.KO_KR,
         @Query("page") page: Int
-    ): ResponsePopularMovieDto
+    ): ResponsePopularDto
+
+    @GET("tv/popular")
+    suspend fun requestPopularTVs(
+        @Query("language") language: String = Locales.KO_KR,
+        @Query("page") page: Int
+    ): ResponsePopularDto
 
 }

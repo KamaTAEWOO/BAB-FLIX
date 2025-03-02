@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen() {
@@ -17,10 +16,8 @@ fun HomeScreen() {
 
     LaunchedEffect("Unit") {
         homeViewModel.requestIsApiKey()
-//        while(true) {
-            homeViewModel.requestPopularMovies()
-//            delay(5000)
-//        }
+        homeViewModel.requestPopularMovies()
+        homeViewModel.requestPopularTVs()
     }
 
     Scaffold(
