@@ -37,19 +37,22 @@ class HomeViewModel(
     }
 
     fun requestPopularMovies() {
-        if (isLastPage) return
-
         homeRepository.requestPopularMovies(pageNumber = currentPage)
             .onEach {
                 Timber.d("requestPopularMovies: $it")
-                if (currentPage == 1) {
-                    isLastPage = true
-                    return@onEach
-                }
-                currentPage++
             }
             .catch {
-                isLastPage = true
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestPopularTVs() {
+        homeRepository.requestPopularTVs(pageNumber = currentPage)
+            .onEach {
+                Timber.d("requestPopularTVs: $it")
+            }
+            .catch {
                 Timber.e(it)
             }
             .launchIn(viewModelScope)

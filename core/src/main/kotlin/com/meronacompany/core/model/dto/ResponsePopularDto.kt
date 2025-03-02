@@ -1,14 +1,14 @@
 package com.meronacompany.core.model.dto
 
 import com.meronacompany.domain.model.Movie
-import com.meronacompany.domain.model.ResponsePopularMovieData
+import com.meronacompany.domain.model.ResponsePopularData
 
-data class ResponsePopularMovieDto(
+data class ResponsePopularDto(
     val page: Int,
     val results: List<Movie>
 ) {
-    fun toModel(): ResponsePopularMovieData {
-        return ResponsePopularMovieData(
+    fun toModel(): ResponsePopularData {
+        return ResponsePopularData(
             page = page,
             results = results
         )
