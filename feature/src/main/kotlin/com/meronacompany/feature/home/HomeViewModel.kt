@@ -69,6 +69,28 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun requestMovieGenres() {
+        homeRepository.requestMovieGenres()
+            .onEach {
+                Timber.d("requestMovieGenres: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestTVGenres() {
+        homeRepository.requestTVGenres()
+            .onEach {
+                Timber.d("requestTVGenres: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     companion object {
         fun provideFactory(): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {

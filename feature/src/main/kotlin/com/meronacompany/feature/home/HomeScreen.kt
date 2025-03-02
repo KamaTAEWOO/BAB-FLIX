@@ -18,7 +18,9 @@ fun HomeScreen() {
 //        homeViewModel.requestIsApiKey()
 //        homeViewModel.requestPopularMovies()
 //        homeViewModel.requestPopularTVs()
-        homeViewModel.requestWatchProviders()
+//        homeViewModel.requestWatchProviders()
+        homeViewModel.requestMovieGenres()
+        homeViewModel.requestTVGenres()
     }
 
     Scaffold(
