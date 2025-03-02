@@ -58,6 +58,17 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun requestWatchProviders() {
+        homeRepository.requestWatchProviders(movieId = 950396)
+            .onEach {
+                Timber.d("requestWatchProviders: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     companion object {
         fun provideFactory(): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {
