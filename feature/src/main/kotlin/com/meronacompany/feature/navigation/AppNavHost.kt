@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.meronacompany.feature.home.HomeScreen
+import com.meronacompany.feature.splash.SplashScreen
 
 @Composable
 fun AppNavHost(
@@ -16,13 +17,21 @@ fun AppNavHost(
 
     NavHost(
         navController = navHostController,
-        startDestination = NavRouteLabel.HOME,
+        startDestination = NavRouteLabel.SPLASH,
         modifier = Modifier.fillMaxSize(),
         route = NavRouteLabel.MAIN
     ) {
         // Splash
         composable(route = NavRouteLabel.SPLASH) {
-            // Splash
+            SplashScreen(
+                onNavigateToHome = {
+                    navHostController.navigate(NavRouteLabel.HOME) {
+                        popUpTo(NavRouteLabel.SPLASH) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         // Home

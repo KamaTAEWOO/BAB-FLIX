@@ -2,6 +2,7 @@ package com.meronacompany.feature.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,8 +20,8 @@ fun HomeScreen() {
 //        homeViewModel.requestPopularMovies()
 //        homeViewModel.requestPopularTVs()
 //        homeViewModel.requestWatchProviders()
-        homeViewModel.requestMovieGenres()
-        homeViewModel.requestTVGenres()
+//        homeViewModel.requestMovieGenres()
+//        homeViewModel.requestTVGenres()
     }
 
     Scaffold(
@@ -37,6 +38,7 @@ fun HomeContent(paddingValues: PaddingValues) {
     // Home Content
     Column(
         modifier = Modifier
+            .fillMaxSize()
             .padding(paddingValues)
     ) {
         Text(text = "Home Screen")
