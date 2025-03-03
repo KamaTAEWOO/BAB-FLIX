@@ -7,7 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.meronacompany.feature.detail.DetailScreen
 import com.meronacompany.feature.home.HomeScreen
+import com.meronacompany.feature.settings.SettingsScreen
 import com.meronacompany.feature.splash.SplashScreen
 
 @Composable
@@ -36,10 +38,18 @@ fun AppNavHost(
 
         // Home
         composable(route = NavRouteLabel.HOME) {
-            HomeScreen()
+            HomeScreen(navHostController)
         }
 
         // Detail
+        composable(route = NavRouteLabel.DETAIL) {
+            DetailScreen(navHostController)
+        }
+
+        // Settings
+        composable(route = NavRouteLabel.SETTINGS) {
+            SettingsScreen(navHostController)
+        }
     }
 
 }

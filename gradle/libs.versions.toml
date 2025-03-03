@@ -16,7 +16,7 @@ compose-ui = "1.2.0"
 # logging
 timber = "5.0.1"
 
-## network
+# network
 retrofit = "2.9.0"
 logging-interceptor = "4.11.0"
 gson = "2.8.8"

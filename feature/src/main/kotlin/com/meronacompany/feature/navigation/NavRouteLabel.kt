@@ -10,4 +10,10 @@ object NavRouteLabel {
 
     // home
     const val HOME = "home"
+
+    // detail
+    const val DETAIL = "detail"
+
+    // settings
+    const val SETTINGS = "settings"
 }
