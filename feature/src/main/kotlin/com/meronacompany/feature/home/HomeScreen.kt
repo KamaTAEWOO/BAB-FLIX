@@ -1,5 +1,6 @@
 package com.meronacompany.feature.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -46,17 +50,45 @@ fun HomeScreen(navHostController: NavHostController) {
 
 @Composable
 fun HomeContent(paddingValues: PaddingValues) {
+    val pagerState = rememberPagerState(pageCount = { 2 }) // 2개의 페이지
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .verticalScroll(rememberScrollState())
     ) {
-        Text(text = "Home Screen", modifier = Modifier.padding(16.dp))
+        HorizontalPager(state = pagerState) { page ->
+            when (page) {
+                0 -> HomeScreen()
+                1 -> ItemListScreen()
+            }
+        }
+    }
+}
 
-        // 예제: 더미 아이템 추가 (스크롤 확인용)
-        repeat(50) { index ->
-            Text(text = "Item #$index", modifier = Modifier.padding(16.dp))
+@Composable
+fun HomeScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        Text(text = "Home Screen")
+        Spacer(modifier = Modifier.height(16.dp))
+        repeat(20) { index ->
+            Text(text = "HomeScreen Item - 1 #$index", modifier = Modifier.padding(8.dp))
+        }
+    }
+}
+
+@Composable
+fun ItemListScreen() {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(50) { index ->
+            Text(text = "ItemListScreen - 2 #$index", modifier = Modifier.padding(16.dp))
         }
     }
 }
