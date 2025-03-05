@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 fun SplashScreen(onNavigateToHome: () -> Unit) {
 
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.delay(3000)
+        kotlinx.coroutines.delay(500)
         onNavigateToHome()
     }
 
