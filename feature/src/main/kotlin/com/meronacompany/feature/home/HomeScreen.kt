@@ -3,6 +3,7 @@ package com.meronacompany.feature.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,15 +32,12 @@ import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import timber.log.Timber
 
-@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory())
-    val homeState = homeViewModel.uiState.value
 
     LaunchedEffect("Unit") {
 //        homeViewModel.requestIsApiKey()
-        homeViewModel.requestPopularMovies() // popular movie
 //        homeViewModel.requestPopularTVs() // popular tv
 //        homeViewModel.requestWatchProviders() // ott
 //        homeViewModel.requestMovieGenres() // movie 장르
@@ -55,18 +51,21 @@ fun HomeScreen(navHostController: NavHostController) {
         topBar = {},
         content = { paddingValues ->
             HomeContent(
-                paddingValues = paddingValues,
-                homeState = homeState
+                homeViewModel = homeViewModel,
+                paddingValues = paddingValues
             )
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HomeContent(paddingValues: PaddingValues, homeState: HomeState?) {
+fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
+    val homeState = homeViewModel.uiState.value
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
     val pagerState = rememberPagerState(pageCount = { pageCount })
+    homeViewModel.requestPopularMovies(pageCount - 1) // popular movie
 
     Column(
         modifier = Modifier
@@ -97,31 +96,53 @@ fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
             Text(text = "Home Screen - Page $pageNumber")
             Spacer(modifier = Modifier.height(16.dp))
         }
-        items(homeState?.popularMovies?.results ?: emptyList()) { movie ->
-            val movieItem = MovieItem(
-                id = movie.id,
-                genreIds = movie.genre_ids,
-                title = movie.title,
-                voteAverage = movie.vote_average,
-                posterPath = movie.poster_path ?: ""
-            )
-            Timber.d("movieItem: $movieItem")
-            MovieData(movieItem)
+        items(homeState?.popularMovies?.results?.chunked(2) ?: emptyList()) { moviePair ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                moviePair.forEach { movie ->
+                    val movieItem = MovieItem(
+                        id = movie.id,
+                        genreIds = movie.genre_ids,
+                        title = movie.title,
+                        voteAverage = movie.vote_average,
+                        posterPath = movie.poster_path ?: ""
+                    )
+                    Timber.d("movieItem: $movieItem")
+                    MovieData(
+                        movieItem = movieItem,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
 
 @Composable
-fun MovieData(movieItem: MovieItem) {
+fun MovieData(movieItem: MovieItem, modifier: Modifier) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "ID: ${movieItem.id}")
-        Text(text = "Title: ${movieItem.title}")
-        Text(text = "Vote Average: ${Util.formatVoteAverage(movieItem.voteAverage)}") // 소스점 한자리 수 까지만 표시
-        Text(text = "Poster Path: ${movieItem.posterPath}")
+        MoviePoster(posterPath = movieItem.posterPath)
+        MovieNameAndScore(movieItem = movieItem)
         Spacer(modifier = Modifier.height(16.dp))
-        CommonGlide.GlideImage(path = movieItem.posterPath)
+    }
+}
+
+@Composable
+fun MoviePoster(posterPath: String) {
+    CommonGlide.GlideImage(path = posterPath)
+}
+
+@Composable
+fun MovieNameAndScore(movieItem: MovieItem) {
+    Column(
+        modifier = Modifier.padding(horizontal = 30.dp)
+    ) {
+        Text(text = movieItem.title)
+        Text(text = Util.formatVoteAverage(movieItem.voteAverage))
     }
 }

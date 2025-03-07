@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.sql.Time
 
 class HomeViewModel(
     private val homeRepository: HomeRepository
@@ -37,8 +36,8 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestPopularMovies() {
-        homeRepository.requestPopularMovies(pageNumber = currentPage)
+    fun requestPopularMovies(pageCount: Int) {
+        homeRepository.requestPopularMovies(pageNumber = pageCount)
             .onEach {
                 sendAction(HomeEvent.PopularMoviesEvent(it))
             }
