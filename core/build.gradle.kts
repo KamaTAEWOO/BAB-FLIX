@@ -18,6 +18,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
     }
 
     buildFeatures {

@@ -11,6 +11,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.glide)
+
+    implementation(libs.timber)
 
     implementation(libs.androidx.ui)
     implementation(libs.androidx.activity.compose)

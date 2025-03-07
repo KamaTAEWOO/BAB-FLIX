@@ -1,6 +1,7 @@
 package com.meronacompany.core.di
 
 import com.google.gson.GsonBuilder
+import com.meronacompany.core.BuildConfig
 import com.meronacompany.core.network.interceptor.HeaderInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,7 +27,7 @@ object NetworkModule {
 
         // Retrofit 객체 생성 (Custom JsonObjectConverterFactory 사용)
         return Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)  // OkHttpClient를 Retrofit에 추가
             .addConverterFactory(GsonConverterFactory.create(gson))  // Gson converter 추가
             .build()

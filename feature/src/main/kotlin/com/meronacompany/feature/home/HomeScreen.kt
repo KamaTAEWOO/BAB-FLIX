@@ -1,17 +1,19 @@
 package com.meronacompany.feature.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.meronacompany.core.utility.Util
+import com.meronacompany.design.common.CommonGlide
+import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
@@ -32,11 +38,10 @@ fun HomeScreen(navHostController: NavHostController) {
 
     LaunchedEffect("Unit") {
 //        homeViewModel.requestIsApiKey()
-//        homeViewModel.requestPopularMovies()
-//        homeViewModel.requestPopularTVs()
-//        homeViewModel.requestWatchProviders()
-//        homeViewModel.requestMovieGenres()
-//        homeViewModel.requestTVGenres()
+//        homeViewModel.requestPopularTVs() // popular tv
+//        homeViewModel.requestWatchProviders() // ott
+//        homeViewModel.requestMovieGenres() // movie 장르
+//        homeViewModel.requestTVGenres() // tv 장르
     }
 
     Scaffold(
@@ -45,16 +50,25 @@ fun HomeScreen(navHostController: NavHostController) {
             .safeDrawingPadding(),
         topBar = {},
         content = { paddingValues ->
-            HomeContent(paddingValues)
+            HomeContent(
+                homeViewModel = homeViewModel,
+                paddingValues = paddingValues
+            )
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HomeContent(paddingValues: PaddingValues) {
+fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
+    val homeState = homeViewModel.uiState.value
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
     val pagerState = rememberPagerState(pageCount = { pageCount })
+    // 만약 allPopularMoviesData에 key가 없다면, requestPopularMovies() 호출
+    if (!homeState.allPopularMoviesData.containsKey(pageCount - 1)) {
+        homeViewModel.requestPopularMovies()
+    }
 
     Column(
         modifier = Modifier
@@ -66,23 +80,71 @@ fun HomeContent(paddingValues: PaddingValues) {
             if (page == pageCount - 1) {
                 pageCount++
             }
-            HomeContentListData(page + 1)
+            HomeContentListData(
+                pageNumber = page + 1,
+                homeState = homeState
+            )
         }
     }
 }
 
 @Composable
-fun HomeContentListData(pageNumber: Int) {
-    Column(
+fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(text = "Home Screen - Page $pageNumber")
-        Spacer(modifier = Modifier.height(16.dp))
-        repeat(20) { index ->
-            Text(text = "HomeScreen Item - $pageNumber, #$index", modifier = Modifier.padding(8.dp))
+        item {
+            Text(text = "Home Screen - Page $pageNumber")
+            Spacer(modifier = Modifier.height(16.dp))
         }
+        items(homeState?.popularMovies?.results?.chunked(2) ?: emptyList()) { moviePair ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                moviePair.forEach { movie ->
+                    val movieItem = MovieItem(
+                        id = movie.id,
+                        genreIds = movie.genre_ids,
+                        title = movie.title,
+                        voteAverage = movie.vote_average,
+                        posterPath = movie.poster_path ?: ""
+                    )
+                    MovieData(
+                        movieItem = movieItem,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun MovieData(movieItem: MovieItem, modifier: Modifier) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        MoviePoster(posterPath = movieItem.posterPath)
+        MovieNameAndScore(movieItem = movieItem)
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+@Composable
+fun MoviePoster(posterPath: String) {
+    CommonGlide.GlideImage(path = posterPath)
+}
+
+@Composable
+fun MovieNameAndScore(movieItem: MovieItem) {
+    Column(
+        modifier = Modifier.padding(horizontal = 30.dp)
+    ) {
+        Text(text = movieItem.title)
+        Text(text = Util.formatVoteAverage(movieItem.voteAverage))
     }
 }
