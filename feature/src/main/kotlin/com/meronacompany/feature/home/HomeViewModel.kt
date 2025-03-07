@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.sql.Time
 
 class HomeViewModel(
     private val homeRepository: HomeRepository
@@ -17,11 +18,11 @@ class HomeViewModel(
     initialState = HomeState()
 ) {
     private var currentPage = 1
-    private var isLastPage = false
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState {
         return when (event) {
-            is HomeEvent.TestEvent -> currentState.copy(test = event.test)
+            is HomeEvent.PopularMoviesEvent -> currentState.copy(popularMovies = event.popularMovies)
+            is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
 
@@ -39,9 +40,10 @@ class HomeViewModel(
     fun requestPopularMovies() {
         homeRepository.requestPopularMovies(pageNumber = currentPage)
             .onEach {
-                Timber.d("requestPopularMovies: $it")
+                sendAction(HomeEvent.PopularMoviesEvent(it))
             }
             .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
             }
             .launchIn(viewModelScope)

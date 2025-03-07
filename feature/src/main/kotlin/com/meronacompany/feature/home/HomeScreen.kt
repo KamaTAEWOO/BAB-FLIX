@@ -1,13 +1,16 @@
 package com.meronacompany.feature.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -24,19 +27,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.meronacompany.design.common.CommonGlide
+import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
+import timber.log.Timber
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory())
+    val homeState = homeViewModel.uiState.value
 
     LaunchedEffect("Unit") {
 //        homeViewModel.requestIsApiKey()
-//        homeViewModel.requestPopularMovies()
-//        homeViewModel.requestPopularTVs()
-//        homeViewModel.requestWatchProviders()
-//        homeViewModel.requestMovieGenres()
-//        homeViewModel.requestTVGenres()
+        homeViewModel.requestPopularMovies() // popular movie
+//        homeViewModel.requestPopularTVs() // popular tv
+//        homeViewModel.requestWatchProviders() // ott
+//        homeViewModel.requestMovieGenres() // movie 장르
+//        homeViewModel.requestTVGenres() // tv 장르
     }
 
     Scaffold(
@@ -45,14 +53,17 @@ fun HomeScreen(navHostController: NavHostController) {
             .safeDrawingPadding(),
         topBar = {},
         content = { paddingValues ->
-            HomeContent(paddingValues)
+            HomeContent(
+                paddingValues = paddingValues,
+                homeState = homeState
+            )
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
 }
 
 @Composable
-fun HomeContent(paddingValues: PaddingValues) {
+fun HomeContent(paddingValues: PaddingValues, homeState: HomeState?) {
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
     val pagerState = rememberPagerState(pageCount = { pageCount })
 
@@ -66,23 +77,50 @@ fun HomeContent(paddingValues: PaddingValues) {
             if (page == pageCount - 1) {
                 pageCount++
             }
-            HomeContentListData(page + 1)
+            HomeContentListData(
+                pageNumber = page + 1,
+                homeState = homeState
+            )
         }
     }
 }
 
 @Composable
-fun HomeContentListData(pageNumber: Int) {
-    Column(
+fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Text(text = "Home Screen - Page $pageNumber")
-        Spacer(modifier = Modifier.height(16.dp))
-        repeat(20) { index ->
-            Text(text = "HomeScreen Item - $pageNumber, #$index", modifier = Modifier.padding(8.dp))
+        item {
+            Text(text = "Home Screen - Page $pageNumber")
+            Spacer(modifier = Modifier.height(16.dp))
         }
+        items(homeState?.popularMovies?.results ?: emptyList()) { movie ->
+            val movieItem = MovieItem(
+                id = movie.id,
+                genreIds = movie.genre_ids,
+                title = movie.title,
+                voteAverage = movie.vote_average,
+                posterPath = movie.poster_path ?: ""
+            )
+            Timber.d("movieItem: $movieItem")
+            MovieData(movieItem)
+        }
+    }
+}
+
+@Composable
+fun MovieData(movieItem: MovieItem) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "ID: ${movieItem.id}")
+        Text(text = "Title: ${movieItem.title}")
+        Text(text = "Vote Average: ${movieItem.voteAverage}")
+        Text(text = "Poster Path: ${movieItem.posterPath}")
+        Spacer(modifier = Modifier.height(16.dp))
+        CommonGlide.GlideImage(path = movieItem.posterPath)
     }
 }
