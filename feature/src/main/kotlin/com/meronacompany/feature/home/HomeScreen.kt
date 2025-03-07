@@ -65,7 +65,10 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
     val homeState = homeViewModel.uiState.value
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
     val pagerState = rememberPagerState(pageCount = { pageCount })
-    homeViewModel.requestPopularMovies(pageCount - 1) // popular movie
+    // 만약 allPopularMoviesData에 key가 없다면, requestPopularMovies() 호출
+    if (!homeState.allPopularMoviesData.containsKey(pageCount - 1)) {
+        homeViewModel.requestPopularMovies()
+    }
 
     Column(
         modifier = Modifier
@@ -106,7 +109,6 @@ fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
                         voteAverage = movie.vote_average,
                         posterPath = movie.poster_path ?: ""
                     )
-                    Timber.d("movieItem: $movieItem")
                     MovieData(
                         movieItem = movieItem,
                         modifier = Modifier.weight(1f)

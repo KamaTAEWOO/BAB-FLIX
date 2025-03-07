@@ -16,11 +16,12 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
-    private var currentPage = 1
-
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState {
         return when (event) {
-            is HomeEvent.PopularMoviesEvent -> currentState.copy(popularMovies = event.popularMovies)
+            is HomeEvent.PopularMoviesEvent -> currentState.copy(
+                popularMovies = event.popularMovies,
+                allPopularMoviesData = currentState.allPopularMoviesData + (event.popularMovies.page to event.popularMovies.results)
+            )
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -36,7 +37,7 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestPopularMovies(pageCount: Int) {
+    fun requestPopularMovies(pageCount: Int = 1) {
         homeRepository.requestPopularMovies(pageNumber = pageCount)
             .onEach {
                 sendAction(HomeEvent.PopularMoviesEvent(it))
@@ -49,7 +50,7 @@ class HomeViewModel(
     }
 
     fun requestPopularTVs() {
-        homeRepository.requestPopularTVs(pageNumber = currentPage)
+        homeRepository.requestPopularTVs(pageNumber = 1)
             .onEach {
                 Timber.d("requestPopularTVs: $it")
             }
