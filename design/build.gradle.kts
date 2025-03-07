@@ -11,8 +11,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-
     implementation(libs.glide)
 
     implementation(libs.timber)
