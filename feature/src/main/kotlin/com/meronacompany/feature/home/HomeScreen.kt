@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.CommonGlide
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
@@ -118,7 +119,7 @@ fun MovieData(movieItem: MovieItem) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "ID: ${movieItem.id}")
         Text(text = "Title: ${movieItem.title}")
-        Text(text = "Vote Average: ${movieItem.voteAverage}")
+        Text(text = "Vote Average: ${Util.formatVoteAverage(movieItem.voteAverage)}") // 소스점 한자리 수 까지만 표시
         Text(text = "Poster Path: ${movieItem.posterPath}")
         Spacer(modifier = Modifier.height(16.dp))
         CommonGlide.GlideImage(path = movieItem.posterPath)
