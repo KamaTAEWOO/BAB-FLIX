@@ -2,8 +2,11 @@ package com.meronacompany.feature.navigation.bottom
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
@@ -26,8 +29,8 @@ import com.meronacompany.feature.navigation.bottom.model.BottomNavItem
 fun BottomNavigationScreen(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val selectedColor = Color.Red
-    val unselectedColor = Color.Gray
+    val selectedColor = colorScheme.onPrimary
+    val unselectedColor = colorScheme.secondary
 
     val items = listOf(
         BottomNavItem(
@@ -48,18 +51,12 @@ fun BottomNavigationScreen(navController: NavController) {
     )
 
     Surface(
-        modifier = Modifier
-            .fillMaxWidth(),
-        color = Color.Transparent
+        modifier = Modifier.fillMaxWidth()
     ) {
         NavigationBar(
-            containerColor = Color.Transparent,
-            contentColor = Color.White,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp, 20.dp, 0.dp, 0.dp))
-                .background(Color.White)
-                .shadow(2.dp)
+            containerColor = colorScheme.tertiary,
+            contentColor = colorScheme.tertiary,
+            modifier = Modifier.fillMaxWidth()
         ) {
             items.forEach { item ->
                 val isSelected = currentRoute == item.route

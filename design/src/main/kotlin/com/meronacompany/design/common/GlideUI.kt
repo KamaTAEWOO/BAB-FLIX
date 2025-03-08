@@ -23,12 +23,11 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import timber.log.Timber
 
-object CommonGlide {
+object GlideUI {
 
     @Composable
-    fun GlideImage(
+    fun CommonGlideImage(
         path: String,
         contentDescription: String? = null,
         @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,

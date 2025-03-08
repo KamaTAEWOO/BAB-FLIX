@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.meronacompany.core.utility.Util
-import com.meronacompany.design.common.CommonGlide
+import com.meronacompany.design.common.AppBarUI
+import com.meronacompany.design.common.GlideUI
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
-import timber.log.Timber
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
@@ -45,15 +45,12 @@ fun HomeScreen(navHostController: NavHostController) {
     }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding(),
-        topBar = {},
+        modifier = Modifier.fillMaxSize(),
+        containerColor = colorScheme.primary,
+        contentColor = colorScheme.primary,
+        topBar = { AppBarUI.CommonAppBar("BabFlix") },
         content = { paddingValues ->
-            HomeContent(
-                homeViewModel = homeViewModel,
-                paddingValues = paddingValues
-            )
+            HomeContent(homeViewModel, paddingValues)
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
@@ -71,9 +68,7 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
+        modifier = Modifier.fillMaxSize()
     ) {
         HorizontalPager(state = pagerState) { page ->
             // 마지막 페이지에 도달하면 페이지 추가
@@ -136,7 +131,7 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier) {
 
 @Composable
 fun MoviePoster(posterPath: String) {
-    CommonGlide.GlideImage(path = posterPath)
+    GlideUI.CommonGlideImage(path = posterPath)
 }
 
 @Composable
@@ -144,7 +139,7 @@ fun MovieNameAndScore(movieItem: MovieItem) {
     Column(
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
-        Text(text = movieItem.title)
-        Text(text = Util.formatVoteAverage(movieItem.voteAverage))
+        Text(text = movieItem.title, color = colorScheme.onPrimary)
+        Text(text = Util.formatVoteAverage(movieItem.voteAverage), color = colorScheme.onPrimary)
     }
 }

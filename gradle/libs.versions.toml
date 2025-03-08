@@ -24,12 +24,13 @@ gson = "2.8.8"
 # glide
 glide = "4.12.0"
 
+# status bar color
+accompanistSystemuicontroller = "0.30.1"
+
 navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
 uiToolingPreviewAndroid = "1.7.8"
 lifecycleViewmodelAndroid = "2.8.3"
-uiGraphics = "1.2.0"
-uiGraphicsAndroid = "1.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,11 +62,12 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 # glide
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 
+# status bar color
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
+
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-viewmodel-android = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "lifecycleViewmodelAndroid" }
-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
-androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
