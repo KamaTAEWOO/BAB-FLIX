@@ -1,6 +1,7 @@
 package com.meronacompany.feature.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import com.meronacompany.design.common.AppBarUI
 import com.meronacompany.design.common.GlideUI
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
@@ -68,7 +70,9 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 24.dp)
     ) {
         HorizontalPager(state = pagerState) { page ->
             // 마지막 페이지에 도달하면 페이지 추가
@@ -77,24 +81,40 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
             }
             HomeContentListData(
                 pageNumber = page + 1,
-                homeState = homeState
+                homeState = homeState,
+                onMovieClick = { movieId ->
+                    Timber.d("movieId: $movieId")
+                }
             )
         }
     }
 }
 
 @Composable
-fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
+fun HomeContentListData(pageNumber: Int, homeState: HomeState?, onMovieClick: (Int) -> Unit) {
+    val moviePairs = remember(homeState?.popularMovies?.results) {
+        homeState?.popularMovies?.results?.chunked(2) ?: emptyList()
+    }
+
+    if (homeState == null || moviePairs.isEmpty()) {
+        Text(
+            text = "데이터를 불러오는 중...",
+            modifier = Modifier.padding(16.dp),
+            color = colorScheme.onPrimary
+        )
+        return
+    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         item {
-            Text(text = "Home Screen - Page $pageNumber")
+            Text(text = "Home Screen - Page $pageNumber", color = colorScheme.onPrimary)
             Spacer(modifier = Modifier.height(16.dp))
         }
-        items(homeState?.popularMovies?.results?.chunked(2) ?: emptyList()) { moviePair ->
+        items(moviePairs) { moviePair ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 moviePair.forEach { movie ->
                     val movieItem = MovieItem(
@@ -106,7 +126,8 @@ fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
                     )
                     MovieData(
                         movieItem = movieItem,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        onClick = onMovieClick
                     )
                 }
             }
@@ -116,10 +137,11 @@ fun HomeContentListData(pageNumber: Int, homeState: HomeState?) {
 }
 
 @Composable
-fun MovieData(movieItem: MovieItem, modifier: Modifier) {
+fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick(movieItem.id) }
             .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(16.dp))
