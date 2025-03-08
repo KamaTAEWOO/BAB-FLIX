@@ -27,10 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.meronacompany.core.utility.Util
-import com.meronacompany.design.common.CommonGlide
+import com.meronacompany.design.common.GlideUI
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
-import timber.log.Timber
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
@@ -136,7 +135,7 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier) {
 
 @Composable
 fun MoviePoster(posterPath: String) {
-    CommonGlide.GlideImage(path = posterPath)
+    GlideUI.CommonGlideImage(path = posterPath)
 }
 
 @Composable
