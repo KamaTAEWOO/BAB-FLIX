@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -46,15 +45,12 @@ fun HomeScreen(navHostController: NavHostController) {
     }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentColor = colorScheme.onPrimary,
+        modifier = Modifier.fillMaxSize(),
+        containerColor = colorScheme.primary,
+        contentColor = colorScheme.primary,
         topBar = { AppBarUI.CommonAppBar("BabFlix") },
         content = { paddingValues ->
-            HomeContent(
-                homeViewModel = homeViewModel,
-                paddingValues = paddingValues
-            )
+            HomeContent(homeViewModel, paddingValues)
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
@@ -72,9 +68,7 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
+        modifier = Modifier.fillMaxSize()
     ) {
         HorizontalPager(state = pagerState) { page ->
             // 마지막 페이지에 도달하면 페이지 추가
@@ -145,7 +139,7 @@ fun MovieNameAndScore(movieItem: MovieItem) {
     Column(
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
-        Text(text = movieItem.title)
-        Text(text = Util.formatVoteAverage(movieItem.voteAverage))
+        Text(text = movieItem.title, color = colorScheme.onPrimary)
+        Text(text = Util.formatVoteAverage(movieItem.voteAverage), color = colorScheme.onPrimary)
     }
 }

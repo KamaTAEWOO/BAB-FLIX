@@ -16,8 +16,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDarkColor,
     onPrimary = OnPrimaryDarkColor,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    secondary = SecondaryDarkColor,
+    tertiary = TertiaryDarkColor
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -53,7 +53,7 @@ fun BAB_FLIXTheme(
 
     val systemUiController = rememberSystemUiController()
     val statusBarColor = colorScheme.primary
-    val navigationBarColor = colorScheme.primary
+    val navigationBarColor = colorScheme.tertiary
 
     SideEffect {
         systemUiController.setStatusBarColor(statusBarColor)

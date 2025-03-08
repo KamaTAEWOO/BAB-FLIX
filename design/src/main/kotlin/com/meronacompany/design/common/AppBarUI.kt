@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +22,10 @@ object AppBarUI {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .safeDrawingPadding()
                 .height(60.dp)
-                .background(color = colorScheme.primary)
-                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .background(color = colorScheme.primary) // TODO : colorScheme.primary
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = title,
