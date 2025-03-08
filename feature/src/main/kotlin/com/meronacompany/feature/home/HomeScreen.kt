@@ -1,8 +1,13 @@
 package com.meronacompany.feature.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,6 +31,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -42,7 +50,7 @@ fun HomeScreen(navHostController: NavHostController) {
 //        homeViewModel.requestIsApiKey()
 //        homeViewModel.requestPopularTVs() // popular tv
 //        homeViewModel.requestWatchProviders() // ott
-//        homeViewModel.requestMovieGenres() // movie 장르
+        homeViewModel.requestMovieGenres() // movie 장르
 //        homeViewModel.requestTVGenres() // tv 장르
     }
 
@@ -72,7 +80,6 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 24.dp)
     ) {
         HorizontalPager(state = pagerState) { page ->
             // 마지막 페이지에 도달하면 페이지 추가
@@ -80,8 +87,8 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
                 pageCount++
             }
             HomeContentListData(
-                pageNumber = page + 1,
                 homeState = homeState,
+                paddingValues = paddingValues,
                 onMovieClick = { movieId ->
                     Timber.d("movieId: $movieId")
                 }
@@ -91,7 +98,7 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
 }
 
 @Composable
-fun HomeContentListData(pageNumber: Int, homeState: HomeState?, onMovieClick: (Int) -> Unit) {
+fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onMovieClick: (Int) -> Unit) {
     val moviePairs = remember(homeState?.popularMovies?.results) {
         homeState?.popularMovies?.results?.chunked(2) ?: emptyList()
     }
@@ -108,14 +115,23 @@ fun HomeContentListData(pageNumber: Int, homeState: HomeState?, onMovieClick: (I
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(paddingValues)
     ) {
         item {
-            Text(text = "Home Screen - Page $pageNumber", color = colorScheme.onPrimary)
-            Spacer(modifier = Modifier.height(16.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Gray)
+            ) {
+                GenresListData(homeState)
+            }
         }
+
         items(moviePairs) { moviePair ->
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
                 moviePair.forEach { movie ->
                     val movieItem = MovieItem(
                         id = movie.id,
@@ -131,9 +147,33 @@ fun HomeContentListData(pageNumber: Int, homeState: HomeState?, onMovieClick: (I
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun GenresListData(homeState: HomeState) {
+    val genres = homeState.genresMovies?.genres ?: emptyList()
+
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+    ) {
+        genres.forEach { genre ->
+            Box(
+                modifier = Modifier
+                    .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Text(text = genre.name, color = Color.White)
+            }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -144,10 +184,10 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
             .clickable { onClick(movieItem.id) }
             .then(modifier)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         MoviePoster(posterPath = movieItem.posterPath)
         MovieNameAndScore(movieItem = movieItem)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
