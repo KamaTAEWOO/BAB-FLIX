@@ -37,12 +37,18 @@ fun AppNavHost(
 
         // Home
         composable(route = NavRouteLabel.HOME) {
-            HomeScreen(navHostController)
+            HomeScreen(
+                navHostController,
+                onNavigateToDetail = { movieId ->
+                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId")
+                }
+            )
         }
 
         // Detail
-        composable(route = NavRouteLabel.DETAIL) {
-            DetailScreen()
+        composable(route = "${NavRouteLabel.DETAIL}/{movieId}") { backStackEntry ->
+            val movieId = backStackEntry.arguments?.getString("movieId") ?: ""
+            DetailScreen(movieId = movieId)
         }
 
         // Settings

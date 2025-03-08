@@ -3,11 +3,8 @@ package com.meronacompany.feature.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,8 +17,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,7 +40,7 @@ import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(navHostController: NavHostController) {
+fun HomeScreen(navHostController: NavHostController, onNavigateToDetail: (Int) -> Unit) {
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory())
 
     LaunchedEffect("Unit") {
@@ -62,7 +57,7 @@ fun HomeScreen(navHostController: NavHostController) {
         contentColor = colorScheme.primary,
         topBar = { AppBarUI.CommonAppBar("BabFlix") },
         content = { paddingValues ->
-            HomeContent(homeViewModel, paddingValues)
+            HomeContent(homeViewModel, paddingValues, onNavigateToDetail)
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
@@ -70,7 +65,11 @@ fun HomeScreen(navHostController: NavHostController) {
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
+fun HomeContent(
+    homeViewModel: HomeViewModel,
+    paddingValues: PaddingValues,
+    onNavigateToDetail: (Int) -> Unit
+) {
     val homeState = homeViewModel.uiState.value
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
     val pagerState = rememberPagerState(pageCount = { pageCount })
@@ -92,6 +91,8 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
                 paddingValues = paddingValues,
                 onMovieClick = { movieId ->
                     Timber.d("movieId: $movieId")
+                    // Detail 화면으로 이동
+                    onNavigateToDetail(movieId)
                 }
             )
         }
