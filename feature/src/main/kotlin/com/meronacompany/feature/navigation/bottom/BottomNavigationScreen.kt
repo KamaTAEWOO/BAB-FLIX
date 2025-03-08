@@ -39,7 +39,7 @@ fun BottomNavigationScreen(navController: NavController) {
             labelResId = com.meronacompany.design.R.string.app_name
         ),
         BottomNavItem(
-            route = NavRouteLabel.DETAIL,
+            route = NavRouteLabel.HOME,
             iconResId = com.meronacompany.design.R.drawable.ic_launcher,
             labelResId = com.meronacompany.design.R.string.app_name
         ),

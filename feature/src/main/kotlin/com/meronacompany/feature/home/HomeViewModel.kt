@@ -22,6 +22,11 @@ class HomeViewModel(
                 popularMovies = event.popularMovies,
                 allPopularMoviesData = currentState.allPopularMoviesData + (event.popularMovies.page to event.popularMovies.results)
             )
+            is HomeEvent.GenresMoviesEvent -> currentState.genresMovies?.let {
+                currentState.copy(genresMovies = it)
+            } ?: run {
+                currentState.copy(genresMovies = event.genres)
+            }
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -60,8 +65,8 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestWatchProviders() {
-        homeRepository.requestWatchProviders(movieId = 950396)
+    fun requestWatchProviders(movieId: Int) {
+        homeRepository.requestWatchProviders(movieId)
             .onEach {
                 Timber.d("requestWatchProviders: $it")
             }
@@ -74,9 +79,10 @@ class HomeViewModel(
     fun requestMovieGenres() {
         homeRepository.requestMovieGenres()
             .onEach {
-                Timber.d("requestMovieGenres: $it")
+                sendAction(HomeEvent.GenresMoviesEvent(it))
             }
             .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
             }
             .launchIn(viewModelScope)
