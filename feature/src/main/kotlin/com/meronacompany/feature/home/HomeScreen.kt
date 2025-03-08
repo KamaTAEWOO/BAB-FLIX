@@ -40,9 +40,7 @@ import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import timber.log.Timber
 
 @Composable
-fun HomeScreen(navHostController: NavHostController, onNavigateToDetail: (Int) -> Unit) {
-    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory())
-
+fun HomeScreen(homeViewModel: HomeViewModel, navHostController: NavHostController, onNavigateToDetail: (Int) -> Unit) {
     LaunchedEffect("Unit") {
 //        homeViewModel.requestIsApiKey()
 //        homeViewModel.requestPopularTVs() // popular tv
