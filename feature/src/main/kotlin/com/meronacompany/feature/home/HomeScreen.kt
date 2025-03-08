@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.meronacompany.core.utility.Util
+import com.meronacompany.design.common.AppBarUI
 import com.meronacompany.design.common.GlideUI
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
@@ -45,9 +47,9 @@ fun HomeScreen(navHostController: NavHostController) {
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .safeDrawingPadding(),
-        topBar = {},
+            .fillMaxSize(),
+        contentColor = colorScheme.onPrimary,
+        topBar = { AppBarUI.CommonAppBar("BabFlix") },
         content = { paddingValues ->
             HomeContent(
                 homeViewModel = homeViewModel,

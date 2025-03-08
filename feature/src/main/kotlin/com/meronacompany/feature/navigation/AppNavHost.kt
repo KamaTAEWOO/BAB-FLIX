@@ -16,7 +16,6 @@ import com.meronacompany.feature.splash.SplashScreen
 fun AppNavHost(
     navHostController: NavHostController = rememberNavController()
 ) {
-
     NavHost(
         navController = navHostController,
         startDestination = NavRouteLabel.SPLASH,
