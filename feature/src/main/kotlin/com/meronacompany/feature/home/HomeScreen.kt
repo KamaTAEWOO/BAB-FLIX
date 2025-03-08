@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -38,6 +39,7 @@ import androidx.navigation.NavHostController
 import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.AppBarUI
 import com.meronacompany.design.common.GlideUI
+import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import timber.log.Timber
@@ -78,8 +80,7 @@ fun HomeContent(homeViewModel: HomeViewModel, paddingValues: PaddingValues) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         HorizontalPager(state = pagerState) { page ->
             // 마지막 페이지에 도달하면 페이지 추가
@@ -115,6 +116,7 @@ fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onM
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(colorScheme.primary)
             .padding(paddingValues)
     ) {
         item {
@@ -125,6 +127,10 @@ fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onM
             ) {
                 GenresListData(homeState)
             }
+        }
+
+        item {
+            Spacer(Modifier.height(16.dp))
         }
 
         items(moviePairs) { moviePair ->
@@ -152,23 +158,27 @@ fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onM
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GenresListData(homeState: HomeState) {
     val genres = homeState.genresMovies?.genres ?: emptyList()
 
-    FlowRow(
+    LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+            .background(colorScheme.primary)
+            .padding(horizontal = 20.dp),
     ) {
-        genres.forEach { genre ->
+        items(genres) { genre ->
             Box(
                 modifier = Modifier
-                    .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+                    .background(colorScheme.primary)
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
-                Text(text = genre.name, color = Color.White)
+                Text(
+                    text = genre.name,
+                    color = colorScheme.onPrimary,
+                    style = BAB_FLIXTheme.typography.textStyleBold18
+                )
             }
         }
     }

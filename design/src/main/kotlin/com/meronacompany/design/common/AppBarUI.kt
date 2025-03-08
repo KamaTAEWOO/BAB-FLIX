@@ -26,7 +26,7 @@ object AppBarUI {
                 .fillMaxWidth()
                 .statusBarsPadding()
                 .height(60.dp)
-                .background(color = Color.White) // TODO : colorScheme.primary
+                .background(color = colorScheme.primary) // TODO : colorScheme.primary
                 .padding(horizontal = 16.dp)
         ) {
             Text(
