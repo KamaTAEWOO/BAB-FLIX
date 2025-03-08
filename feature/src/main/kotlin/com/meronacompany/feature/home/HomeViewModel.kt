@@ -65,8 +65,8 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestWatchProviders() {
-        homeRepository.requestWatchProviders(movieId = 950396)
+    fun requestWatchProviders(movieId: Int) {
+        homeRepository.requestWatchProviders(movieId)
             .onEach {
                 Timber.d("requestWatchProviders: $it")
             }

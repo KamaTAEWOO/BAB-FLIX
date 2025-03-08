@@ -42,7 +42,7 @@ fun AppNavHost(
 
         // Detail
         composable(route = NavRouteLabel.DETAIL) {
-            DetailScreen(navHostController)
+            DetailScreen()
         }
 
         // Settings
