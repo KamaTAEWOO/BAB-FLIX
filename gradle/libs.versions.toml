@@ -27,10 +27,15 @@ glide = "4.12.0"
 # status bar color
 accompanistSystemuicontroller = "0.30.1"
 
+# youtube player
+youtube-player = "12.1.1"
+chromecastSender = "0.30"
+
 navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
 uiToolingPreviewAndroid = "1.7.8"
 lifecycleViewmodelAndroid = "2.8.3"
+youtubeAndroidPlayerApi = "1.2.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +69,11 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 
 # status bar color
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
+
+# youtube player
+youtube-player-core = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtube-player" }
+chromecast-sender = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender", version.ref = "chromecastSender" }
+
 
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }

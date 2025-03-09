@@ -2,6 +2,7 @@ package com.meronacompany.core.network.service
 
 import com.meronacompany.core.model.dto.CommonDto
 import com.meronacompany.core.model.dto.ResponseGenreDto
+import com.meronacompany.core.model.dto.ResponseMovieVideoDto
 import com.meronacompany.core.model.dto.ResponsePopularDto
 import com.meronacompany.core.model.dto.ResponseWatchProvidersDto
 import com.meronacompany.core.utility.Locales
@@ -41,5 +42,11 @@ interface HomeService {
     suspend fun requestTVGenres(
         @Query("language") language: String = Locales.KO_KR
     ): ResponseGenreDto
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun requestMovieVideo(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = Locales.EN_US
+    ): ResponseMovieVideoDto
 
 }

@@ -27,6 +27,7 @@ class HomeViewModel(
             } ?: run {
                 currentState.copy(genresMovies = event.genres)
             }
+            is HomeEvent.MovieVideoEvent -> currentState.copy(movieVideo = event.movieVideo)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -94,6 +95,19 @@ class HomeViewModel(
                 Timber.d("requestTVGenres: $it")
             }
             .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieVideo(movieId: Int) {
+        homeRepository.requestMovieVideo(movieId)
+            .onEach {
+                Timber.d("requestMovieVideo: $it")
+                sendAction(HomeEvent.MovieVideoEvent(it))
+            }
+            .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
             }
             .launchIn(viewModelScope)

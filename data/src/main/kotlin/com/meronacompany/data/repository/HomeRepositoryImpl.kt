@@ -2,6 +2,7 @@ package com.meronacompany.data.repository
 
 import com.meronacompany.core.network.service.HomeService
 import com.meronacompany.domain.model.ResponseGenreData
+import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
 import com.meronacompany.domain.repository.HomeRepository
@@ -34,6 +35,10 @@ class HomeRepositoryImpl(
 
     override fun requestTVGenres(): Flow<ResponseGenreData> = flow {
         emit(homeService.requestTVGenres().toModel())
+    }
+
+    override fun requestMovieVideo(movieId: Int): Flow<ResponseMovieVideo> = flow {
+        emit(homeService.requestMovieVideo(movieId = movieId).toModel())
     }
 
 }
