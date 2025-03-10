@@ -20,6 +20,9 @@ dependencies {
 
     implementation(libs.androidx.navigation.runtime.ktx)
 
+    implementation(libs.youtube.player.core)
+    implementation(libs.chromecast.sender)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

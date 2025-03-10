@@ -9,8 +9,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import com.meronacompany.design.common.YoutubePlayer
+import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.home.model.MovieDetailItem
+import kotlinx.coroutines.delay
+import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -18,7 +22,6 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
     val homeUiState = homeViewModel.uiState.value
     val movieKey = movieId.toIntOrNull()
     var movieDetailItem: MovieDetailItem? = null
-    var movieVideoKey: String? = null
 
     LaunchedEffect("Unit") {
         homeUiState.allPopularMoviesData.values.forEach { value ->
@@ -48,7 +51,7 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
             homeViewModel.requestMovieVideo(movieKey)
         }
 
-        movieVideoKey = homeUiState.movieVideo?.results?.get(0)?.key
+        delay(1000)
     }
 
     Scaffold(
@@ -57,19 +60,22 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
             DetailContent(
                 paddingValues = paddingValues,
                 movieDetailItem = movieDetailItem,
-                movieVideoKey = movieVideoKey)
+                homeUiState = homeUiState)
         },
         bottomBar = { }
     )
 }
 
 @Composable
-fun DetailContent(paddingValues: PaddingValues, movieDetailItem: MovieDetailItem?, movieVideoKey: String?) {
+fun DetailContent(paddingValues: PaddingValues, movieDetailItem: MovieDetailItem?, homeUiState: HomeState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
     ){
-
+        if (homeUiState.movieVideoKey != null) {
+            Timber.d("movieVideoKey: ${homeUiState.movieVideoKey}")
+            YoutubePlayer(videoId = homeUiState.movieVideoKey)
+        }
     }
 }

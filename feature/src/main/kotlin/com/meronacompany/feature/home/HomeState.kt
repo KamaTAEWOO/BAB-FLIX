@@ -11,5 +11,6 @@ data class HomeState(
     val allPopularMoviesData: Map<Int, List<Movie>> = emptyMap(),
     val genresMovies: ResponseGenreData? = null,
     val movieVideo: ResponseMovieVideo? = null,
+    val movieVideoKey: String? = null,
     val errorMessage: String? = null
 ) : BaseState

@@ -27,7 +27,10 @@ class HomeViewModel(
             } ?: run {
                 currentState.copy(genresMovies = event.genres)
             }
-            is HomeEvent.MovieVideoEvent -> currentState.copy(movieVideo = event.movieVideo)
+            is HomeEvent.MovieVideoEvent -> currentState.copy(
+                movieVideo = event.movieVideo,
+                movieVideoKey = event.movieVideo.results[0].key
+            )
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
