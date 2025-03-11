@@ -27,6 +27,12 @@ class HomeViewModel(
             } ?: run {
                 currentState.copy(genresMovies = event.genres)
             }
+            is HomeEvent.MovieVideoEvent -> currentState.copy(
+                movieVideo = event.movieVideo,
+                movieVideoKey = event.movieVideo.results[0].key
+            )
+            is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
+            is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -92,6 +98,55 @@ class HomeViewModel(
         homeRepository.requestTVGenres()
             .onEach {
                 Timber.d("requestTVGenres: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieVideo(movieId: Int) {
+        homeRepository.requestMovieVideo(movieId)
+            .onEach {
+                Timber.d("requestMovieVideo: $it")
+                sendAction(HomeEvent.MovieVideoEvent(it))
+            }
+            .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieDetail(movieId: Int) {
+        homeRepository.requestMovieDetail(movieId)
+            .onEach {
+                Timber.d("requestMovieDetail: $it")
+                sendAction(HomeEvent.MovieDetailEvent(it))
+            }
+            .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieCertification(movieId: Int) {
+        homeRepository.requestMovieCertification(movieId)
+            .onEach {
+                Timber.d("requestMovieCertification: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieCredits(movieId: Int) {
+        homeRepository.requestMovieCredits(movieId)
+            .onEach {
+                Timber.d("requestMovieCredits: $it")
+                sendAction(HomeEvent.MovieCreditsEvent(it))
             }
             .catch {
                 Timber.e(it)

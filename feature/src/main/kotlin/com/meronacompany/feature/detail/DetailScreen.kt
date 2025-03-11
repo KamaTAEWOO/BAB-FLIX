@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import com.meronacompany.design.common.YoutubePlayer
+import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.home.model.MovieDetailItem
 import timber.log.Timber
@@ -16,49 +20,44 @@ import timber.log.Timber
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
-    val homeUiState = homeViewModel.uiState.value
-    val movieKey = movieId.toIntOrNull()
-    var movieDetailItem: MovieDetailItem? = null
-    homeUiState.allPopularMoviesData.values.forEach { value ->
-        value.forEach { movieItem ->
-            if (movieItem.id == movieKey) {
-                Timber.d("DetailScreen: $movieItem")
-                movieDetailItem = MovieDetailItem(
-                    adult = movieItem.adult,
-                    backdrop_path = movieItem.backdrop_path,
-                    genre_ids = movieItem.genre_ids,
-                    id = movieItem.id,
-                    original_language = movieItem.original_language,
-                    original_title = movieItem.original_title,
-                    overview = movieItem.overview,
-                    popularity = movieItem.popularity,
-                    poster_path = movieItem.poster_path,
-                    release_date = movieItem.release_date,
-                    title = movieItem.title,
-                    video = movieItem.video,
-                    vote_average = movieItem.vote_average,
-                    vote_count = movieItem.vote_count
-                )
-            }
+    val homeUiState = homeViewModel.uiState.collectAsState().value
+
+    // LaunchedEffect will be triggered only when `movieKey` changes
+    LaunchedEffect(movieId) {
+        // Request movie video only if movieKey is valid and not already requested
+        if (homeUiState.movieVideoKey != movieId) {
+            homeViewModel.requestMovieVideo(movieId.toInt())
+            homeViewModel.requestMovieDetail(movieId.toInt())
+            homeViewModel.requestMovieCertification(movieId.toInt())
+            homeViewModel.requestMovieCredits(movieId.toInt())
         }
     }
 
     Scaffold(
         topBar = {},
         content = { paddingValues ->
-            DetailContent(paddingValues, movieDetailItem)
+            DetailContent(
+                paddingValues = paddingValues,
+                homeUiState = homeUiState,
+                movieId = movieId
+            )
         },
-        bottomBar = { }
+        bottomBar = {}
     )
 }
 
 @Composable
-fun DetailContent(paddingValues: PaddingValues, movieDetailItem: MovieDetailItem?) {
+fun DetailContent(paddingValues: PaddingValues, homeUiState: HomeState, movieId: String?) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-    ){
-        Text(text = movieDetailItem.toString()) // 데이터 들어옴
+    ) {
+        // Show YouTube player only if movieVideoKey is available
+        if (homeUiState.movieVideoKey != null && homeUiState.movieVideoKey != movieId) {
+            Timber.d("movieVideoKey: ${homeUiState.movieVideoKey}")
+            YoutubePlayer(videoId = homeUiState.movieVideoKey)
+            Text(text = homeUiState.movieDetail.toString())
+        }
     }
 }

@@ -1,6 +1,10 @@
 package com.meronacompany.domain.repository
 
 import com.meronacompany.domain.model.ResponseGenreData
+import com.meronacompany.domain.model.ResponseMovieCertificationData
+import com.meronacompany.domain.model.ResponseMovieCreditsData
+import com.meronacompany.domain.model.ResponseMovieDetailData
+import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +22,12 @@ interface HomeRepository {
     fun requestMovieGenres(): Flow<ResponseGenreData>
 
     fun requestTVGenres(): Flow<ResponseGenreData>
+
+    fun requestMovieVideo(movieId: Int): Flow<ResponseMovieVideo>
+
+    fun requestMovieDetail(movieId: Int): Flow<ResponseMovieDetailData>
+
+    fun requestMovieCertification(movieId: Int): Flow<ResponseMovieCertificationData>
+
+    fun requestMovieCredits(movieId: Int): Flow<ResponseMovieCreditsData>
 }

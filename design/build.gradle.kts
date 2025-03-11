@@ -17,6 +17,9 @@ dependencies {
 
     implementation(libs.accompanist.systemuicontroller)
 
+    implementation(libs.youtube.player.core)
+    implementation(libs.chromecast.sender)
+
     implementation(libs.androidx.ui)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

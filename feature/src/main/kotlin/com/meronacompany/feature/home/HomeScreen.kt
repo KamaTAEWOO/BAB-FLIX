@@ -29,11 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.meronacompany.core.utility.Util
-import com.meronacompany.design.common.AppBarUI
-import com.meronacompany.design.common.GlideUI
+import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.model.MovieItem
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
@@ -53,7 +52,7 @@ fun HomeScreen(homeViewModel: HomeViewModel, navHostController: NavHostControlle
         modifier = Modifier.fillMaxSize(),
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
-        topBar = { AppBarUI.CommonAppBar("BabFlix") },
+        topBar = { CommonAppBar("BabFlix") },
         content = { paddingValues ->
             HomeContent(homeViewModel, paddingValues, onNavigateToDetail)
         },
@@ -202,7 +201,7 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
 
 @Composable
 fun MoviePoster(posterPath: String) {
-    GlideUI.CommonGlideImage(path = posterPath)
+    CommonGlideImage(path = posterPath)
 }
 
 @Composable
