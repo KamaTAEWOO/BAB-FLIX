@@ -3,6 +3,7 @@ package com.meronacompany.core.network.service
 import com.meronacompany.core.model.dto.CommonDto
 import com.meronacompany.core.model.dto.ResponseGenreDto
 import com.meronacompany.core.model.dto.ResponseMovieCertificationDto
+import com.meronacompany.core.model.dto.ResponseMovieCreditsDto
 import com.meronacompany.core.model.dto.ResponseMovieDetailDto
 import com.meronacompany.core.model.dto.ResponseMovieVideoDto
 import com.meronacompany.core.model.dto.ResponsePopularDto
@@ -62,5 +63,11 @@ interface HomeService {
     suspend fun requestMovieCertification(
         @Path("movie_id") movieId: Int
     ): ResponseMovieCertificationDto
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun requestMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = Locales.KO_KR
+    ): ResponseMovieCreditsDto
 
 }

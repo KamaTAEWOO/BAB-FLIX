@@ -29,6 +29,7 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
             homeViewModel.requestMovieVideo(movieId.toInt())
             homeViewModel.requestMovieDetail(movieId.toInt())
             homeViewModel.requestMovieCertification(movieId.toInt())
+            homeViewModel.requestMovieCredits(movieId.toInt())
         }
     }
 

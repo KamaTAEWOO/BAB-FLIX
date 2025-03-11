@@ -32,6 +32,7 @@ class HomeViewModel(
                 movieVideoKey = event.movieVideo.results[0].key
             )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
+            is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -134,6 +135,18 @@ class HomeViewModel(
         homeRepository.requestMovieCertification(movieId)
             .onEach {
                 Timber.d("requestMovieCertification: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieCredits(movieId: Int) {
+        homeRepository.requestMovieCredits(movieId)
+            .onEach {
+                Timber.d("requestMovieCredits: $it")
+                sendAction(HomeEvent.MovieCreditsEvent(it))
             }
             .catch {
                 Timber.e(it)
