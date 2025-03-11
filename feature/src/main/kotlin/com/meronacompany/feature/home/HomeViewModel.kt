@@ -31,6 +31,7 @@ class HomeViewModel(
                 movieVideo = event.movieVideo,
                 movieVideoKey = event.movieVideo.results[0].key
             )
+            is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -108,6 +109,19 @@ class HomeViewModel(
             .onEach {
                 Timber.d("requestMovieVideo: $it")
                 sendAction(HomeEvent.MovieVideoEvent(it))
+            }
+            .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieDetail(movieId: Int) {
+        homeRepository.requestMovieDetail(movieId)
+            .onEach {
+                Timber.d("requestMovieDetail: $it")
+                sendAction(HomeEvent.MovieDetailEvent(it))
             }
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))

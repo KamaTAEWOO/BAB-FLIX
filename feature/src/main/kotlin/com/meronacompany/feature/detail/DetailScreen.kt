@@ -27,6 +27,7 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
         // Request movie video only if movieKey is valid and not already requested
         if (homeUiState.movieVideoKey != movieId) {
             homeViewModel.requestMovieVideo(movieId.toInt())
+            homeViewModel.requestMovieDetail(movieId.toInt())
         }
     }
 
@@ -54,6 +55,7 @@ fun DetailContent(paddingValues: PaddingValues, homeUiState: HomeState, movieId:
         if (homeUiState.movieVideoKey != null && homeUiState.movieVideoKey != movieId) {
             Timber.d("movieVideoKey: ${homeUiState.movieVideoKey}")
             YoutubePlayer(videoId = homeUiState.movieVideoKey)
+            Text(text = homeUiState.movieDetail.toString())
         }
     }
 }

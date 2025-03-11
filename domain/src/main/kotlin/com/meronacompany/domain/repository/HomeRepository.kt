@@ -1,6 +1,7 @@
 package com.meronacompany.domain.repository
 
 import com.meronacompany.domain.model.ResponseGenreData
+import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
@@ -21,4 +22,6 @@ interface HomeRepository {
     fun requestTVGenres(): Flow<ResponseGenreData>
 
     fun requestMovieVideo(movieId: Int): Flow<ResponseMovieVideo>
+
+    fun requestMovieDetail(movieId: Int): Flow<ResponseMovieDetailData>
 }
