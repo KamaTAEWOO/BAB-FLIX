@@ -2,11 +2,13 @@ package com.meronacompany.core.network.service
 
 import com.meronacompany.core.model.dto.CommonDto
 import com.meronacompany.core.model.dto.ResponseGenreDto
+import com.meronacompany.core.model.dto.ResponseMovieCertificationDto
 import com.meronacompany.core.model.dto.ResponseMovieDetailDto
 import com.meronacompany.core.model.dto.ResponseMovieVideoDto
 import com.meronacompany.core.model.dto.ResponsePopularDto
 import com.meronacompany.core.model.dto.ResponseWatchProvidersDto
 import com.meronacompany.core.utility.Locales
+import com.meronacompany.domain.model.ResponseMovieCertificationData
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -55,5 +57,10 @@ interface HomeService {
         @Path("movie_id") movieId: Int,
         @Query("language") language: String = Locales.KO_KR
     ): ResponseMovieDetailDto
+
+    @GET("movie/{movie_id}/release_dates")
+    suspend fun requestMovieCertification(
+        @Path("movie_id") movieId: Int
+    ): ResponseMovieCertificationDto
 
 }

@@ -2,6 +2,7 @@ package com.meronacompany.data.repository
 
 import com.meronacompany.core.network.service.HomeService
 import com.meronacompany.domain.model.ResponseGenreData
+import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularData
@@ -44,6 +45,10 @@ class HomeRepositoryImpl(
 
     override fun requestMovieDetail(movieId: Int): Flow<ResponseMovieDetailData> = flow {
         emit(homeService.requestMovieDetail(movieId = movieId).toModel())
+    }
+
+    override fun requestMovieCertification(movieId: Int): Flow<ResponseMovieCertificationData> = flow {
+        emit(homeService.requestMovieCertification(movieId = movieId).toModel())
     }
 
 }

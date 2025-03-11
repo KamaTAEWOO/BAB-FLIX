@@ -28,6 +28,7 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
         if (homeUiState.movieVideoKey != movieId) {
             homeViewModel.requestMovieVideo(movieId.toInt())
             homeViewModel.requestMovieDetail(movieId.toInt())
+            homeViewModel.requestMovieCertification(movieId.toInt())
         }
     }
 

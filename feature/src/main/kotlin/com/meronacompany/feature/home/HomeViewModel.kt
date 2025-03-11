@@ -130,6 +130,17 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun requestMovieCertification(movieId: Int) {
+        homeRepository.requestMovieCertification(movieId)
+            .onEach {
+                Timber.d("requestMovieCertification: $it")
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     companion object {
         fun provideFactory(): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {
