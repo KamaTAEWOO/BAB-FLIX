@@ -22,25 +22,29 @@ import timber.log.Timber
 fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
     val homeUiState = homeViewModel.uiState.collectAsState().value
 
-    // LaunchedEffect will be triggered only when `movieKey` changes
     LaunchedEffect(movieId) {
-        // Request movie video only if movieKey is valid and not already requested
         if (homeUiState.movieVideoKey != movieId) {
+            homeViewModel.setLoading(true) // 로딩 시작
             homeViewModel.requestMovieVideo(movieId.toInt())
             homeViewModel.requestMovieDetail(movieId.toInt())
             homeViewModel.requestMovieCertification(movieId.toInt())
             homeViewModel.requestMovieCredits(movieId.toInt())
+            homeViewModel.setLoading(false) // 로딩 종료
         }
     }
 
     Scaffold(
         topBar = {},
         content = { paddingValues ->
-            DetailContent(
-                paddingValues = paddingValues,
-                homeUiState = homeUiState,
-                movieId = movieId
-            )
+            if (homeViewModel.isLoading.value) {
+                Text(text = "Loading...")
+            } else {
+                DetailContent(
+                    paddingValues = paddingValues,
+                    homeUiState = homeUiState,
+                    movieId = movieId
+                )
+            }
         },
         bottomBar = {}
     )
