@@ -2,6 +2,7 @@ package com.meronacompany.feature.home
 
 import com.meronacompany.common.base.BaseEvent
 import com.meronacompany.domain.model.ResponseGenreData
+import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
@@ -18,6 +19,8 @@ sealed class HomeEvent : BaseEvent {
     data class MovieDetailEvent(val movieDetail: ResponseMovieDetailData) : HomeEvent()
 
     data class MovieCreditsEvent(val movieCredits: ResponseMovieCreditsData) : HomeEvent()
+
+    data class MovieCertificationEvent(val movieCertification: ResponseMovieCertificationData) : HomeEvent()
 
     data class ErrorEvent(val errorMessage: String) : HomeEvent()
 }

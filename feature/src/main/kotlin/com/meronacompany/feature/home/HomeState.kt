@@ -3,6 +3,7 @@ package com.meronacompany.feature.home
 import com.meronacompany.common.base.BaseState
 import com.meronacompany.domain.model.Movie
 import com.meronacompany.domain.model.ResponseGenreData
+import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
@@ -16,5 +17,6 @@ data class HomeState(
     val movieVideoKey: String? = null,
     val movieDetail: ResponseMovieDetailData? = null,
     val movieCredits: ResponseMovieCreditsData? = null,
+    val movieCertification: ResponseMovieCertificationData? = null,
     val errorMessage: String? = null
 ) : BaseState

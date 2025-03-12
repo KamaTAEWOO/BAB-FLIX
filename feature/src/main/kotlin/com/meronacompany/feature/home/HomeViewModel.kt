@@ -44,6 +44,7 @@ class HomeViewModel(
             )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
+            is HomeEvent.MovieCertificationEvent -> currentState.copy(movieCertification = event.movieCertification)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -146,6 +147,7 @@ class HomeViewModel(
         homeRepository.requestMovieCertification(movieId)
             .onEach {
                 Timber.d("requestMovieCertification: $it")
+                sendAction(HomeEvent.MovieCertificationEvent(it))
             }
             .catch {
                 Timber.e(it)
