@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.meronacompany.core.utility.Util.formatDuration
 import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.domain.model.ResponseMovieCertificationData
@@ -85,7 +86,7 @@ fun DetailContent(
             val details = listOf(
                 "감독" to (detailUIModel?.director ?: "No director"),
                 "출연" to (detailUIModel?.cast ?: "No cast"),
-                "재생" to (detailUIModel?.duration ?: "No duration"),
+                "재생" to (detailUIModel?.duration?.toInt()?.let { formatDuration(it) } ?: "No duration"),
                 "장르" to (detailUIModel?.genre ?: "No genre"),
                 "개봉일" to (detailUIModel?.releaseDate ?: "No release date"),
                 "시청등급" to ("${detailUIModel?.rating}세 관람가"),
