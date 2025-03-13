@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.meronacompany.design.theme.BAB_FLIXTheme
 
 @Composable
 fun CommonAppBar(
@@ -23,11 +24,12 @@ fun CommonAppBar(
             .statusBarsPadding()
             .height(60.dp)
             .background(color = colorScheme.primary) // TODO : colorScheme.primary
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 24.dp)
     ) {
         Text(
             text = title,
             color = colorScheme.onPrimary,
+            style = BAB_FLIXTheme.typography.textStyleBold24,
             modifier = Modifier.align(Alignment.CenterStart)
         )
     }
