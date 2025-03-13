@@ -6,6 +6,8 @@ import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
 import com.meronacompany.common.base.BaseViewModelFactory
 import com.meronacompany.domain.repository.HomeRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -16,6 +18,15 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    fun setLoading(isLoading: Boolean) {
+        _isLoading.value = isLoading
+    }
+
+
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState {
         return when (event) {
             is HomeEvent.PopularMoviesEvent -> currentState.copy(
@@ -33,6 +44,7 @@ class HomeViewModel(
             )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
+            is HomeEvent.MovieCertificationEvent -> currentState.copy(movieCertification = event.movieCertification)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
         }
     }
@@ -135,6 +147,7 @@ class HomeViewModel(
         homeRepository.requestMovieCertification(movieId)
             .onEach {
                 Timber.d("requestMovieCertification: $it")
+                sendAction(HomeEvent.MovieCertificationEvent(it))
             }
             .catch {
                 Timber.e(it)
