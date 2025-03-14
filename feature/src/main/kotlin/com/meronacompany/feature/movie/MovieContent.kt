@@ -40,7 +40,8 @@ import timber.log.Timber
 fun MovieContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
-    onNavigateToDetail: (Int) -> Unit
+    onNavigateToDetail: (Int, String) -> Unit,
+    route: String
 ) {
     val homeState = homeViewModel.uiState.value
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
@@ -64,7 +65,7 @@ fun MovieContent(
                 onMovieClick = { movieId ->
                     Timber.d("movieId: $movieId")
                     // Detail 화면으로 이동
-                    onNavigateToDetail(movieId)
+                    onNavigateToDetail(movieId, route)
                 }
             )
         }

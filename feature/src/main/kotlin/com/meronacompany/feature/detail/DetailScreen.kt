@@ -7,10 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.feature.navigation.NavRouteLabel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
+fun DetailScreen(homeViewModel: HomeViewModel, movieId: String, route: String) {
     val homeUiState = homeViewModel.uiState.collectAsState().value
 
     LaunchedEffect(movieId) {
@@ -30,14 +31,24 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String) {
             if (homeViewModel.isLoading.value) {
                 Text(text = "Loading...")
             } else {
-                val detailUIModel = detailMovieContentData(homeUiState)
+                val detailMovieUIModel = detailMovieContentData(homeUiState)
+                val detailTvUIModel = detailTvContentData(homeUiState)
 
-                DetailMovieContent(
-                    paddingValues = paddingValues,
-                    homeUiState = homeUiState,
-                    movieId = movieId,
-                    detailUIModel = detailUIModel
-                )
+                if (route == NavRouteLabel.MOVIE) {
+                    DetailMovieContent(
+                        paddingValues = paddingValues,
+                        homeUiState = homeUiState,
+                        movieId = movieId,
+                        detailUIModel = detailMovieUIModel
+                    )
+                } else {
+                    DetailTvContent(
+                        paddingValues = paddingValues,
+                        homeUiState = homeUiState,
+                        movieId = movieId,
+                        detailUIModel = detailTvUIModel
+                    )
+                }
             }
         },
         bottomBar = {}

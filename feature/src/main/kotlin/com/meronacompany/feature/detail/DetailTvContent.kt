@@ -103,13 +103,13 @@ private fun RowText(title: String, content: String) {
     }
 }
 
-private fun detailTvContentData(homeUiState: HomeState): DetailModel? {
+fun detailTvContentData(homeUiState: HomeState): DetailModel? {
     return homeUiState.movieDetail?.let { detail ->
         val castNames = homeUiState.movieCredits?.cast?.joinToString { it.name } ?: ""
         val directorName =
             homeUiState.movieCredits?.crew?.firstOrNull { it.job == "Director" }?.name ?: ""
         val genreNames = detail.genres.joinToString { it.name }
-        val rating = getMovieCertification(
+        val rating = getCertification(
             homeUiState.movieCertification ?: ResponseMovieCertificationData(
                 0,
                 emptyList()

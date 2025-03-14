@@ -40,7 +40,8 @@ import timber.log.Timber
 fun TvContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
-    onNavigateToDetail: (Int) -> Unit
+    onNavigateToDetail: (Int) -> Unit,
+    route: String
 ) {
     val homeState = homeViewModel.uiState.value
     var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수

@@ -45,8 +45,8 @@ fun AppNavHost(
                 route = NavRouteLabel.MOVIE,
                 homeViewModel,
                 navHostController,
-                onNavigateToDetail = { movieId ->
-                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId")
+                onNavigateToDetail = { movieId, route ->
+                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId/$route")
                 }
             )
         }
@@ -57,18 +57,20 @@ fun AppNavHost(
                 route = NavRouteLabel.TV,
                 homeViewModel,
                 navHostController,
-                onNavigateToDetail = { movieId ->
-                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId")
+                onNavigateToDetail = { movieId, route ->
+                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId/$route")
                 }
             )
         }
 
         // Detail
-        composable(route = "${NavRouteLabel.DETAIL}/{movieId}") { backStackEntry ->
+        composable(route = "${NavRouteLabel.DETAIL}/{movieId}/{route}") { backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId") ?: ""
+            val route = backStackEntry.arguments?.getString("route") ?: ""
             DetailScreen(
                 homeViewModel = homeViewModel,
-                movieId = movieId
+                movieId = movieId,
+                route = route
             )
         }
 

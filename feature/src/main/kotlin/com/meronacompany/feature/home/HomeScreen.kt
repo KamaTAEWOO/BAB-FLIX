@@ -18,7 +18,7 @@ fun HomeScreen(
     route: String,
     homeViewModel: HomeViewModel,
     navHostController: NavHostController,
-    onNavigateToDetail: (Int) -> Unit
+    onNavigateToDetail: (Int, String) -> Unit
 ) {
     LaunchedEffect("Unit") {
 //        homeViewModel.requestWatchProviders() // ott
@@ -33,9 +33,9 @@ fun HomeScreen(
         topBar = { CommonAppBar("BabFlix") },
         content = { paddingValues ->
             if (route == NavRouteLabel.MOVIE) {
-                MovieContent(homeViewModel, paddingValues, onNavigateToDetail)
+                MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
             } else {
-                TvContent(homeViewModel, paddingValues, onNavigateToDetail)
+                TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
             }
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
