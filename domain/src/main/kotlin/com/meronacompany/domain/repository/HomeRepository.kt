@@ -6,6 +6,7 @@ import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularMovieData
+import com.meronacompany.domain.model.ResponsePopularTvData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +16,7 @@ interface HomeRepository {
 
     fun requestPopularMovies(pageNumber: Int): Flow<ResponsePopularMovieData>
 
-    fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularMovieData>
+    fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularTvData>
 
     fun requestWatchProviders(movieId: Int): Flow<ResponseWatchProvidersData>
 

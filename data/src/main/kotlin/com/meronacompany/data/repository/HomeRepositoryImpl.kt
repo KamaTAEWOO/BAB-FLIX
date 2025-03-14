@@ -7,6 +7,7 @@ import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularMovieData
+import com.meronacompany.domain.model.ResponsePopularTvData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,7 @@ class HomeRepositoryImpl(
         emit(homeService.requestPopularMovies(page = pageNumber).toModel())
     }
 
-    override fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularMovieData> = flow {
+    override fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularTvData> = flow {
         emit(homeService.requestPopularTVs(page = pageNumber).toModel())
     }
 

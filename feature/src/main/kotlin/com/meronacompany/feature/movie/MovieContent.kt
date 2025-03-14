@@ -32,7 +32,7 @@ import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
-import com.meronacompany.feature.home.model.tvItem
+import com.meronacompany.feature.movie.model.MovieItem
 import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -112,7 +112,7 @@ fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onM
                     .fillMaxWidth()
             ) {
                 moviePair.forEach { movie ->
-                    val movieItem = tvItem(
+                    val movieItem = MovieItem(
                         id = movie.id,
                         genreIds = movie.genre_ids,
                         title = movie.title,
@@ -160,15 +160,15 @@ fun GenresListData(homeState: HomeState) {
 }
 
 @Composable
-fun MovieData(movieItem: tvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
+fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(movieItem.id) }
+            .clickable { onClick(movieItem.id ?: 0) }
             .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(4.dp))
-        MoviePoster(posterPath = movieItem.posterPath)
+        MoviePoster(posterPath = movieItem.posterPath ?: "")
         MovieNameAndScore(movieItem = movieItem)
         Spacer(modifier = Modifier.height(4.dp))
     }
@@ -180,11 +180,11 @@ fun MoviePoster(posterPath: String) {
 }
 
 @Composable
-fun MovieNameAndScore(movieItem: tvItem) {
+fun MovieNameAndScore(movieItem: MovieItem) {
     Column(
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
-        Text(text = movieItem.title, color = colorScheme.onPrimary)
-        Text(text = Util.formatVoteAverage(movieItem.voteAverage), color = colorScheme.onPrimary)
+        Text(text = movieItem.title ?: "", color = colorScheme.onPrimary)
+        Text(text = Util.formatVoteAverage(movieItem.voteAverage ?: 0.0), color = colorScheme.onPrimary)
     }
 }

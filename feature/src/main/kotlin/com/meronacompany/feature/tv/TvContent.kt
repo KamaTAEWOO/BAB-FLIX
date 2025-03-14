@@ -32,7 +32,7 @@ import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
-import com.meronacompany.feature.home.model.tvItem
+import com.meronacompany.feature.tv.model.TvItem
 import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -116,12 +116,12 @@ fun HomeContentListData(
                     .fillMaxWidth()
             ) {
                 tvPair.forEach { tv ->
-                    val tvItem = tvItem(
+                    val tvItem = TvItem(
                         id = tv.id,
                         genreIds = tv.genre_ids,
-                        title = tv.title,
+                        title = tv.name,
                         voteAverage = tv.vote_average,
-                        posterPath = tv.poster_path ?: ""
+                        posterPath = tv.poster_path
                     )
                     TvData(
                         tvItem = tvItem,
@@ -164,15 +164,15 @@ fun GenresListData(homeState: HomeState) {
 }
 
 @Composable
-fun TvData(tvItem: tvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
+fun TvData(tvItem: TvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick(tvItem.id) }
+            .clickable { onClick(tvItem.id ?: 0) }
             .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(4.dp))
-        TvPoster(posterPath = tvItem.posterPath)
+        TvPoster(posterPath = tvItem.posterPath ?: "")
         TvNameAndScore(tvItem = tvItem)
         Spacer(modifier = Modifier.height(4.dp))
     }
@@ -184,11 +184,11 @@ fun TvPoster(posterPath: String) {
 }
 
 @Composable
-fun TvNameAndScore(tvItem: tvItem) {
+fun TvNameAndScore(tvItem: TvItem) {
     Column(
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
-        Text(text = tvItem.title, color = colorScheme.onPrimary)
-        Text(text = Util.formatVoteAverage(tvItem.voteAverage), color = colorScheme.onPrimary)
+        Text(text = tvItem.title ?: "", color = colorScheme.onPrimary)
+        Text(text = Util.formatVoteAverage(tvItem.voteAverage ?: 0.0), color = colorScheme.onPrimary)
     }
 }

@@ -2,12 +2,14 @@ package com.meronacompany.feature.home
 
 import com.meronacompany.common.base.BaseState
 import com.meronacompany.domain.model.PopularMovieData
+import com.meronacompany.domain.model.PopularTvData
 import com.meronacompany.domain.model.ResponseGenreData
 import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularMovieData
+import com.meronacompany.domain.model.ResponsePopularTvData
 
 data class HomeState(
     // movie
@@ -21,8 +23,8 @@ data class HomeState(
     val movieCertification: ResponseMovieCertificationData? = null,
 
     // tv
-    val popularTVs: ResponsePopularMovieData? = null,
-    val allPopularTVsData: Map<Int, List<PopularMovieData>> = emptyMap(),
+    val popularTVs: ResponsePopularTvData? = null,
+    val allPopularTVsData: Map<Int, List<PopularTvData>> = emptyMap(),
     val genresTVs: ResponseGenreData? = null,
 
     // error
