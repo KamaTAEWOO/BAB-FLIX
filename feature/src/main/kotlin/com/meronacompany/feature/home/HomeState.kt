@@ -10,6 +10,7 @@ import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularMovieData
 import com.meronacompany.domain.model.ResponsePopularTvData
+import com.meronacompany.domain.model.ResponseTvDetailData
 
 data class HomeState(
     // movie
@@ -26,6 +27,7 @@ data class HomeState(
     val popularTVs: ResponsePopularTvData? = null,
     val allPopularTVsData: Map<Int, List<PopularTvData>> = emptyMap(),
     val genresTVs: ResponseGenreData? = null,
+    val tvDetail: ResponseTvDetailData? = null,
 
     // error
     val errorMessage: String? = null

@@ -11,16 +11,18 @@ import com.meronacompany.feature.navigation.NavRouteLabel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun DetailScreen(homeViewModel: HomeViewModel, movieId: String, route: String) {
+fun DetailScreen(homeViewModel: HomeViewModel, id: String, route: String) {
     val homeUiState = homeViewModel.uiState.collectAsState().value
 
-    LaunchedEffect(movieId) {
-        if (homeUiState.movieVideoKey != movieId) {
+    LaunchedEffect(id) {
+        if (homeUiState.movieVideoKey != id) {
             homeViewModel.setLoading(true) // 로딩 시작
-            homeViewModel.requestMovieVideo(movieId.toInt())
-            homeViewModel.requestMovieDetail(movieId.toInt())
-            homeViewModel.requestMovieCertification(movieId.toInt())
-            homeViewModel.requestMovieCredits(movieId.toInt())
+            homeViewModel.requestMovieVideo(id.toInt())
+            homeViewModel.requestMovieDetail(id.toInt())
+            homeViewModel.requestMovieCertification(id.toInt())
+            homeViewModel.requestMovieCredits(id.toInt())
+            homeViewModel.requestTvDetail(id.toInt())
+            homeViewModel.requestTvCredits(id.toInt())
             homeViewModel.setLoading(false) // 로딩 종료
         }
     }
@@ -38,14 +40,14 @@ fun DetailScreen(homeViewModel: HomeViewModel, movieId: String, route: String) {
                     DetailMovieContent(
                         paddingValues = paddingValues,
                         homeUiState = homeUiState,
-                        movieId = movieId,
+                        movieId = id,
                         detailUIModel = detailMovieUIModel
                     )
                 } else {
                     DetailTvContent(
                         paddingValues = paddingValues,
                         homeUiState = homeUiState,
-                        movieId = movieId,
+                        tvId = id,
                         detailUIModel = detailTvUIModel
                     )
                 }

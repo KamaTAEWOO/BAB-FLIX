@@ -8,6 +8,7 @@ import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularMovieData
 import com.meronacompany.domain.model.ResponsePopularTvData
+import com.meronacompany.domain.model.ResponseTvDetailData
 
 sealed class HomeEvent : BaseEvent {
 
@@ -28,6 +29,8 @@ sealed class HomeEvent : BaseEvent {
     data class PopularTVsEvent(val popularTVs: ResponsePopularTvData) : HomeEvent()
 
     data class GenresTVsEvent(val genres: ResponseGenreData) : HomeEvent()
+
+    data class TvDetailEvent(val tvDetail: ResponseTvDetailData) : HomeEvent()
 
     // error
     data class ErrorEvent(val errorMessage: String) : HomeEvent()

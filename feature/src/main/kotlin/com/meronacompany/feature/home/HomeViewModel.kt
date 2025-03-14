@@ -52,6 +52,7 @@ class HomeViewModel(
                 movieVideoKey = event.movieVideo.results[0].key
             )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
+            is HomeEvent.TvDetailEvent -> currentState.copy(tvDetail = event.tvDetail)
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
             is HomeEvent.MovieCertificationEvent -> currentState.copy(movieCertification = event.movieCertification)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
@@ -156,6 +157,18 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun requestTvDetail(tvId: Int) {
+        homeRepository.requestTvDetail(tvId)
+            .onEach {
+                Timber.d("requestTvDetail: $it")
+                sendAction(HomeEvent.TvDetailEvent(it))
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun requestMovieCertification(movieId: Int) {
         homeRepository.requestMovieCertification(movieId)
             .onEach {
@@ -172,6 +185,18 @@ class HomeViewModel(
         homeRepository.requestMovieCredits(movieId)
             .onEach {
                 Timber.d("requestMovieCredits: $it")
+                sendAction(HomeEvent.MovieCreditsEvent(it))
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestTvCredits(tvId: Int) {
+        homeRepository.requestTvCredits(tvId)
+            .onEach {
+                Timber.d("requestTvCredits: $it")
                 sendAction(HomeEvent.MovieCreditsEvent(it))
             }
             .catch {

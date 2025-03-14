@@ -27,8 +27,8 @@ import timber.log.Timber
 fun DetailTvContent(
     paddingValues: PaddingValues,
     homeUiState: HomeState,
-    movieId: String?,
-    detailUIModel: DetailModel?
+    tvId: String?,
+    detailUIModel: DetailTvModel?
 ) {
     Column(
         modifier = Modifier
@@ -37,7 +37,7 @@ fun DetailTvContent(
             .verticalScroll(rememberScrollState()) // Enable scrolling
     ) {
         // Show YouTube player only if movieVideoKey is available
-        if (homeUiState.movieVideoKey != null && homeUiState.movieVideoKey != movieId) {
+        if (homeUiState.movieVideoKey != null && homeUiState.movieVideoKey != tvId) {
             Timber.d("movieVideoKey: ${homeUiState.movieVideoKey}")
             YoutubePlayer(videoId = homeUiState.movieVideoKey)
             // title
@@ -48,12 +48,9 @@ fun DetailTvContent(
             )
 
             val details = listOf(
-                "감독" to (detailUIModel?.director ?: "No director"),
+                "창작자" to (detailUIModel?.creator ?: "No director"),
                 "출연" to (detailUIModel?.cast ?: "No cast"),
-                "재생" to (detailUIModel?.duration?.toInt()?.let { formatDuration(it) } ?: "No duration"),
                 "장르" to (detailUIModel?.genre ?: "No genre"),
-                "개봉일" to (detailUIModel?.releaseDate ?: "No release date"),
-                "시청등급" to ("${detailUIModel?.rating}세 관람가"),
                 "원어" to (detailUIModel?.originalLanguage ?: "No original language"),
                 "별점" to (detailUIModel?.ratingScore ?: "No rating score")
             )
@@ -103,43 +100,23 @@ private fun RowText(title: String, content: String) {
     }
 }
 
-fun detailTvContentData(homeUiState: HomeState): DetailModel? {
-    return homeUiState.movieDetail?.let { detail ->
+fun detailTvContentData(homeUiState: HomeState): DetailTvModel? {
+    return homeUiState.tvDetail?.let { detail ->
         val castNames = homeUiState.movieCredits?.cast?.joinToString { it.name } ?: ""
         val directorName =
             homeUiState.movieCredits?.crew?.firstOrNull { it.job == "Director" }?.name ?: ""
         val genreNames = detail.genres.joinToString { it.name }
-        val rating = getCertification(
-            homeUiState.movieCertification ?: ResponseMovieCertificationData(
-                0,
-                emptyList()
-            )
+        val originalLanguage = detail.spoken_languages.firstOrNull()?.name ?: ""
+        val ratingScore = detail.vote_average.toString()
+
+        DetailTvModel(
+            title = detail.name,
+            creator = detail.created_by.firstOrNull()?.name ?: directorName,
+            cast = castNames,
+            genre = genreNames,
+            originalLanguage = originalLanguage,
+            ratingScore = ratingScore,
+            overview = detail.overview
         )
-        val originalLanguage = detail.spokenLanguages[0].name
-        val ratingScore = detail.voteAverage.toString()
-
-        detail.runtime.toString().let {
-            DetailModel(
-                title = detail.title,
-                director = directorName,
-                cast = castNames,
-                duration = it,
-                genre = genreNames,
-                releaseDate = detail.releaseDate,
-                rating = rating,
-                originalLanguage = originalLanguage,
-                ratingScore = ratingScore,
-                overview = detail.overview
-            )
-        }
     }
-}
-
-private fun getCertification(response: ResponseMovieCertificationData, countryCode: String = "KR"): String {
-    return response.results
-        .firstOrNull { it.iso_3166_1 == countryCode }
-        ?.release_dates
-        ?.firstOrNull()
-        ?.certification
-        ?: "등급 정보 없음"
 }

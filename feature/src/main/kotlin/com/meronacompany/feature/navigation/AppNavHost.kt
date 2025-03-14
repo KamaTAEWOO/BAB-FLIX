@@ -65,11 +65,11 @@ fun AppNavHost(
 
         // Detail
         composable(route = "${NavRouteLabel.DETAIL}/{movieId}/{route}") { backStackEntry ->
-            val movieId = backStackEntry.arguments?.getString("movieId") ?: ""
+            val id = backStackEntry.arguments?.getString("movieId") ?: ""
             val route = backStackEntry.arguments?.getString("route") ?: ""
             DetailScreen(
                 homeViewModel = homeViewModel,
-                movieId = movieId,
+                id = id,
                 route = route
             )
         }

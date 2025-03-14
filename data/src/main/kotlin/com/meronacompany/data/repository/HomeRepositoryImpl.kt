@@ -8,6 +8,7 @@ import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
 import com.meronacompany.domain.model.ResponsePopularMovieData
 import com.meronacompany.domain.model.ResponsePopularTvData
+import com.meronacompany.domain.model.ResponseTvDetailData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
@@ -49,12 +50,20 @@ class HomeRepositoryImpl(
         emit(homeService.requestMovieDetail(movieId = movieId).toModel())
     }
 
+    override fun requestTvDetail(tvId: Int): Flow<ResponseTvDetailData> = flow {
+        emit(homeService.requestTvDetail(tvId = tvId).toModel())
+    }
+
     override fun requestMovieCertification(movieId: Int): Flow<ResponseMovieCertificationData> = flow {
         emit(homeService.requestMovieCertification(movieId = movieId).toModel())
     }
 
     override fun requestMovieCredits(movieId: Int): Flow<ResponseMovieCreditsData> = flow {
         emit(homeService.requestMovieCredits(movieId = movieId).toModel())
+    }
+
+    override fun requestTvCredits(tvId: Int): Flow<ResponseMovieCreditsData> = flow {
+        emit(homeService.requestTvCredits(tvId = tvId).toModel())
     }
 
 }

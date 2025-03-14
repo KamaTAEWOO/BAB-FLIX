@@ -40,7 +40,7 @@ import timber.log.Timber
 fun TvContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
-    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToDetail: (Int, String) -> Unit,
     route: String
 ) {
     val homeState = homeViewModel.uiState.value
@@ -65,7 +65,7 @@ fun TvContent(
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
                     // Detail 화면으로 이동
-                    onNavigateToDetail(tvId)
+                    onNavigateToDetail(tvId, route)
                 }
             )
         }

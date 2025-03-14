@@ -8,8 +8,10 @@ import com.meronacompany.core.model.dto.ResponseMovieDetailDto
 import com.meronacompany.core.model.dto.ResponseMovieVideoDto
 import com.meronacompany.core.model.dto.ResponsePopularMovieDto
 import com.meronacompany.core.model.dto.ResponsePopularTvDto
+import com.meronacompany.core.model.dto.ResponseTvDetailDto
 import com.meronacompany.core.model.dto.ResponseWatchProvidersDto
 import com.meronacompany.core.utility.Locales
+import com.meronacompany.domain.model.ResponseTvDetailData
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -59,6 +61,12 @@ interface HomeService {
         @Query("language") language: String = Locales.KO_KR
     ): ResponseMovieDetailDto
 
+    @GET("tv/{tv_id}")
+    suspend fun requestTvDetail(
+        @Path("tv_id") tvId: Int,
+        @Query("language") language: String = Locales.KO_KR
+    ): ResponseTvDetailDto
+
     @GET("movie/{movie_id}/release_dates")
     suspend fun requestMovieCertification(
         @Path("movie_id") movieId: Int
@@ -67,6 +75,12 @@ interface HomeService {
     @GET("movie/{movie_id}/credits")
     suspend fun requestMovieCredits(
         @Path("movie_id") movieId: Int,
+        @Query("language") language: String = Locales.KO_KR
+    ): ResponseMovieCreditsDto
+
+    @GET("tv/{tv_id}/credits")
+    suspend fun requestTvCredits(
+        @Path("tv_id") tvId: Int,
         @Query("language") language: String = Locales.KO_KR
     ): ResponseMovieCreditsDto
 

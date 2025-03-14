@@ -28,7 +28,7 @@ fun DetailMovieContent(
     paddingValues: PaddingValues,
     homeUiState: HomeState,
     movieId: String?,
-    detailUIModel: DetailModel?
+    detailUIModel: DetailMovieModel?
 ) {
     Column(
         modifier = Modifier
@@ -103,7 +103,7 @@ private fun RowText(title: String, content: String) {
     }
 }
 
-fun detailMovieContentData(homeUiState: HomeState): DetailModel? {
+fun detailMovieContentData(homeUiState: HomeState): DetailMovieModel? {
     return homeUiState.movieDetail?.let { detail ->
         val castNames = homeUiState.movieCredits?.cast?.joinToString { it.name } ?: ""
         val directorName =
@@ -119,7 +119,7 @@ fun detailMovieContentData(homeUiState: HomeState): DetailModel? {
         val ratingScore = detail.voteAverage.toString()
 
         detail.runtime.toString().let {
-            DetailModel(
+            DetailMovieModel(
                 title = detail.title,
                 director = directorName,
                 cast = castNames,
