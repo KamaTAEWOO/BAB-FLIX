@@ -19,20 +19,3 @@ data class ResponseMovieDetailData(
     val productionCompanies: List<ProductionCompany>,
     val spokenLanguages: List<SpokenLanguage>
 )
-
-data class Genre(
-    val id: Int,
-    val name: String
-)
-
-data class ProductionCompany(
-    val id: Int,
-    val name: String,
-    val logoPath: String?,
-    val originCountry: String
-)
-
-data class SpokenLanguage(
-    val iso6391: String,
-    val name: String
-)
