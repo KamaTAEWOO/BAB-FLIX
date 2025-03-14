@@ -1,51 +1,29 @@
 package com.meronacompany.feature.home
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.CommonAppBar
-import com.meronacompany.design.common.CommonGlideImage
-import com.meronacompany.design.theme.BAB_FLIXTheme
-import com.meronacompany.feature.home.model.MovieItem
+import com.meronacompany.feature.movie.MovieContent
+import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
-import timber.log.Timber
+import com.meronacompany.feature.tv.TvContent
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel, navHostController: NavHostController, onNavigateToDetail: (Int) -> Unit) {
+fun HomeScreen(
+    route: String,
+    homeViewModel: HomeViewModel,
+    navHostController: NavHostController,
+    onNavigateToDetail: (Int) -> Unit
+) {
     LaunchedEffect("Unit") {
-//        homeViewModel.requestIsApiKey()
-//        homeViewModel.requestPopularTVs() // popular tv
 //        homeViewModel.requestWatchProviders() // ott
         homeViewModel.requestMovieGenres() // movie 장르
-//        homeViewModel.requestTVGenres() // tv 장르
+        homeViewModel.requestTVGenres() // tv 장르
     }
 
     Scaffold(
@@ -54,162 +32,12 @@ fun HomeScreen(homeViewModel: HomeViewModel, navHostController: NavHostControlle
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar("BabFlix") },
         content = { paddingValues ->
-            HomeContent(homeViewModel, paddingValues, onNavigateToDetail)
+            if (route == NavRouteLabel.MOVIE) {
+                MovieContent(homeViewModel, paddingValues, onNavigateToDetail)
+            } else {
+                TvContent(homeViewModel, paddingValues, onNavigateToDetail)
+            }
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
-}
-
-@SuppressLint("StateFlowValueCalledInComposition")
-@Composable
-fun HomeContent(
-    homeViewModel: HomeViewModel,
-    paddingValues: PaddingValues,
-    onNavigateToDetail: (Int) -> Unit
-) {
-    val homeState = homeViewModel.uiState.value
-    var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
-    val pagerState = rememberPagerState(pageCount = { pageCount })
-    // 만약 allPopularMoviesData에 key가 없다면, requestPopularMovies() 호출
-    if (!homeState.allPopularMoviesData.containsKey(pageCount - 1)) {
-        homeViewModel.requestPopularMovies()
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        HorizontalPager(state = pagerState) { page ->
-            // 마지막 페이지에 도달하면 페이지 추가
-            if (page == pageCount - 1) {
-                pageCount++
-            }
-            HomeContentListData(
-                homeState = homeState,
-                paddingValues = paddingValues,
-                onMovieClick = { movieId ->
-                    Timber.d("movieId: $movieId")
-                    // Detail 화면으로 이동
-                    onNavigateToDetail(movieId)
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onMovieClick: (Int) -> Unit) {
-    val moviePairs = remember(homeState?.popularMovies?.results) {
-        homeState?.popularMovies?.results?.chunked(2) ?: emptyList()
-    }
-
-    if (homeState == null || moviePairs.isEmpty()) {
-        Text(
-            text = "데이터를 불러오는 중...",
-            modifier = Modifier.padding(16.dp),
-            color = colorScheme.onPrimary
-        )
-        return
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorScheme.primary)
-            .padding(paddingValues)
-    ) {
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Gray)
-            ) {
-                GenresListData(homeState)
-            }
-        }
-
-        item {
-            Spacer(Modifier.height(16.dp))
-        }
-
-        items(moviePairs) { moviePair ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                moviePair.forEach { movie ->
-                    val movieItem = MovieItem(
-                        id = movie.id,
-                        genreIds = movie.genre_ids,
-                        title = movie.title,
-                        voteAverage = movie.vote_average,
-                        posterPath = movie.poster_path ?: ""
-                    )
-                    MovieData(
-                        movieItem = movieItem,
-                        modifier = Modifier.weight(1f),
-                        onClick = onMovieClick
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-    }
-}
-
-@Composable
-fun GenresListData(homeState: HomeState) {
-    val genres = homeState.genresMovies?.genres ?: emptyList()
-
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorScheme.primary)
-            .padding(horizontal = 20.dp),
-    ) {
-        items(genres) { genre ->
-            Box(
-                modifier = Modifier
-                    .background(colorScheme.primary)
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Text(
-                    text = genre.name,
-                    color = colorScheme.onPrimary,
-                    style = BAB_FLIXTheme.typography.textStyleBold18
-                )
-            }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-}
-
-@Composable
-fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick(movieItem.id) }
-            .then(modifier)
-    ) {
-        Spacer(modifier = Modifier.height(4.dp))
-        MoviePoster(posterPath = movieItem.posterPath)
-        MovieNameAndScore(movieItem = movieItem)
-        Spacer(modifier = Modifier.height(4.dp))
-    }
-}
-
-@Composable
-fun MoviePoster(posterPath: String) {
-    CommonGlideImage(path = posterPath)
-}
-
-@Composable
-fun MovieNameAndScore(movieItem: MovieItem) {
-    Column(
-        modifier = Modifier.padding(horizontal = 30.dp)
-    ) {
-        Text(text = movieItem.title, color = colorScheme.onPrimary)
-        Text(text = Util.formatVoteAverage(movieItem.voteAverage), color = colorScheme.onPrimary)
-    }
 }

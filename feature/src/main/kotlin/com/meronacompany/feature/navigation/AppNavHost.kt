@@ -30,7 +30,7 @@ fun AppNavHost(
         composable(route = NavRouteLabel.SPLASH) {
             SplashScreen(
                 onNavigateToHome = {
-                    navHostController.navigate(NavRouteLabel.HOME) {
+                    navHostController.navigate(NavRouteLabel.MOVIE) {
                         popUpTo(NavRouteLabel.SPLASH) {
                             inclusive = true
                         }
@@ -39,9 +39,22 @@ fun AppNavHost(
             )
         }
 
-        // Home
-        composable(route = NavRouteLabel.HOME) {
+        // Movie
+        composable(route = NavRouteLabel.MOVIE) {
             HomeScreen(
+                route = NavRouteLabel.MOVIE,
+                homeViewModel,
+                navHostController,
+                onNavigateToDetail = { movieId ->
+                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId")
+                }
+            )
+        }
+
+        // TV
+        composable(route = NavRouteLabel.TV) {
+            HomeScreen(
+                route = NavRouteLabel.TV,
                 homeViewModel,
                 navHostController,
                 onNavigateToDetail = { movieId ->

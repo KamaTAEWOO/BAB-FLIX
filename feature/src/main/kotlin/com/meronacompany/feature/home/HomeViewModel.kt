@@ -33,10 +33,19 @@ class HomeViewModel(
                 popularMovies = event.popularMovies,
                 allPopularMoviesData = currentState.allPopularMoviesData + (event.popularMovies.page to event.popularMovies.results)
             )
+            is HomeEvent.PopularTVsEvent -> currentState.copy(
+                popularTVs = event.popularTVs,
+                allPopularTVsData = currentState.allPopularTVsData + (event.popularTVs.page to event.popularTVs.results)
+            )
             is HomeEvent.GenresMoviesEvent -> currentState.genresMovies?.let {
                 currentState.copy(genresMovies = it)
             } ?: run {
                 currentState.copy(genresMovies = event.genres)
+            }
+            is HomeEvent.GenresTVsEvent -> currentState.genresTVs?.let {
+                currentState.copy(genresTVs = it)
+            } ?: run {
+                currentState.copy(genresTVs = event.genres)
             }
             is HomeEvent.MovieVideoEvent -> currentState.copy(
                 movieVideo = event.movieVideo,
@@ -76,9 +85,11 @@ class HomeViewModel(
         homeRepository.requestPopularTVs(pageNumber = 1)
             .onEach {
                 Timber.d("requestPopularTVs: $it")
+                sendAction(HomeEvent.PopularTVsEvent(it))
             }
             .catch {
                 Timber.e(it)
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
             }
             .launchIn(viewModelScope)
     }
@@ -110,9 +121,11 @@ class HomeViewModel(
         homeRepository.requestTVGenres()
             .onEach {
                 Timber.d("requestTVGenres: $it")
+                sendAction(HomeEvent.GenresTVsEvent(it))
             }
             .catch {
                 Timber.e(it)
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
             }
             .launchIn(viewModelScope)
     }

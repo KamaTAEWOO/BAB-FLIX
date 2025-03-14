@@ -11,6 +11,12 @@ object NavRouteLabel {
     // home
     const val HOME = "home"
 
+    // movie
+    const val MOVIE = "movie"
+
+    // tv
+    const val TV = "tv"
+
     // detail
     const val DETAIL = "detail"
 

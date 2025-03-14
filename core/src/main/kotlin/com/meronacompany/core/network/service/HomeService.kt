@@ -6,10 +6,9 @@ import com.meronacompany.core.model.dto.ResponseMovieCertificationDto
 import com.meronacompany.core.model.dto.ResponseMovieCreditsDto
 import com.meronacompany.core.model.dto.ResponseMovieDetailDto
 import com.meronacompany.core.model.dto.ResponseMovieVideoDto
-import com.meronacompany.core.model.dto.ResponsePopularDto
+import com.meronacompany.core.model.dto.ResponsePopularMovieDto
 import com.meronacompany.core.model.dto.ResponseWatchProvidersDto
 import com.meronacompany.core.utility.Locales
-import com.meronacompany.domain.model.ResponseMovieCertificationData
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -23,13 +22,13 @@ interface HomeService {
     suspend fun requestPopularMovies(
         @Query("language") language: String = Locales.KO_KR,
         @Query("page") page: Int
-    ): ResponsePopularDto
+    ): ResponsePopularMovieDto
 
-    @GET("tv/popular")
+    @GET("tv/top_rated")
     suspend fun requestPopularTVs(
         @Query("language") language: String = Locales.KO_KR,
         @Query("page") page: Int
-    ): ResponsePopularDto
+    ): ResponsePopularMovieDto
 
     @GET("movie/{movie_id}/watch/providers")
     suspend fun requestWatchProviders(

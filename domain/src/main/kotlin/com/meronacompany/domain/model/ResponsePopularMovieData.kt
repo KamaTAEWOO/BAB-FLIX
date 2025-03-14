@@ -1,11 +1,11 @@
 package com.meronacompany.domain.model
 
-data class ResponsePopularData(
+data class ResponsePopularMovieData(
     val page: Int,
-    val results: List<Movie>
+    val results: List<PopularMovieData>
 )
 
-data class Movie(
+data class PopularMovieData(
     val adult: Boolean,
     val backdrop_path: String?,
     val genre_ids: List<Int>,

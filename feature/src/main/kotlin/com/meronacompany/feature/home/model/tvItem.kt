@@ -1,6 +1,6 @@
 package com.meronacompany.feature.home.model
 
-data class MovieItem(
+data class tvItem(
     val id: Int,               // 아이디
     val genreIds: List<Int>,   // 장르 ID 리스트
     val title: String,         // 영화 제목

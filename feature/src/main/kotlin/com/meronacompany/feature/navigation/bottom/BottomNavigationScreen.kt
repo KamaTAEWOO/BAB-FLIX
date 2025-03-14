@@ -27,12 +27,12 @@ fun BottomNavigationScreen(navController: NavController) {
 
     val items = listOf(
         BottomNavItem(
-            route = NavRouteLabel.HOME,
+            route = NavRouteLabel.MOVIE,
             iconResId = R.drawable.ic_launcher,
             labelResId = R.string.movie
         ),
         BottomNavItem(
-            route = NavRouteLabel.HOME,
+            route = NavRouteLabel.TV,
             iconResId = R.drawable.ic_launcher,
             labelResId = R.string.tv
         ),

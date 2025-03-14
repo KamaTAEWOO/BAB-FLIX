@@ -6,7 +6,7 @@ import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
-import com.meronacompany.domain.model.ResponsePopularData
+import com.meronacompany.domain.model.ResponsePopularMovieData
 import com.meronacompany.domain.model.ResponseWatchProvidersData
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,11 +20,11 @@ class HomeRepositoryImpl(
         emit(homeService.requestIsApiKey().toModel().success)
     }
 
-    override fun requestPopularMovies(pageNumber: Int): Flow<ResponsePopularData> = flow {
+    override fun requestPopularMovies(pageNumber: Int): Flow<ResponsePopularMovieData> = flow {
         emit(homeService.requestPopularMovies(page = pageNumber).toModel())
     }
 
-    override fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularData> = flow {
+    override fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularMovieData> = flow {
         emit(homeService.requestPopularTVs(page = pageNumber).toModel())
     }
 
