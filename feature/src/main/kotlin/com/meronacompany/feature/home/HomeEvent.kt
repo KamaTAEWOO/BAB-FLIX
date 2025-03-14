@@ -32,6 +32,8 @@ sealed class HomeEvent : BaseEvent {
 
     data class TvDetailEvent(val tvDetail: ResponseTvDetailData) : HomeEvent()
 
+    data class TvVideoEvent(val tvVideo: ResponseMovieVideo) : HomeEvent()
+
     // error
     data class ErrorEvent(val errorMessage: String) : HomeEvent()
 }

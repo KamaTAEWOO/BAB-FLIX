@@ -49,9 +49,15 @@ interface HomeService {
         @Query("language") language: String = Locales.KO_KR
     ): ResponseGenreDto
 
-    @GET("movie/{movie_id}/videos")
+    @GET("movie/{id}/videos")
     suspend fun requestMovieVideo(
-        @Path("movie_id") movieId: Int,
+        @Path("id") id: Int,
+        @Query("language") language: String = Locales.EN_US
+    ): ResponseMovieVideoDto
+
+    @GET("tv/{id}/videos")
+    suspend fun requestTvVideo(
+        @Path("id") id: Int,
         @Query("language") language: String = Locales.EN_US
     ): ResponseMovieVideoDto
 

@@ -37,9 +37,9 @@ fun DetailTvContent(
             .verticalScroll(rememberScrollState()) // Enable scrolling
     ) {
         // Show YouTube player only if movieVideoKey is available
-        if (homeUiState.movieVideoKey != null && homeUiState.movieVideoKey != tvId) {
-            Timber.d("movieVideoKey: ${homeUiState.movieVideoKey}")
-            YoutubePlayer(videoId = homeUiState.movieVideoKey)
+        if (homeUiState.tvVideoKey != null && homeUiState.tvVideoKey != tvId) {
+            Timber.d("movieVideoKey: ${homeUiState.tvVideoKey}")
+            YoutubePlayer(videoId = homeUiState.tvVideoKey)
             // title
             Text(
                 modifier = Modifier.padding(16.dp),

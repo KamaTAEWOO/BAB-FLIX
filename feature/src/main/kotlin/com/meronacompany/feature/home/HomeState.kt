@@ -28,6 +28,8 @@ data class HomeState(
     val allPopularTVsData: Map<Int, List<PopularTvData>> = emptyMap(),
     val genresTVs: ResponseGenreData? = null,
     val tvDetail: ResponseTvDetailData? = null,
+    val tvVideo: ResponseMovieVideo? = null,
+    val tvVideoKey: String? = null,
 
     // error
     val errorMessage: String? = null

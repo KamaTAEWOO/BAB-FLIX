@@ -23,6 +23,7 @@ fun DetailScreen(homeViewModel: HomeViewModel, id: String, route: String) {
             homeViewModel.requestMovieCredits(id.toInt())
             homeViewModel.requestTvDetail(id.toInt())
             homeViewModel.requestTvCredits(id.toInt())
+            homeViewModel.requestTvVideo(id.toInt())
             homeViewModel.setLoading(false) // 로딩 종료
         }
     }

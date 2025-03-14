@@ -25,7 +25,9 @@ interface HomeRepository {
 
     fun requestTVGenres(): Flow<ResponseGenreData>
 
-    fun requestMovieVideo(movieId: Int): Flow<ResponseMovieVideo>
+    fun requestMovieVideo(id: Int): Flow<ResponseMovieVideo>
+
+    fun requestTvVideo(id: Int): Flow<ResponseMovieVideo>
 
     fun requestMovieDetail(movieId: Int): Flow<ResponseMovieDetailData>
 

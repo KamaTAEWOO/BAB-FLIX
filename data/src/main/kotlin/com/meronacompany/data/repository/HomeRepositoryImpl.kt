@@ -42,8 +42,12 @@ class HomeRepositoryImpl(
         emit(homeService.requestTVGenres().toModel())
     }
 
-    override fun requestMovieVideo(movieId: Int): Flow<ResponseMovieVideo> = flow {
-        emit(homeService.requestMovieVideo(movieId = movieId).toModel())
+    override fun requestMovieVideo(id: Int): Flow<ResponseMovieVideo> = flow {
+        emit(homeService.requestMovieVideo(id = id).toModel())
+    }
+
+    override fun requestTvVideo(id: Int): Flow<ResponseMovieVideo> = flow {
+        emit(homeService.requestTvVideo(id = id).toModel())
     }
 
     override fun requestMovieDetail(movieId: Int): Flow<ResponseMovieDetailData> = flow {

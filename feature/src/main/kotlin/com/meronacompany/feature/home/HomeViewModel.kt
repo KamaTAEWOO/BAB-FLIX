@@ -51,6 +51,10 @@ class HomeViewModel(
                 movieVideo = event.movieVideo,
                 movieVideoKey = event.movieVideo.results[0].key
             )
+            is HomeEvent.TvVideoEvent -> currentState.copy(
+                tvVideo = event.tvVideo,
+                tvVideoKey = event.tvVideo.results[0].key
+            )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
             is HomeEvent.TvDetailEvent -> currentState.copy(tvDetail = event.tvDetail)
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
@@ -131,11 +135,32 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestMovieVideo(movieId: Int) {
-        homeRepository.requestMovieVideo(movieId)
+    fun requestMovieVideo(id: Int) {
+        homeRepository.requestMovieVideo(id)
             .onEach {
                 Timber.d("requestMovieVideo: $it")
-                sendAction(HomeEvent.MovieVideoEvent(it))
+                if (it.results.isNotEmpty()) {
+                    sendAction(HomeEvent.MovieVideoEvent(it))
+                } else {
+                    sendAction(HomeEvent.ErrorEvent("No video found"))
+                }
+            }
+            .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestTvVideo(id: Int) {
+        homeRepository.requestTvVideo(id)
+            .onEach {
+                Timber.d("requestTvVideo: $it")
+                if (it.results.isNotEmpty()) {
+                    sendAction(HomeEvent.TvVideoEvent(it))
+                } else {
+                    sendAction(HomeEvent.ErrorEvent("No video found"))
+                }
             }
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
