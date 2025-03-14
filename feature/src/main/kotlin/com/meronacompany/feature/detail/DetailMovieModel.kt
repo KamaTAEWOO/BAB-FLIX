@@ -1,6 +1,6 @@
 package com.meronacompany.feature.detail
 
-data class DetailModel(
+data class DetailMovieModel(
     // 타이틀
     val title: String,
     // 감독

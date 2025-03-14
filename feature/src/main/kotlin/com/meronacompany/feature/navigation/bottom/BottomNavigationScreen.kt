@@ -1,10 +1,6 @@
 package com.meronacompany.feature.navigation.bottom
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.NavigationBar
@@ -14,16 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.model.BottomNavItem
+import com.meronacompany.design.R
 
 @Composable
 fun BottomNavigationScreen(navController: NavController) {
@@ -34,19 +27,19 @@ fun BottomNavigationScreen(navController: NavController) {
 
     val items = listOf(
         BottomNavItem(
-            route = NavRouteLabel.HOME,
-            iconResId = com.meronacompany.design.R.drawable.ic_launcher,
-            labelResId = com.meronacompany.design.R.string.app_name
+            route = NavRouteLabel.MOVIE,
+            iconResId = R.drawable.ic_launcher,
+            labelResId = R.string.movie
         ),
         BottomNavItem(
-            route = NavRouteLabel.HOME,
-            iconResId = com.meronacompany.design.R.drawable.ic_launcher,
-            labelResId = com.meronacompany.design.R.string.app_name
+            route = NavRouteLabel.TV,
+            iconResId = R.drawable.ic_launcher,
+            labelResId = R.string.tv
         ),
         BottomNavItem(
             route = NavRouteLabel.SETTINGS,
-            iconResId = com.meronacompany.design.R.drawable.ic_launcher,
-            labelResId = com.meronacompany.design.R.string.app_name
+            iconResId = R.drawable.ic_launcher,
+            labelResId = R.string.settings
         ),
     )
 

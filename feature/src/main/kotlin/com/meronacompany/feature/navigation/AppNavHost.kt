@@ -30,7 +30,7 @@ fun AppNavHost(
         composable(route = NavRouteLabel.SPLASH) {
             SplashScreen(
                 onNavigateToHome = {
-                    navHostController.navigate(NavRouteLabel.HOME) {
+                    navHostController.navigate(NavRouteLabel.MOVIE) {
                         popUpTo(NavRouteLabel.SPLASH) {
                             inclusive = true
                         }
@@ -39,23 +39,38 @@ fun AppNavHost(
             )
         }
 
-        // Home
-        composable(route = NavRouteLabel.HOME) {
+        // Movie
+        composable(route = NavRouteLabel.MOVIE) {
             HomeScreen(
+                route = NavRouteLabel.MOVIE,
                 homeViewModel,
                 navHostController,
-                onNavigateToDetail = { movieId ->
-                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId")
+                onNavigateToDetail = { movieId, route ->
+                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId/$route")
+                }
+            )
+        }
+
+        // TV
+        composable(route = NavRouteLabel.TV) {
+            HomeScreen(
+                route = NavRouteLabel.TV,
+                homeViewModel,
+                navHostController,
+                onNavigateToDetail = { movieId, route ->
+                    navHostController.navigate("${NavRouteLabel.DETAIL}/$movieId/$route")
                 }
             )
         }
 
         // Detail
-        composable(route = "${NavRouteLabel.DETAIL}/{movieId}") { backStackEntry ->
-            val movieId = backStackEntry.arguments?.getString("movieId") ?: ""
+        composable(route = "${NavRouteLabel.DETAIL}/{movieId}/{route}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("movieId") ?: ""
+            val route = backStackEntry.arguments?.getString("route") ?: ""
             DetailScreen(
                 homeViewModel = homeViewModel,
-                movieId = movieId
+                id = id,
+                route = route
             )
         }
 

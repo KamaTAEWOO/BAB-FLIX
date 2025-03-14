@@ -33,16 +33,30 @@ class HomeViewModel(
                 popularMovies = event.popularMovies,
                 allPopularMoviesData = currentState.allPopularMoviesData + (event.popularMovies.page to event.popularMovies.results)
             )
+            is HomeEvent.PopularTVsEvent -> currentState.copy(
+                popularTVs = event.popularTVs,
+                allPopularTVsData = currentState.allPopularTVsData + (event.popularTVs.page to event.popularTVs.results)
+            )
             is HomeEvent.GenresMoviesEvent -> currentState.genresMovies?.let {
                 currentState.copy(genresMovies = it)
             } ?: run {
                 currentState.copy(genresMovies = event.genres)
             }
+            is HomeEvent.GenresTVsEvent -> currentState.genresTVs?.let {
+                currentState.copy(genresTVs = it)
+            } ?: run {
+                currentState.copy(genresTVs = event.genres)
+            }
             is HomeEvent.MovieVideoEvent -> currentState.copy(
                 movieVideo = event.movieVideo,
                 movieVideoKey = event.movieVideo.results[0].key
             )
+            is HomeEvent.TvVideoEvent -> currentState.copy(
+                tvVideo = event.tvVideo,
+                tvVideoKey = event.tvVideo.results[0].key
+            )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
+            is HomeEvent.TvDetailEvent -> currentState.copy(tvDetail = event.tvDetail)
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
             is HomeEvent.MovieCertificationEvent -> currentState.copy(movieCertification = event.movieCertification)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
@@ -76,9 +90,11 @@ class HomeViewModel(
         homeRepository.requestPopularTVs(pageNumber = 1)
             .onEach {
                 Timber.d("requestPopularTVs: $it")
+                sendAction(HomeEvent.PopularTVsEvent(it))
             }
             .catch {
                 Timber.e(it)
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
             }
             .launchIn(viewModelScope)
     }
@@ -110,18 +126,41 @@ class HomeViewModel(
         homeRepository.requestTVGenres()
             .onEach {
                 Timber.d("requestTVGenres: $it")
+                sendAction(HomeEvent.GenresTVsEvent(it))
             }
             .catch {
+                Timber.e(it)
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestMovieVideo(id: Int) {
+        homeRepository.requestMovieVideo(id)
+            .onEach {
+                Timber.d("requestMovieVideo: $it")
+                if (it.results.isNotEmpty()) {
+                    sendAction(HomeEvent.MovieVideoEvent(it))
+                } else {
+                    sendAction(HomeEvent.ErrorEvent("No video found"))
+                }
+            }
+            .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
             }
             .launchIn(viewModelScope)
     }
 
-    fun requestMovieVideo(movieId: Int) {
-        homeRepository.requestMovieVideo(movieId)
+    fun requestTvVideo(id: Int) {
+        homeRepository.requestTvVideo(id)
             .onEach {
-                Timber.d("requestMovieVideo: $it")
-                sendAction(HomeEvent.MovieVideoEvent(it))
+                Timber.d("requestTvVideo: $it")
+                if (it.results.isNotEmpty()) {
+                    sendAction(HomeEvent.TvVideoEvent(it))
+                } else {
+                    sendAction(HomeEvent.ErrorEvent("No video found"))
+                }
             }
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
@@ -143,6 +182,18 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun requestTvDetail(tvId: Int) {
+        homeRepository.requestTvDetail(tvId)
+            .onEach {
+                Timber.d("requestTvDetail: $it")
+                sendAction(HomeEvent.TvDetailEvent(it))
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun requestMovieCertification(movieId: Int) {
         homeRepository.requestMovieCertification(movieId)
             .onEach {
@@ -159,6 +210,18 @@ class HomeViewModel(
         homeRepository.requestMovieCredits(movieId)
             .onEach {
                 Timber.d("requestMovieCredits: $it")
+                sendAction(HomeEvent.MovieCreditsEvent(it))
+            }
+            .catch {
+                Timber.e(it)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun requestTvCredits(tvId: Int) {
+        homeRepository.requestTvCredits(tvId)
+            .onEach {
+                Timber.d("requestTvCredits: $it")
                 sendAction(HomeEvent.MovieCreditsEvent(it))
             }
             .catch {

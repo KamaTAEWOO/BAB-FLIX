@@ -6,11 +6,14 @@ import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.domain.model.ResponseMovieCreditsData
 import com.meronacompany.domain.model.ResponseMovieDetailData
 import com.meronacompany.domain.model.ResponseMovieVideo
-import com.meronacompany.domain.model.ResponsePopularData
+import com.meronacompany.domain.model.ResponsePopularMovieData
+import com.meronacompany.domain.model.ResponsePopularTvData
+import com.meronacompany.domain.model.ResponseTvDetailData
 
 sealed class HomeEvent : BaseEvent {
 
-    data class PopularMoviesEvent(val popularMovies: ResponsePopularData) : HomeEvent()
+    // movie
+    data class PopularMoviesEvent(val popularMovies: ResponsePopularMovieData) : HomeEvent()
 
     data class GenresMoviesEvent(val genres: ResponseGenreData) : HomeEvent()
 
@@ -22,5 +25,15 @@ sealed class HomeEvent : BaseEvent {
 
     data class MovieCertificationEvent(val movieCertification: ResponseMovieCertificationData) : HomeEvent()
 
+    // tv
+    data class PopularTVsEvent(val popularTVs: ResponsePopularTvData) : HomeEvent()
+
+    data class GenresTVsEvent(val genres: ResponseGenreData) : HomeEvent()
+
+    data class TvDetailEvent(val tvDetail: ResponseTvDetailData) : HomeEvent()
+
+    data class TvVideoEvent(val tvVideo: ResponseMovieVideo) : HomeEvent()
+
+    // error
     data class ErrorEvent(val errorMessage: String) : HomeEvent()
 }
