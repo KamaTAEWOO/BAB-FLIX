@@ -48,7 +48,7 @@ fun TvContent(
     val pagerState = rememberPagerState(pageCount = { pageCount })
     // 만약 allPopularMoviesData에 key가 없다면, requestPopularMovies() 호출
     if (!homeState.allPopularTVsData.containsKey(pageCount - 1)) {
-        homeViewModel.requestPopularTVs()
+        homeViewModel.requestPopularTVs(pageCount - 1)
     }
 
     Column(
@@ -61,6 +61,7 @@ fun TvContent(
             }
             HomeContentListData(
                 homeState = homeState,
+                pageNumber = page + 1,
                 paddingValues = paddingValues,
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
@@ -75,14 +76,13 @@ fun TvContent(
 @Composable
 fun HomeContentListData(
     homeState: HomeState?,
+    pageNumber: Int,
     paddingValues: PaddingValues,
     onTvClick: (Int) -> Unit
 ) {
-    val tvPairs = remember(homeState?.popularTVs?.results) {
-        homeState?.popularTVs?.results?.chunked(2) ?: emptyList()
-    }
+    val tvPairs = homeState?.allPopularTVsData?.get(pageNumber)?.chunked(2)
 
-    if (homeState == null || tvPairs.isEmpty()) {
+    if (tvPairs.isNullOrEmpty()) {
         Text(
             text = "데이터를 불러오는 중...",
             modifier = Modifier.padding(16.dp),
