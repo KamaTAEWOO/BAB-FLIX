@@ -1,17 +1,23 @@
 package com.meronacompany.feature.navigation.bottom
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.meronacompany.feature.navigation.NavRouteLabel
@@ -28,17 +34,17 @@ fun BottomNavigationScreen(navController: NavController) {
     val items = listOf(
         BottomNavItem(
             route = NavRouteLabel.MOVIE,
-            iconResId = R.drawable.ic_launcher,
+            iconResId = R.drawable.ic_navigation_movie,
             labelResId = R.string.movie
         ),
         BottomNavItem(
             route = NavRouteLabel.TV,
-            iconResId = R.drawable.ic_launcher,
+            iconResId = R.drawable.ic_navigation_tv,
             labelResId = R.string.tv
         ),
         BottomNavItem(
             route = NavRouteLabel.SETTINGS,
-            iconResId = R.drawable.ic_launcher,
+            iconResId = R.drawable.ic_navigation_settings,
             labelResId = R.string.settings
         ),
     )
@@ -56,6 +62,7 @@ fun BottomNavigationScreen(navController: NavController) {
                 NavigationBarItem(
                     icon = {
                         Icon(
+                            modifier = Modifier.size(24.dp),
                             painter = painterResource(id = item.iconResId),
                             contentDescription = stringResource(id = item.labelResId),
                             tint = if (isSelected) selectedColor else unselectedColor
@@ -79,13 +86,13 @@ fun BottomNavigationScreen(navController: NavController) {
                             }
                         }
                     },
-//                    colors = NavigationBarItemDefaults.colors(
-//                        indicatorColor = Color.White,
-//                        selectedIconColor = selectedColor,
-//                        unselectedIconColor = unselectedColor,
-//                        selectedTextColor = selectedColor,
-//                        unselectedTextColor = unselectedColor
-//                    )
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = Color.Transparent, // Remove border effect
+                        selectedIconColor = selectedColor,
+                        unselectedIconColor = unselectedColor,
+                        selectedTextColor = selectedColor,
+                        unselectedTextColor = unselectedColor
+                    )
                 )
             }
         }
