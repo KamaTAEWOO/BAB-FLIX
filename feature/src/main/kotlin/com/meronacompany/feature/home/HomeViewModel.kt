@@ -100,8 +100,8 @@ class HomeViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun requestPopularTVs() {
-        homeRepository.requestPopularTVs(pageNumber = 1)
+    fun requestPopularTVs(pageNumber: Int = 1) {
+        homeRepository.requestPopularTVs(pageNumber = pageNumber)
             .onEach {
                 Timber.d("requestPopularTVs: $it")
                 sendAction(HomeEvent.PopularTVsEvent(it))

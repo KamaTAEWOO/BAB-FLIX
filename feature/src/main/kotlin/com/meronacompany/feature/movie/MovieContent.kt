@@ -48,7 +48,7 @@ fun MovieContent(
     val pagerState = rememberPagerState(pageCount = { pageCount })
     // 만약 allPopularMoviesData에 key가 없다면, requestPopularMovies() 호출
     if (!homeState.allPopularMoviesData.containsKey(pageCount - 1)) {
-        homeViewModel.requestPopularMovies()
+        homeViewModel.requestPopularMovies(pageCount - 1)
     }
 
     Column(
@@ -61,6 +61,7 @@ fun MovieContent(
             }
             HomeContentListData(
                 homeState = homeState,
+                pageNumber = page + 1,
                 paddingValues = paddingValues,
                 onMovieClick = { movieId ->
                     Timber.d("movieId: $movieId")
@@ -73,12 +74,15 @@ fun MovieContent(
 }
 
 @Composable
-fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onMovieClick: (Int) -> Unit) {
-    val moviePairs = remember(homeState?.popularMovies?.results) {
-        homeState?.popularMovies?.results?.chunked(2) ?: emptyList()
-    }
+fun HomeContentListData(
+    homeState: HomeState?,
+    pageNumber: Int,
+    paddingValues: PaddingValues,
+    onMovieClick: (Int) -> Unit
+) {
+    val moviePairs = homeState?.allPopularMoviesData?.get(pageNumber)?.chunked(2)
 
-    if (homeState == null || moviePairs.isEmpty()) {
+    if (moviePairs.isNullOrEmpty()) {
         Text(
             text = "데이터를 불러오는 중...",
             modifier = Modifier.padding(16.dp),
@@ -93,16 +97,6 @@ fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onM
             .background(colorScheme.primary)
             .padding(paddingValues)
     ) {
-//        item {
-////            Box(
-////                modifier = Modifier
-////                    .fillMaxSize()
-////                    .background(Color.Gray)
-////            ) {
-////                 GenresListData(homeState)
-////            }
-//        }
-
         item {
             Spacer(Modifier.height(16.dp))
         }
@@ -186,6 +180,9 @@ fun MovieNameAndScore(movieItem: MovieItem) {
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
         Text(text = movieItem.title ?: "", color = colorScheme.onPrimary)
-        Text(text = Util.formatVoteAverage(movieItem.voteAverage ?: 0.0), color = colorScheme.onPrimary)
+        Text(
+            text = Util.formatVoteAverage(movieItem.voteAverage ?: 0.0),
+            color = colorScheme.onPrimary
+        )
     }
 }
