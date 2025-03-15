@@ -93,15 +93,15 @@ fun HomeContentListData(homeState: HomeState?, paddingValues: PaddingValues, onM
             .background(colorScheme.primary)
             .padding(paddingValues)
     ) {
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Gray)
-            ) {
-                GenresListData(homeState)
-            }
-        }
+//        item {
+////            Box(
+////                modifier = Modifier
+////                    .fillMaxSize()
+////                    .background(Color.Gray)
+////            ) {
+////                 GenresListData(homeState)
+////            }
+//        }
 
         item {
             Spacer(Modifier.height(16.dp))
