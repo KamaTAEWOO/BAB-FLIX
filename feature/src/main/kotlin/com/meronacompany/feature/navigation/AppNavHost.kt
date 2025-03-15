@@ -82,9 +82,4 @@ fun AppNavHost(
         }
     }
 
-    BackHandler {
-        Timber.d("onBackPressed")
-        navHostController.popBackStack()
-    }
-
 }
