@@ -26,6 +26,20 @@ class HomeViewModel(
         _isLoading.value = isLoading
     }
 
+    private val _movieVideoKey = MutableStateFlow("")
+    var movieVideoKey: String
+        get() = _movieVideoKey.value
+        set(value) {
+            _movieVideoKey.value = value
+        }
+
+    private val _tvVideoKey = MutableStateFlow("")
+    var tvVideoKey: String
+        get() = _tvVideoKey.value
+        set(value) {
+            _tvVideoKey.value = value
+        }
+
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState {
         return when (event) {
@@ -47,14 +61,14 @@ class HomeViewModel(
             } ?: run {
                 currentState.copy(genresTVs = event.genres)
             }
-            is HomeEvent.MovieVideoEvent -> currentState.copy(
-                movieVideo = event.movieVideo,
-                movieVideoKey = event.movieVideo.results[0].key
-            )
-            is HomeEvent.TvVideoEvent -> currentState.copy(
-                tvVideo = event.tvVideo,
-                tvVideoKey = event.tvVideo.results[0].key
-            )
+//            is HomeEvent.MovieVideoEvent -> currentState.copy(
+//                movieVideo = event.movieVideo,
+//                movieVideoKey = event.movieVideo.results[0].key
+//            )
+//            is HomeEvent.TvVideoEvent -> currentState.copy(
+//                tvVideo = event.tvVideo,
+//                tvVideoKey = event.tvVideo.results[0].key
+//            )
             is HomeEvent.MovieDetailEvent -> currentState.copy(movieDetail = event.movieDetail)
             is HomeEvent.TvDetailEvent -> currentState.copy(tvDetail = event.tvDetail)
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
@@ -140,7 +154,8 @@ class HomeViewModel(
             .onEach {
                 Timber.d("requestMovieVideo: $it")
                 if (it.results.isNotEmpty()) {
-                    sendAction(HomeEvent.MovieVideoEvent(it))
+                    movieVideoKey = it.results[0].key
+//                    sendAction(HomeEvent.MovieVideoEvent(it))
                 } else {
                     sendAction(HomeEvent.ErrorEvent("No video found"))
                 }
@@ -157,7 +172,8 @@ class HomeViewModel(
             .onEach {
                 Timber.d("requestTvVideo: $it")
                 if (it.results.isNotEmpty()) {
-                    sendAction(HomeEvent.TvVideoEvent(it))
+//                    sendAction(HomeEvent.TvVideoEvent(it))
+                    tvVideoKey = it.results[0].key
                 } else {
                     sendAction(HomeEvent.ErrorEvent("No video found"))
                 }

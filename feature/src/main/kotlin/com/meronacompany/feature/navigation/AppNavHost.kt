@@ -1,5 +1,6 @@
 package com.meronacompany.feature.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +14,7 @@ import com.meronacompany.feature.home.HomeScreen
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.settings.SettingsScreen
 import com.meronacompany.feature.splash.SplashScreen
+import timber.log.Timber
 
 @Composable
 fun AppNavHost(
