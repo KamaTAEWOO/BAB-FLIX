@@ -20,15 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.meronacompany.core.utility.Util.formatDuration
 import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.design.R
 
 @Composable
 fun DetailMovieContent(
@@ -59,14 +59,21 @@ fun DetailMovieContent(
         )
 
         val details = listOf(
-            "감독" to (detailUIModel?.director ?: "No director"),
-            "출연" to (detailUIModel?.cast ?: "No cast"),
-            "재생" to (detailUIModel?.duration?.toInt()?.let { formatDuration(it) } ?: "No duration"),
-            "장르" to (detailUIModel?.genre ?: "No genre"),
-            "개봉일" to (detailUIModel?.releaseDate ?: "No release date"),
-            "시청등급" to ("${detailUIModel?.rating}세 관람가"),
-            "원어" to (detailUIModel?.originalLanguage ?: "No original language"),
-            "별점" to (detailUIModel?.ratingScore ?: "No rating score")
+            stringResource(R.string.director) to (detailUIModel?.director ?: stringResource(R.string.data_error)),
+            stringResource(R.string.cast) to (detailUIModel?.cast ?: stringResource(R.string.data_error)),
+            stringResource(R.string.duration) to (detailUIModel?.duration?.toInt()?.let { formatDuration(it) } ?: stringResource(R.string.data_error)),
+            stringResource(R.string.genre) to (detailUIModel?.genre ?: stringResource(R.string.data_error)),
+            stringResource(R.string.release_date) to (detailUIModel?.releaseDate ?: stringResource(R.string.data_error)),
+            stringResource(R.string.watch_rating) to (
+                    if(detailUIModel?.rating == "All") {
+                        "${detailUIModel.rating} 관람가"
+                    } else if (detailUIModel?.rating == "등급 정보 없음") {
+                        "등급 정보 없음"
+                    } else {
+                        "${detailUIModel?.rating}세 관람가"
+                    }),
+            stringResource(R.string.original_language) to (detailUIModel?.originalLanguage ?: stringResource(R.string.data_error)),
+            stringResource(R.string.rating) to (detailUIModel?.ratingScore ?: stringResource(R.string.data_error))
         )
 
         details.forEach { (title, content) ->
@@ -76,12 +83,12 @@ fun DetailMovieContent(
         Text(
             modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
             style = BAB_FLIXTheme.typography.textStyleBold18,
-            text = "줄거리"
+            text = stringResource(R.string.store)
         )
 
         Text(
             modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 24.dp),
-            text = detailUIModel?.overview ?: "No overview",
+            text = if(detailUIModel?.overview == "") stringResource(R.string.data_error) else detailUIModel?.overview ?: stringResource(R.string.data_error),
             style = BAB_FLIXTheme.typography.textStyleLight16,
         )
     }
@@ -156,7 +163,7 @@ fun detailMovieContentData(homeUiState: HomeState): DetailMovieModel? {
                 emptyList()
             )
         )
-        val originalLanguage = detail.spokenLanguages[0].name
+        val originalLanguage = detail.spokenLanguages.firstOrNull()?.name ?: ""
         val ratingScore = detail.voteAverage.toString()
 
         detail.runtime.toString().let {

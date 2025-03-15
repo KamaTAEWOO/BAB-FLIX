@@ -1,6 +1,27 @@
 <resources>
     <string name="app_name">BAB_FLIX</string>
+
+    <string name="toolbar_name">BabFlix</string>
+
+    <string name="loading">로딩 중…</string>
+
     <string name="movie">영화</string>
     <string name="tv">TV 프로그램</string>
     <string name="settings">설정</string>
+
+    <string name="creator">창작자</string>
+    <string name="cast">출연</string>
+    <string name="genre">장르</string>
+    <string name="original_language">원어</string>
+    <string name="rating">평점</string>
+    <string name="director">감독</string>
+    <string name="release_date">개봉일</string>
+    <string name="duration">재생</string>
+    <string name="watch_rating">시청등급</string>
+
+    <string name="store">줄거리</string>
+
+    <string name="np_certification">등급 정보 없음</string>
+
+    <string name="data_error">데이터가 없습니다.</string>
 </resources>

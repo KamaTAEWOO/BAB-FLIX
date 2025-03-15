@@ -6,10 +6,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.navigation.NavRouteLabel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import com.meronacompany.design.R
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -51,7 +53,7 @@ fun DetailScreen(homeViewModel: HomeViewModel, id: String, route: String) {
         topBar = {},
         content = { paddingValues ->
             if (homeViewModel.isLoading.value) {
-                Text(text = "Loading...")
+                Text(text = stringResource(R.string.loading))
             } else {
                 val detailMovieUIModel = detailMovieContentData(homeUiState)
                 val detailTvUIModel = detailTvContentData(homeUiState)
