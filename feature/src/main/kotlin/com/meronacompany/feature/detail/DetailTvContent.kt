@@ -15,7 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.meronacompany.design.R
 import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
@@ -41,16 +43,16 @@ fun DetailTvContent(
 
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = detailUIModel?.title ?: "No title",
+                text = detailUIModel?.title ?: stringResource(R.string.data_error),
                 style = BAB_FLIXTheme.typography.textStyleBold24
             )
 
             val details = listOf(
-                "창작자" to (detailUIModel?.creator ?: "No director"),
-                "출연" to (detailUIModel?.cast ?: "No cast"),
-                "장르" to (detailUIModel?.genre ?: "No genre"),
-                "원어" to (detailUIModel?.originalLanguage ?: "No original language"),
-                "별점" to (detailUIModel?.ratingScore ?: "No rating score")
+                stringResource(R.string.creator) to (detailUIModel?.creator ?: stringResource(R.string.data_error)),
+                stringResource(R.string.cast) to (detailUIModel?.cast ?: stringResource(R.string.data_error)),
+                stringResource(R.string.genre) to (detailUIModel?.genre ?: stringResource(R.string.data_error)),
+                stringResource(R.string.original_language) to (detailUIModel?.originalLanguage ?: stringResource(R.string.data_error)),
+                stringResource(R.string.rating) to (detailUIModel?.ratingScore ?: stringResource(R.string.data_error))
             )
 
             details.forEach { (title, content) ->
@@ -60,12 +62,12 @@ fun DetailTvContent(
             Text(
                 modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
                 style = BAB_FLIXTheme.typography.textStyleBold18,
-                text = "줄거리"
+                text = stringResource(R.string.store)
             )
 
             Text(
                 modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                text = detailUIModel?.overview ?: "No overview",
+                text = detailUIModel?.overview ?: stringResource(R.string.data_error),
                 style = BAB_FLIXTheme.typography.textStyleLight16,
             )
         }

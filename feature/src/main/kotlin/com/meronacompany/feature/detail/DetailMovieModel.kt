@@ -20,5 +20,5 @@ data class DetailMovieModel(
     // 별점
     val ratingScore: String,
     // 줄거리
-    val overview: String = "데이터 없음",
+    val overview: String,
 )
