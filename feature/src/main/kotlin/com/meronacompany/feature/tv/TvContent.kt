@@ -32,6 +32,7 @@ import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.feature.home.ImageError
 import com.meronacompany.feature.tv.model.TvItem
 import timber.log.Timber
 
@@ -181,6 +182,10 @@ fun TvData(tvItem: TvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
 
 @Composable
 fun TvPoster(posterPath: String) {
+    if (posterPath.isEmpty()) {
+        ImageError()
+        return
+    }
     CommonGlideImage(path = posterPath)
 }
 
