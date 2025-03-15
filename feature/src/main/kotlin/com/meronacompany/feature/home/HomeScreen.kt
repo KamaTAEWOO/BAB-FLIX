@@ -22,8 +22,8 @@ fun HomeScreen(
 ) {
     LaunchedEffect("Unit") {
 //        homeViewModel.requestWatchProviders() // ott
-        homeViewModel.requestMovieGenres() // movie 장르
-        homeViewModel.requestTVGenres() // tv 장르
+//        homeViewModel.requestMovieGenres() // movie 장르
+//        homeViewModel.requestTVGenres() // tv 장르
     }
 
     Scaffold(
