@@ -23,17 +23,25 @@ fun DetailScreen(homeViewModel: HomeViewModel, id: String, route: String) {
             // 모든 요청을 하나의 launch 블록에서 실행
             homeViewModel.movieVideoKey = id // 중복 실행 방지
 
-            homeViewModel.run {
-                listOf(
-                    async { requestMovieVideo(id.toInt()) },
-                    async { requestMovieDetail(id.toInt()) },
-                    async { requestMovieCertification(id.toInt()) },
-                    async { requestMovieCredits(id.toInt()) },
-                    async { requestTvDetail(id.toInt()) },
-                    async { requestTvCredits(id.toInt()) },
-                    async { requestTvVideo(id.toInt()) }
-                ).awaitAll()
+            if (route == NavRouteLabel.MOVIE) {
+                homeViewModel.run {
+                    listOf(
+                        async { homeViewModel.requestMovieVideo(id.toInt()) },
+                        async { requestMovieDetail(id.toInt()) },
+                        async { requestMovieCertification(id.toInt()) },
+                        async { requestMovieCredits(id.toInt()) },
+                    ).awaitAll()
+                }
+            } else {
+                homeViewModel.run {
+                    listOf(
+                        async { homeViewModel.requestTvVideo(id.toInt()) },
+                        async { requestTvDetail(id.toInt()) },
+                        async { requestTvCredits(id.toInt()) },
+                    ).awaitAll()
+                }
             }
+
 
             homeViewModel.setLoading(false) // 모든 요청 완료 후 로딩 종료
         }
