@@ -18,7 +18,6 @@ data class HomeState(
     val allPopularMoviesData: Map<Int, List<PopularMovieData>> = emptyMap(),
     val genresMovies: ResponseGenreData? = null,
     val movieVideo: ResponseMovieVideo? = null,
-//    val movieVideoKey: String? = null,
     val movieDetail: ResponseMovieDetailData? = null,
     val movieCredits: ResponseMovieCreditsData? = null,
     val movieCertification: ResponseMovieCertificationData? = null,
@@ -29,7 +28,6 @@ data class HomeState(
     val genresTVs: ResponseGenreData? = null,
     val tvDetail: ResponseTvDetailData? = null,
     val tvVideo: ResponseMovieVideo? = null,
-//    val tvVideoKey: String? = null,
 
     // error
     val errorMessage: String? = null

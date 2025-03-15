@@ -17,8 +17,6 @@ sealed class HomeEvent : BaseEvent {
 
     data class GenresMoviesEvent(val genres: ResponseGenreData) : HomeEvent()
 
-//    data class MovieVideoEvent(val movieVideo: ResponseMovieVideo) : HomeEvent()
-
     data class MovieDetailEvent(val movieDetail: ResponseMovieDetailData) : HomeEvent()
 
     data class MovieCreditsEvent(val movieCredits: ResponseMovieCreditsData) : HomeEvent()
@@ -31,8 +29,6 @@ sealed class HomeEvent : BaseEvent {
     data class GenresTVsEvent(val genres: ResponseGenreData) : HomeEvent()
 
     data class TvDetailEvent(val tvDetail: ResponseTvDetailData) : HomeEvent()
-
-//    data class TvVideoEvent(val tvVideo: ResponseMovieVideo) : HomeEvent()
 
     // error
     data class ErrorEvent(val errorMessage: String) : HomeEvent()
