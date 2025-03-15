@@ -80,7 +80,7 @@ fun DetailMovieContent(
         )
 
         Text(
-            modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 24.dp),
             text = detailUIModel?.overview ?: "No overview",
             style = BAB_FLIXTheme.typography.textStyleLight16,
         )
