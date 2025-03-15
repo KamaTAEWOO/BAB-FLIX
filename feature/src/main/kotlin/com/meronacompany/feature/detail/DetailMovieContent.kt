@@ -21,26 +21,26 @@ import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.feature.home.HomeState
-import timber.log.Timber
+import com.meronacompany.feature.home.HomeViewModel
 
 @Composable
 fun DetailMovieContent(
     paddingValues: PaddingValues,
-    homeUiState: HomeState,
+    homeViewModel: HomeViewModel,
     movieId: String?,
     detailUIModel: DetailMovieModel?
 ) {
+    val movieVideoKey = homeViewModel.movieVideoKey
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
             .verticalScroll(rememberScrollState()) // Enable scrolling
     ) {
-        // Show YouTube player only if movieVideoKey is available
-        if (homeUiState.movieVideoKey != null && homeUiState.movieVideoKey != movieId) {
-            Timber.d("movieVideoKey: ${homeUiState.movieVideoKey}")
-            YoutubePlayer(videoId = homeUiState.movieVideoKey)
-            // title
+        if (movieVideoKey != movieId) {
+            YoutubePlayer(videoId = movieVideoKey)
+
             Text(
                 modifier = Modifier.padding(16.dp),
                 text = detailUIModel?.title ?: "No title",
@@ -62,7 +62,6 @@ fun DetailMovieContent(
                 RowText(title = title, content = content)
             }
 
-            // overview
             Text(
                 modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
                 style = BAB_FLIXTheme.typography.textStyleBold18,
@@ -85,14 +84,14 @@ private fun RowText(title: String, content: String) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.Top // Ensure title stays at the top
+        verticalAlignment = Alignment.Top
     ) {
         Text(
             text = title,
             style = BAB_FLIXTheme.typography.textStyleBold16,
             modifier = Modifier
-                .width(80.dp) // Fixed width for consistency
-                .align(Alignment.Top) // Align title to top
+                .width(80.dp)
+                .align(Alignment.Top)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(

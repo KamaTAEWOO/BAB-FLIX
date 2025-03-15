@@ -8,6 +8,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.navigation.NavRouteLabel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -15,16 +17,25 @@ fun DetailScreen(homeViewModel: HomeViewModel, id: String, route: String) {
     val homeUiState = homeViewModel.uiState.collectAsState().value
 
     LaunchedEffect(id) {
-        if (homeUiState.movieVideoKey != id) {
+        if (homeViewModel.movieVideoKey != id) {
             homeViewModel.setLoading(true) // 로딩 시작
-            homeViewModel.requestMovieVideo(id.toInt())
-            homeViewModel.requestMovieDetail(id.toInt())
-            homeViewModel.requestMovieCertification(id.toInt())
-            homeViewModel.requestMovieCredits(id.toInt())
-            homeViewModel.requestTvDetail(id.toInt())
-            homeViewModel.requestTvCredits(id.toInt())
-            homeViewModel.requestTvVideo(id.toInt())
-            homeViewModel.setLoading(false) // 로딩 종료
+
+            // 모든 요청을 하나의 launch 블록에서 실행
+            homeViewModel.movieVideoKey = id // 중복 실행 방지
+
+            homeViewModel.run {
+                listOf(
+                    async { requestMovieVideo(id.toInt()) },
+                    async { requestMovieDetail(id.toInt()) },
+                    async { requestMovieCertification(id.toInt()) },
+                    async { requestMovieCredits(id.toInt()) },
+                    async { requestTvDetail(id.toInt()) },
+                    async { requestTvCredits(id.toInt()) },
+                    async { requestTvVideo(id.toInt()) }
+                ).awaitAll()
+            }
+
+            homeViewModel.setLoading(false) // 모든 요청 완료 후 로딩 종료
         }
     }
 
@@ -40,14 +51,14 @@ fun DetailScreen(homeViewModel: HomeViewModel, id: String, route: String) {
                 if (route == NavRouteLabel.MOVIE) {
                     DetailMovieContent(
                         paddingValues = paddingValues,
-                        homeUiState = homeUiState,
+                        homeViewModel = homeViewModel,
                         movieId = id,
                         detailUIModel = detailMovieUIModel
                     )
                 } else {
                     DetailTvContent(
                         paddingValues = paddingValues,
-                        homeUiState = homeUiState,
+                        homeViewModel = homeViewModel,
                         tvId = id,
                         detailUIModel = detailTvUIModel
                     )
