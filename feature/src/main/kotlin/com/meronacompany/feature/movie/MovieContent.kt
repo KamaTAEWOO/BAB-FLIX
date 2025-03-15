@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -32,6 +33,7 @@ import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.feature.home.ImageError
 import com.meronacompany.feature.movie.model.MovieItem
 import timber.log.Timber
 
@@ -171,6 +173,13 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
 
 @Composable
 fun MoviePoster(posterPath: String) {
+    if (posterPath.isEmpty()) {
+        ImageError(modifier = Modifier
+                .size(342.dp, 513.dp)
+            .padding(32.dp),
+            strokeWidth = 10f)
+        return
+    }
     CommonGlideImage(path = posterPath)
 }
 

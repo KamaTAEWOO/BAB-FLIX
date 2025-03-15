@@ -1,11 +1,14 @@
 package com.meronacompany.feature.home
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.meronacompany.design.common.CommonAppBar
@@ -42,4 +45,23 @@ fun HomeScreen(
         },
         bottomBar = { BottomNavigationScreen(navHostController) }
     )
+}
+
+// image 데이터 없을 때 x 표시
+@Composable
+fun ImageError(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Gray,
+    strokeWidth: Float = 8f
+) {
+    Canvas(modifier = modifier) {
+        val size = size.minDimension
+        val startOffset1 = Offset(0f, 0f)
+        val endOffset1 = Offset(size, size)
+        val startOffset2 = Offset(size, 0f)
+        val endOffset2 = Offset(0f, size)
+
+        drawLine(color = color, start = startOffset1, end = endOffset1, strokeWidth = strokeWidth)
+        drawLine(color = color, start = startOffset2, end = endOffset2, strokeWidth = strokeWidth)
+    }
 }
