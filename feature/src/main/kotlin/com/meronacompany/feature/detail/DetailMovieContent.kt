@@ -22,6 +22,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.meronacompany.core.utility.Util
 import com.meronacompany.core.utility.Util.formatDuration
 import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
@@ -73,7 +74,9 @@ fun DetailMovieContent(
                         "${detailUIModel?.rating}세 관람가"
                     }),
             stringResource(R.string.original_language) to (detailUIModel?.originalLanguage ?: stringResource(R.string.data_error)),
-            stringResource(R.string.rating) to (detailUIModel?.ratingScore ?: stringResource(R.string.data_error))
+            stringResource(R.string.rating) to (detailUIModel?.ratingScore?.toDouble()
+                ?.let { Util.formatVoteAverage(it) }
+                ?: stringResource(R.string.data_error))
         )
 
         details.forEach { (title, content) ->
