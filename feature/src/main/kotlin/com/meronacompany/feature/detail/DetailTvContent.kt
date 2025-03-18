@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.meronacompany.core.utility.Util
 import com.meronacompany.design.R
 import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
@@ -52,7 +53,9 @@ fun DetailTvContent(
                 stringResource(R.string.cast) to (detailUIModel?.cast ?: stringResource(R.string.data_error)),
                 stringResource(R.string.genre) to (detailUIModel?.genre ?: stringResource(R.string.data_error)),
                 stringResource(R.string.original_language) to (detailUIModel?.originalLanguage ?: stringResource(R.string.data_error)),
-                stringResource(R.string.rating) to (detailUIModel?.ratingScore ?: stringResource(R.string.data_error))
+                stringResource(R.string.rating) to (detailUIModel?.ratingScore?.toDouble()
+                    ?.let { Util.formatVoteAverage(it) }
+                    ?: stringResource(R.string.data_error))
             )
 
             details.forEach { (title, content) ->

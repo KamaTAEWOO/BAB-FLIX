@@ -82,16 +82,14 @@ fun HomeContentListData(
     paddingValues: PaddingValues,
     onMovieClick: (Int) -> Unit
 ) {
-    val moviePairs = homeState?.allPopularMoviesData?.get(pageNumber)?.chunked(2)
+    var filteredMovies = homeState?.allPopularMoviesData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
-    if (moviePairs.isNullOrEmpty()) {
-        Text(
-            text = "데이터를 불러오는 중...",
-            modifier = Modifier.padding(16.dp),
-            color = colorScheme.onPrimary
-        )
-        return
+    // Remove the last item if the number of movies is odd
+    if (filteredMovies.size % 2 != 0) {
+        filteredMovies = filteredMovies.dropLast(1)
     }
+
+    val moviePairs = filteredMovies.chunked(2)
 
     LazyColumn(
         modifier = Modifier
@@ -103,27 +101,42 @@ fun HomeContentListData(
             Spacer(Modifier.height(16.dp))
         }
 
-        items(moviePairs) { moviePair ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                moviePair.forEach { movie ->
-                    val movieItem = MovieItem(
-                        id = movie.id,
-                        genreIds = movie.genre_ids,
-                        title = movie.title,
-                        voteAverage = movie.vote_average,
-                        posterPath = movie.poster_path ?: ""
-                    )
-                    MovieData(
-                        movieItem = movieItem,
-                        modifier = Modifier.weight(1f),
-                        onClick = onMovieClick
-                    )
-                }
+        if (moviePairs.isEmpty()) {
+            item {
+                Text(
+                    text = "데이터를 불러오는 중...",
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    color = colorScheme.onPrimary
+                )
             }
-            Spacer(modifier = Modifier.height(12.dp))
+        } else {
+            items(moviePairs) { moviePair ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = if (moviePair.size == 1) androidx.compose.foundation.layout.Arrangement.Start else androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                ) {
+                    moviePair.forEach { movie ->
+                        val movieItem = MovieItem(
+                            id = movie.id,
+                            genreIds = movie.genre_ids,
+                            title = movie.title,
+                            voteAverage = movie.vote_average,
+                            posterPath = movie.poster_path
+                        )
+
+                        MovieData(
+                            movieItem = movieItem,
+                            modifier = Modifier.weight(1f),
+                            onClick = onMovieClick
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
 }
@@ -165,6 +178,7 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
             .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(4.dp))
+
         MoviePoster(posterPath = movieItem.posterPath ?: "")
         MovieNameAndScore(movieItem = movieItem)
         Spacer(modifier = Modifier.height(4.dp))
@@ -173,13 +187,6 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
 
 @Composable
 fun MoviePoster(posterPath: String) {
-    if (posterPath.isEmpty()) {
-        ImageError(modifier = Modifier
-                .size(342.dp, 513.dp)
-            .padding(32.dp),
-            strokeWidth = 10f)
-        return
-    }
     CommonGlideImage(path = posterPath)
 }
 
