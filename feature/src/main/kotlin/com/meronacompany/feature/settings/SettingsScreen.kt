@@ -19,13 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.meronacompany.design.theme.BAB_FLIXTheme
-import com.meronacompany.feature.R
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 
 /**

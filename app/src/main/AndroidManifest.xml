@@ -29,6 +29,10 @@
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
 
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+
         <meta-data
             android:name="com.google.android.gms.oss.licenses.service.START"
             android:value="com.google.android.gms.oss.licenses.OssLicensesService" />
