@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    id("com.google.android.gms.oss-licenses-plugin") apply false // Added OSS Licenses plugin
 }
 
 android {
@@ -17,6 +18,8 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":common"))
     implementation(project(":data"))
+
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0") // Added OSS Licenses dependency
 
     implementation(libs.androidx.navigation.runtime.ktx)
 

@@ -53,8 +53,8 @@ fun BottomNavigationScreen(navController: NavController) {
         modifier = Modifier.fillMaxWidth()
     ) {
         NavigationBar(
-            containerColor = colorScheme.tertiary,
-            contentColor = colorScheme.tertiary,
+            containerColor = colorScheme.background,
+            contentColor = colorScheme.background,
             modifier = Modifier.fillMaxWidth()
         ) {
             items.forEach { item ->

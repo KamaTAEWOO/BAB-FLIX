@@ -17,7 +17,8 @@ private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDarkColor,
     onPrimary = OnPrimaryDarkColor,
     secondary = SecondaryDarkColor,
-    tertiary = TertiaryDarkColor
+    tertiary = TertiaryDarkColor,
+    background = BackgroundDarkColor
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -53,7 +54,7 @@ fun BAB_FLIXTheme(
 
     val systemUiController = rememberSystemUiController()
     val statusBarColor = colorScheme.primary
-    val navigationBarColor = colorScheme.tertiary
+    val navigationBarColor = colorScheme.background
 
     SideEffect {
         systemUiController.setStatusBarColor(statusBarColor)
