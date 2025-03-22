@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -12,12 +13,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.CommonGlideImage
@@ -37,11 +39,21 @@ fun TvContent(
     route: String
 ) {
     val homeState = homeViewModel.uiState.value
-    var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
-    val pagerState = rememberPagerState(pageCount = { pageCount })
+    var pageCount by rememberSaveable { mutableIntStateOf(2) } // 초기 페이지 수
+
+    val pagerState = rememberPagerState(
+        initialPage = homeViewModel.tvPagerIndex,
+        pageCount = { pageCount }
+    )
+
+    val listStates = homeViewModel.tvScrollStates
 
     if (!homeState.allPopularTVsData.containsKey(pageCount - 1)) {
         homeViewModel.requestPopularTVs(pageCount - 1)
+    }
+
+    LaunchedEffect(pagerState.currentPage) {
+        homeViewModel.tvPagerIndex = pagerState.currentPage
     }
 
     Column(
@@ -55,6 +67,7 @@ fun TvContent(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
+                listStates = listStates,
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
                     onNavigateToDetail(tvId, route)
@@ -69,8 +82,13 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
+    listStates: MutableMap<Int, LazyListState>,
     onTvClick: (Int) -> Unit
 ) {
+    val scrollState = listStates.getOrPut(pageNumber) {
+        LazyListState()
+    }
+
     var filteredTVs = homeState?.allPopularTVsData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
     if (filteredTVs.size % 2 != 0) {
@@ -79,16 +97,17 @@ fun HomeContentListData(
 
     val tvPairs = filteredTVs.chunked(2)
 
-    if (tvPairs.isEmpty()) {
-        Text(
-            text = "데이터를 불러오는 중...",
-            modifier = Modifier.padding(16.dp),
-            color = colorScheme.onPrimary
-        )
-        return
-    }
+//    if (tvPairs.isEmpty()) {
+//        Text(
+//            text = "데이터를 불러오는 중...",
+//            modifier = Modifier.padding(16.dp),
+//            color = colorScheme.onPrimary
+//        )
+//        return
+//    }
 
     LazyColumn(
+        state = scrollState,
         modifier = Modifier
             .fillMaxSize()
             .background(colorScheme.primary)

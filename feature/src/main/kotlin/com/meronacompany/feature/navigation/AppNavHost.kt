@@ -78,7 +78,7 @@ fun AppNavHost(
 
         // Settings
         composable(route = NavRouteLabel.SETTINGS) {
-            SettingsScreen(navHostController)
+            SettingsScreen(navHostController, homeViewModel)
         }
     }
 

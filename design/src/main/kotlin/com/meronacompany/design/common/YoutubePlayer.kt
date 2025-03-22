@@ -3,8 +3,15 @@ package com.meronacompany.design.common
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import androidx.compose.ui.viewinterop.AndroidView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -14,6 +21,24 @@ import timber.log.Timber
 
 @Composable
 fun YoutubePlayer(videoId: String) {
+    val scope = rememberCoroutineScope()
+    var lastVideoId by remember { mutableStateOf("") }
+    var debounceJob by remember { mutableStateOf<Job?>(null) }
+
+    LaunchedEffect(videoId) {
+        if (videoId.isNotEmpty()) {
+            debounceJob?.cancel()
+            debounceJob = scope.launch {
+                delay(100)
+                lastVideoId = videoId
+                Timber.d("YoutubePlayer - Applied videoId after debounce: $lastVideoId")
+            }
+        }
+    }
+
+    if (lastVideoId.isEmpty()) return
+
+    Timber.d("YoutubePlayer - videoId: $lastVideoId")
     AndroidView(
         factory = { context ->
             val youTubePlayerView = YouTubePlayerView(context)
@@ -54,7 +79,7 @@ fun YoutubePlayer(videoId: String) {
                 }
 
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(videoId, 0f)
+                    youTubePlayer.cueVideo(lastVideoId, 0f)
                 }
 
                 override fun onStateChange(

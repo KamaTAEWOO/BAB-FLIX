@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.meronacompany.design.theme.BAB_FLIXTheme
+import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 
 /**
@@ -38,10 +39,10 @@ import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
  */
 
 @Composable
-fun SettingsScreen(navHostController: NavHostController) {
+fun SettingsScreen(navHostController: NavHostController, homeViewModel: HomeViewModel) {
     Scaffold(topBar = {}, content = { paddingValues ->
         SettingsContent(paddingValues)
-    }, bottomBar = { BottomNavigationScreen(navHostController) })
+    }, bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) })
 }
 
 @Composable

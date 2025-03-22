@@ -1,8 +1,6 @@
 package com.meronacompany.feature.navigation.bottom
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -23,9 +21,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.model.BottomNavItem
 import com.meronacompany.design.R
+import com.meronacompany.feature.home.HomeViewModel
 
 @Composable
-fun BottomNavigationScreen(navController: NavController) {
+fun BottomNavigationScreen(navController: NavController, homeViewModel: HomeViewModel) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val selectedColor = colorScheme.onPrimary
@@ -77,6 +76,8 @@ fun BottomNavigationScreen(navController: NavController) {
                     selected = isSelected,
                     onClick = {
                         if (!isSelected) {
+                            homeViewModel.movieScrollStates.clear()
+                            homeViewModel.tvScrollStates.clear()
                             navController.navigate(item.route) {
                                 popUpTo(navController.graph.startDestinationId) {
                                     saveState = true
