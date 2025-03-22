@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -21,21 +21,19 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
-import com.meronacompany.feature.home.ImageError
 import com.meronacompany.feature.movie.model.MovieItem
-import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -46,28 +44,35 @@ fun MovieContent(
     route: String
 ) {
     val homeState = homeViewModel.uiState.value
-    var pageCount by remember { mutableIntStateOf(2) } // 초기 페이지 수
-    val pagerState = rememberPagerState(pageCount = { pageCount })
-    // 만약 allPopularMoviesData에 key가 없다면, requestPopularMovies() 호출
+    var pageCount by rememberSaveable { mutableIntStateOf(2) }
+
+    val pagerState = rememberPagerState(
+        initialPage = homeViewModel.moviePagerIndex,
+        pageCount = { pageCount }
+    )
+    // LazyListState 저장용 Map from ViewModel
+    val listStates = homeViewModel.movieScrollStates
+
     if (!homeState.allPopularMoviesData.containsKey(pageCount - 1)) {
         homeViewModel.requestPopularMovies(pageCount - 1)
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    LaunchedEffect(pagerState.currentPage) {
+        homeViewModel.moviePagerIndex = pagerState.currentPage
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(state = pagerState) { page ->
-            // 마지막 페이지에 도달하면 페이지 추가
             if (page == pageCount - 1) {
                 pageCount++
             }
+
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
+                listStates = listStates,
                 onMovieClick = { movieId ->
-                    Timber.d("movieId: $movieId")
-                    // Detail 화면으로 이동
                     onNavigateToDetail(movieId, route)
                 }
             )
@@ -80,8 +85,13 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
+    listStates: MutableMap<Int, LazyListState>,
     onMovieClick: (Int) -> Unit
 ) {
+    val scrollState = listStates.getOrPut(pageNumber) {
+        LazyListState()
+    }
+
     var filteredMovies = homeState?.allPopularMoviesData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
     // Remove the last item if the number of movies is odd
@@ -92,6 +102,7 @@ fun HomeContentListData(
     val moviePairs = filteredMovies.chunked(2)
 
     LazyColumn(
+        state = scrollState,
         modifier = Modifier
             .fillMaxSize()
             .background(colorScheme.primary)

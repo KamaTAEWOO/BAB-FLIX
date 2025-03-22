@@ -1,5 +1,6 @@
 package com.meronacompany.feature.home
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.meronacompany.common.base.BaseInjection
@@ -40,6 +41,27 @@ class HomeViewModel(
             _tvVideoKey.value = value
         }
 
+    private val _moviePagerIndex = MutableStateFlow(0)
+    var moviePagerIndex: Int
+        get() = _moviePagerIndex.value
+        set(value) {
+            _moviePagerIndex.value = value
+        }
+
+    private val _tvPagerIndex = MutableStateFlow(0)
+    var tvPagerIndex: Int
+        get() = _tvPagerIndex.value
+        set(value) {
+            _tvPagerIndex.value = value
+        }
+
+    private val _movieScrollStates = mutableMapOf<Int, LazyListState>()
+    val movieScrollStates: MutableMap<Int, LazyListState>
+        get() = _movieScrollStates
+
+    private val _tvScrollStates = mutableMapOf<Int, LazyListState>()
+    val tvScrollStates: MutableMap<Int, LazyListState>
+        get() = _tvScrollStates
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState {
         return when (event) {

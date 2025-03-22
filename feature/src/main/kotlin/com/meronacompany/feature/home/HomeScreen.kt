@@ -45,7 +45,7 @@ fun HomeScreen(
                 TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
             }
         },
-        bottomBar = { BottomNavigationScreen(navHostController) }
+        bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
 }
 
