@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.meronacompany.design.theme.BAB_FLIXTheme
+import com.meronacompany.feature.R
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 
@@ -66,7 +67,7 @@ fun SettingsContent(paddingValues: PaddingValues) {
         Spacer(modifier = Modifier.height(8.dp))
         // 버전
         Text(
-            text = "버전 1.0.0",
+            text = "버전 " + context.resources.getString(R.string.APP_VERSION),
             color = colorScheme.onPrimary,
             style = BAB_FLIXTheme.typography.textStyleLight18,
             modifier = Modifier.align(Alignment.CenterHorizontally)
