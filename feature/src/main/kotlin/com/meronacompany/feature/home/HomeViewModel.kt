@@ -114,6 +114,9 @@ class HomeViewModel(
         homeRepository.requestPopularMovies(pageNumber = pageCount)
             .onEach {
                 sendAction(HomeEvent.PopularMoviesEvent(it))
+                if (it.results.isEmpty()) {
+                    requestPopularMovies()
+                }
             }
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
@@ -127,6 +130,9 @@ class HomeViewModel(
             .onEach {
                 Timber.d("requestPopularTVs: $it")
                 sendAction(HomeEvent.PopularTVsEvent(it))
+                if (it.results.isEmpty()) {
+                    requestPopularTVs()
+                }
             }
             .catch {
                 Timber.e(it)
