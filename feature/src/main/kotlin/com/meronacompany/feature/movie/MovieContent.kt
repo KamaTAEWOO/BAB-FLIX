@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -34,6 +36,7 @@ import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.movie.model.MovieItem
+import kotlinx.coroutines.delay
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -100,6 +103,7 @@ fun HomeContentListData(
     }
 
     val moviePairs = filteredMovies.chunked(2)
+    var shouldTrigger by remember { mutableStateOf(true) }
 
     LazyColumn(
         state = scrollState,
@@ -121,6 +125,12 @@ fun HomeContentListData(
                         .fillMaxWidth(),
                     color = colorScheme.onPrimary
                 )
+                if (shouldTrigger) {
+                    LaunchedEffect(Unit) {
+                        delay(1000)
+                        shouldTrigger = false
+                    }
+                }
             }
         } else {
             items(moviePairs) { moviePair ->
