@@ -44,7 +44,7 @@ fun TvContent(
     var pageCount by rememberSaveable { mutableIntStateOf(2) } // 초기 페이지 수
 
     val pagerState = rememberPagerState(
-        initialPage = homeViewModel.tvPagerIndex,
+        initialPage = homeViewModel.tvPagerIndex.value,
         pageCount = { pageCount }
     )
 
@@ -55,7 +55,7 @@ fun TvContent(
     }
 
     LaunchedEffect(pagerState.currentPage) {
-        homeViewModel.tvPagerIndex = pagerState.currentPage
+        homeViewModel.setTvPagerIndex(pagerState.currentPage)
     }
 
     Column(
