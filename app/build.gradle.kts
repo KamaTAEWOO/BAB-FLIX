@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     id("com.google.android.gms.oss-licenses-plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -25,6 +26,9 @@ dependencies {
 
     implementation(libs.youtube.player.core)
     implementation(libs.chromecast.sender)
+
+    implementation(platform("com.google.firebase:firebase-bom:33.11.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

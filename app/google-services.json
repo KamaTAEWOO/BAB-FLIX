@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "186142056242",
+    "project_id": "babflix-557c3",
+    "storage_bucket": "babflix-557c3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186142056242:android:19c7da638147865359012b",
+        "android_client_info": {
+          "package_name": "com.meronacompany.bab_flix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOwn7kLFO16Mrji_JzPspwgZiXWsFPa84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
