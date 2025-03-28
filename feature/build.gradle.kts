@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    id("com.google.android.gms.oss-licenses-plugin") apply false // Added OSS Licenses plugin
+    id("com.google.android.gms.oss-licenses-plugin") apply false
 }
 
 android {
@@ -29,6 +29,11 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.gson)
+
+    implementation(platform("com.google.firebase:firebase-bom:33.11.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)

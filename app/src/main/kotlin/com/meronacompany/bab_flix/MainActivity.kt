@@ -10,7 +10,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.meronacompany.design.theme.BAB_FLIXTheme
+import com.meronacompany.feature.navigation.AppNavHost
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
@@ -19,8 +21,8 @@ class MainActivity : ComponentActivity() {
         setupTimber()
         setContent {
             BAB_FLIXTheme {
-//                AppNavHost()
-                CrashButton()
+                AppNavHost()
+//                CrashButton()
             }
         }
     }
@@ -38,7 +40,13 @@ private fun CrashButton() {
     ) {
         // Button
         Button(onClick = {
-            throw RuntimeException("Test Crash") // Force a crash
+            try {
+                throw Exception("Test Crash1111")
+            } catch (e: Exception) {
+                Timber.e(e, "Test Crash")
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+
         }) {
             Text("Test Crash")
         }
