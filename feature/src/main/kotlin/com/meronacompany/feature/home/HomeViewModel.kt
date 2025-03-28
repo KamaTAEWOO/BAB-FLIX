@@ -42,18 +42,18 @@ class HomeViewModel(
         }
 
     private val _moviePagerIndex = MutableStateFlow(0)
-    var moviePagerIndex: Int
-        get() = _moviePagerIndex.value
-        set(value) {
-            _moviePagerIndex.value = value
-        }
+    val moviePagerIndex: StateFlow<Int> = _moviePagerIndex
 
     private val _tvPagerIndex = MutableStateFlow(0)
-    var tvPagerIndex: Int
-        get() = _tvPagerIndex.value
-        set(value) {
-            _tvPagerIndex.value = value
-        }
+    val tvPagerIndex: StateFlow<Int> = _tvPagerIndex
+
+    fun setMoviePagerIndex(index: Int) {
+        _moviePagerIndex.value = index
+    }
+
+    fun setTvPagerIndex(index: Int) {
+        _tvPagerIndex.value = index
+    }
 
     private val _movieScrollStates = mutableMapOf<Int, LazyListState>()
     val movieScrollStates: MutableMap<Int, LazyListState>
@@ -128,7 +128,7 @@ class HomeViewModel(
     fun requestPopularTVs(pageNumber: Int = 1) {
         homeRepository.requestPopularTVs(pageNumber = pageNumber)
             .onEach {
-                Timber.d("requestPopularTVs: $it")
+//                Timber.d("requestPopularTVs: $it")
                 sendAction(HomeEvent.PopularTVsEvent(it))
                 if (it.results.isEmpty()) {
                     requestPopularTVs()
@@ -180,7 +180,7 @@ class HomeViewModel(
     fun requestMovieVideo(id: Int) {
         homeRepository.requestMovieVideo(id)
             .onEach {
-                Timber.d("requestMovieVideo: $it")
+//                Timber.d("requestMovieVideo: $it")
                 if (it.results.isNotEmpty()) {
                     movieVideoKey = it.results[0].key
 //                    sendAction(HomeEvent.MovieVideoEvent(it))

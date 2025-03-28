@@ -50,7 +50,7 @@ fun MovieContent(
     var pageCount by rememberSaveable { mutableIntStateOf(2) }
 
     val pagerState = rememberPagerState(
-        initialPage = homeViewModel.moviePagerIndex,
+        initialPage = homeViewModel.moviePagerIndex.value,
         pageCount = { pageCount }
     )
     // LazyListState 저장용 Map from ViewModel
@@ -61,7 +61,7 @@ fun MovieContent(
     }
 
     LaunchedEffect(pagerState.currentPage) {
-        homeViewModel.moviePagerIndex = pagerState.currentPage
+        homeViewModel.setMoviePagerIndex(pagerState.currentPage)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
