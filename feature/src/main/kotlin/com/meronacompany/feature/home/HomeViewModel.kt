@@ -3,6 +3,7 @@ package com.meronacompany.feature.home
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
 import com.meronacompany.common.base.BaseViewModelFactory
@@ -106,6 +107,7 @@ class HomeViewModel(
             }
             .catch {
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -121,6 +123,7 @@ class HomeViewModel(
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -137,6 +140,7 @@ class HomeViewModel(
             .catch {
                 Timber.e(it)
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -148,6 +152,7 @@ class HomeViewModel(
             }
             .catch {
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -160,6 +165,7 @@ class HomeViewModel(
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -173,6 +179,7 @@ class HomeViewModel(
             .catch {
                 Timber.e(it)
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -191,6 +198,7 @@ class HomeViewModel(
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -209,6 +217,7 @@ class HomeViewModel(
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -222,6 +231,7 @@ class HomeViewModel(
             .catch {
                 sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -233,7 +243,9 @@ class HomeViewModel(
                 sendAction(HomeEvent.TvDetailEvent(it))
             }
             .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -245,7 +257,9 @@ class HomeViewModel(
                 sendAction(HomeEvent.MovieCertificationEvent(it))
             }
             .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -257,7 +271,9 @@ class HomeViewModel(
                 sendAction(HomeEvent.MovieCreditsEvent(it))
             }
             .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
@@ -269,7 +285,9 @@ class HomeViewModel(
                 sendAction(HomeEvent.MovieCreditsEvent(it))
             }
             .catch {
+                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                 Timber.e(it)
+                FirebaseCrashlytics.getInstance().recordException(it)
             }
             .launchIn(viewModelScope)
     }
