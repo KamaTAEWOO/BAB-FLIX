@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -28,6 +29,7 @@ import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.home.ImageError
 import com.meronacompany.feature.tv.model.TvItem
+import kotlinx.coroutines.delay
 import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -96,15 +98,7 @@ fun HomeContentListData(
     }
 
     val tvPairs = filteredTVs.chunked(2)
-
-//    if (tvPairs.isEmpty()) {
-//        Text(
-//            text = "데이터를 불러오는 중...",
-//            modifier = Modifier.padding(16.dp),
-//            color = colorScheme.onPrimary
-//        )
-//        return
-//    }
+    var shouldTrigger by remember { mutableStateOf(true) }
 
     LazyColumn(
         state = scrollState,
@@ -117,29 +111,47 @@ fun HomeContentListData(
             Spacer(Modifier.height(16.dp))
         }
 
-        items(tvPairs) { tvPair ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                tvPair.forEach { tv ->
-                    val tvItem = TvItem(
-                        id = tv.id,
-                        genreIds = tv.genre_ids,
-                        title = tv.name,
-                        voteAverage = tv.vote_average,
-                        posterPath = tv.poster_path
-                    )
-                    TvData(
-                        tvItem = tvItem,
-                        modifier = Modifier.weight(1f),
-                        onClick = onTvClick
-                    )
+        if (tvPairs.isEmpty()) {
+            item {
+                Text(
+                    text = "데이터를 불러오는 중...",
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    color = colorScheme.onPrimary
+                )
+                if (shouldTrigger) {
+                    LaunchedEffect(Unit) {
+                        delay(1000)
+                        shouldTrigger = false
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
+        } else {
+            items(tvPairs) { tvPair ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    tvPair.forEach { tv ->
+                        val tvItem = TvItem(
+                            id = tv.id,
+                            genreIds = tv.genre_ids,
+                            title = tv.name,
+                            voteAverage = tv.vote_average,
+                            posterPath = tv.poster_path
+                        )
+                        TvData(
+                            tvItem = tvItem,
+                            modifier = Modifier.weight(1f),
+                            onClick = onTvClick
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
 }
