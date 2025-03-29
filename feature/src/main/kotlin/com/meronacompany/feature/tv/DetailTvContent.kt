@@ -1,4 +1,4 @@
-package com.meronacompany.feature.detail
+package com.meronacompany.feature.tv
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,7 @@ import com.meronacompany.core.utility.Util
 import com.meronacompany.design.R
 import com.meronacompany.design.common.YoutubePlayer
 import com.meronacompany.design.theme.BAB_FLIXTheme
+import com.meronacompany.feature.tv.model.DetailTvModel
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import timber.log.Timber

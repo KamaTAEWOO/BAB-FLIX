@@ -1,4 +1,4 @@
-package com.meronacompany.feature.detail
+package com.meronacompany.feature.movie
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement

@@ -12,6 +12,10 @@ import com.meronacompany.feature.navigation.NavRouteLabel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import com.meronacompany.design.R
+import com.meronacompany.feature.movie.DetailMovieContent
+import com.meronacompany.feature.movie.detailMovieContentData
+import com.meronacompany.feature.tv.DetailTvContent
+import com.meronacompany.feature.tv.detailTvContentData
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
