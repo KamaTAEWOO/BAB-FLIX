@@ -1,4 +1,4 @@
-package com.meronacompany.feature.detail
+package com.meronacompany.feature.movie
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +30,7 @@ import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.design.R
+import com.meronacompany.feature.movie.model.DetailMovieModel
 
 @Composable
 fun DetailMovieContent(

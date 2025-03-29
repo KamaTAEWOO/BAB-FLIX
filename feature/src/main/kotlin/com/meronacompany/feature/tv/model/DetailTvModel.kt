@@ -1,4 +1,4 @@
-package com.meronacompany.feature.detail
+package com.meronacompany.feature.tv.model
 
 data class DetailTvModel(
     // 타이틀
