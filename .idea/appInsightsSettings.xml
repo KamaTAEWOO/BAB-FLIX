@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.meronacompany.bab_flix" />
+                  <option name="mobileSdkAppId" value="1:186142056242:android:19c7da638147865359012b" />
+                  <option name="projectId" value="babflix-557c3" />
+                  <option name="projectNumber" value="186142056242" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
