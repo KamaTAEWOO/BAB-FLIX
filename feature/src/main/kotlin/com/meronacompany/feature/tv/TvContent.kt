@@ -41,7 +41,7 @@ fun TvContent(
     route: String
 ) {
     val homeState = homeViewModel.uiState.value
-    var pageCount by rememberSaveable { mutableIntStateOf(2) } // 초기 페이지 수
+    var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
     val pagerState = rememberPagerState(
         initialPage = homeViewModel.tvPagerIndex.value,
