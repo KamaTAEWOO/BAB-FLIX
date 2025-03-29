@@ -30,6 +30,7 @@ import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.design.R
+import com.meronacompany.feature.movie.model.DetailMovieModel
 
 @Composable
 fun DetailMovieContent(

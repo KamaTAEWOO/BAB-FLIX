@@ -157,34 +157,6 @@ fun HomeContentListData(
 }
 
 @Composable
-fun GenresListData(homeState: HomeState) {
-    val genres = homeState.genresTVs?.genres ?: emptyList()
-
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorScheme.primary)
-            .padding(horizontal = 20.dp),
-    ) {
-        items(genres) { genre ->
-            Box(
-                modifier = Modifier
-                    .background(colorScheme.primary)
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Text(
-                    text = genre.name,
-                    color = colorScheme.onPrimary,
-                    style = BAB_FLIXTheme.typography.textStyleBold18
-                )
-            }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-}
-
-@Composable
 fun TvData(tvItem: TvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
     Column(
         modifier = Modifier
