@@ -12,6 +12,28 @@ plugins {
 
 android {
     namespace = "com.meronacompany.bab_flix"
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getProperty("user.home") + "/Desktop/bab_key")
+            storePassword = "123456"
+            keyAlias = "bab_key"
+            keyPassword = "123456"
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+            enableAndroidTestCoverage = false
+            enableUnitTestCoverage = false
+        }
+    }
 }
 
 dependencies {
@@ -48,4 +70,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+tasks.configureEach {
+    if (name.contains("collectReleaseBaselineProfile")) {
+        enabled = false
+    }
 }
