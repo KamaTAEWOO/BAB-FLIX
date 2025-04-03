@@ -19,10 +19,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.meronacompany.design.R
 
 @Composable
 fun CommonGlideImage(
@@ -31,7 +33,7 @@ fun CommonGlideImage(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     alignment: Alignment = Alignment.Center,
-    loading: @Composable (() -> Unit)? = { CircularProgressIndicator(modifier = Modifier.size(40.dp)) },
+    loading: @Composable (() -> Unit)? = { CircularProgressIndicator(modifier = Modifier.size(20.dp)) }, // TODO : 로딩 인디케이터
 ) {
     val context = LocalContext.current
     var imageBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
@@ -64,10 +66,24 @@ fun CommonGlideImage(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading) {
-            loading?.invoke()
-        } else {
-            imageBitmap?.let { bitmap ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_no_poster),
+                contentDescription = "No image background",
+                modifier = Modifier
+                    .size(130.dp, 187.dp)
+            )
+        }
+        imageBitmap?.let { bitmap ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 Image(
                     painter = BitmapPainter(bitmap.asImageBitmap()),
                     contentDescription = contentDescription,

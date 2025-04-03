@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
@@ -37,6 +38,7 @@ import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.movie.model.MovieItem
 import kotlinx.coroutines.delay
+import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -208,7 +210,26 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
 
 @Composable
 fun MoviePoster(posterPath: String) {
-    CommonGlideImage(path = posterPath)
+    Timber.d("Poster Path: $posterPath") // 1bhIezUxvLM9r66yIf1i6EDVJ6R.jpg
+    if (posterPath.isEmpty()) {
+        // image placeholder
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(colorScheme.onPrimary)
+        ) {
+            Text(
+                text = "No Image",
+                color = colorScheme.primary,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+            )
+        }
+    } else {
+        CommonGlideImage(path = posterPath)
+    }
 }
 
 @Composable
