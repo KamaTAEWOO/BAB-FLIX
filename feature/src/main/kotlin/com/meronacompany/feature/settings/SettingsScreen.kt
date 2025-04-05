@@ -3,7 +3,9 @@ package com.meronacompany.feature.settings
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -84,24 +87,45 @@ fun SettingsContent(paddingValues: PaddingValues) {
         Spacer(modifier = Modifier.weight(1f))  // 빈 공간을 채워 하단으로 밀기
 
         // 오픈 소스 라이브러리 Button
-        Button(
-            onClick = {
-                val intent = Intent(context, OssLicensesMenuActivity::class.java).apply {
-                    putExtra("title", "오픈 소스 라이선스")
-                }
-                context.startActivity(intent)
-            },
+        Box(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 50.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colorScheme.tertiary,
-                contentColor = colorScheme.onPrimary
-            )
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "오픈 소스 라이브러리",
-                style = BAB_FLIXTheme.typography.textStyleBold18
-            )
+            Button(
+                onClick = {
+                    val intent = Intent(context, OssLicensesMenuActivity::class.java).apply {
+                        putExtra("title", "오픈 소스 라이선스")
+                    }
+                    context.startActivity(intent)
+                },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorScheme.tertiary,
+                    contentColor = colorScheme.onPrimary
+                )
+            ) {
+                Text(
+                    text = "오픈 소스 라이브러리",
+                    style = BAB_FLIXTheme.typography.textStyleBold18
+                )
+            }
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            text = "This app uses the TMDB API but is not endorsed or certified by TMDB.",
+            style = BAB_FLIXTheme.typography.textStyleBold20,
+            maxLines = 1,
+            overflow = TextOverflow.Visible,
+            softWrap = false,
+            modifier = Modifier
+                .fillMaxWidth()
+                .basicMarquee()
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
