@@ -43,6 +43,6 @@
 이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 [LICENSE](https://opensource.org/licenses/MIT) 파일을 참조하세요.
 
 ## 이미지
-<img src="../../Downloads/Screenshot_20250413_180643.png" width="300" alt=""/>
-<img src="../../Downloads/Screenshot_20250413_180650.png" width="300" alt=""/>
-<img src="../../Downloads/Screenshot_20250413_180714.png" width="300" alt=""/>
+![Screenshot_20250413_180643.png](../../Downloads/Screenshot_20250413_180643.png)
+![Screenshot_20250413_180650.png](../../Downloads/Screenshot_20250413_180650.png)
+![Screenshot_20250413_180714.png](../../Downloads/Screenshot_20250413_180714.png)
