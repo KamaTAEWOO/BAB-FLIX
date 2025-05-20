@@ -30,10 +30,13 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.gson)
 
-    implementation(platform("com.google.firebase:firebase-bom:33.11.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.google.firebase.analytics)
+
+    implementation(libs.v2.user)
+    implementation(libs.firebase.auth.ktx)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)

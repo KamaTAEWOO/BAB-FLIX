@@ -1,5 +1,6 @@
 package com.meronacompany.feature.auth
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,12 +8,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.kakao.sdk.user.UserApiClient
 import com.meronacompany.design.R
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @Composable
 fun AuthScreen(onNavigateToHome: () -> Unit) {
@@ -48,7 +58,9 @@ fun AuthContent(paddingValues: PaddingValues, onNavigateToHome: () -> Unit) {
                 .padding(bottom = 50.dp)
                 .size(50.dp)
                 .background(color = Color(0xFFFEE500), shape = CircleShape)
-                .clickable(onClick = onNavigateToHome),
+                .clickable(onClick = {
+                    onNavigateToHome()
+                }),
             contentAlignment = Alignment.Center
         ) {
             Image(
