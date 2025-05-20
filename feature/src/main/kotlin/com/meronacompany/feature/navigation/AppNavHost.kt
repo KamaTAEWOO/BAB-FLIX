@@ -1,6 +1,5 @@
 package com.meronacompany.feature.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,12 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.meronacompany.feature.auth.AuthScreen
 import com.meronacompany.feature.detail.DetailScreen
 import com.meronacompany.feature.home.HomeScreen
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.settings.SettingsScreen
 import com.meronacompany.feature.splash.SplashScreen
-import timber.log.Timber
 
 @Composable
 fun AppNavHost(
@@ -32,8 +31,21 @@ fun AppNavHost(
         composable(route = NavRouteLabel.SPLASH) {
             SplashScreen(
                 onNavigateToHome = {
-                    navHostController.navigate(NavRouteLabel.MOVIE) {
+                    navHostController.navigate(NavRouteLabel.AUTH) {
                         popUpTo(NavRouteLabel.SPLASH) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
+        // Auth
+        composable(route = NavRouteLabel.AUTH) {
+            AuthScreen(
+                onNavigateToHome = {
+                    navHostController.navigate(NavRouteLabel.MOVIE) {
+                        popUpTo(NavRouteLabel.AUTH) {
                             inclusive = true
                         }
                     }
