@@ -5,11 +5,11 @@ object NavRouteLabel {
     // Main
     const val MAIN = "main"
 
+    // Auth
+    const val AUTH = "auth"
+
     // 스플래쉬
     const val SPLASH = "splash"
-
-    // home
-    const val HOME = "home"
 
     // movie
     const val MOVIE = "movie"
