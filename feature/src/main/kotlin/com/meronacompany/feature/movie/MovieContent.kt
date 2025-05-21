@@ -240,7 +240,7 @@ fun MovieNameAndScore(movieItem: MovieItem) {
         Text(text = movieItem.title ?: "", color = colorScheme.onPrimary)
         Text(
             text = Util.formatVoteAverage(movieItem.voteAverage ?: 0.0),
-            color = colorScheme.onPrimary
+            color = colorScheme.secondary
         )
     }
 }

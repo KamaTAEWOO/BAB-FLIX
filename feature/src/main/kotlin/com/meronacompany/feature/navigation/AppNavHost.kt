@@ -31,7 +31,7 @@ fun AppNavHost(
         composable(route = NavRouteLabel.SPLASH) {
             SplashScreen(
                 onNavigateToHome = {
-                    navHostController.navigate(NavRouteLabel.AUTH) {
+                    navHostController.navigate(NavRouteLabel.MOVIE) {
                         popUpTo(NavRouteLabel.SPLASH) {
                             inclusive = true
                         }
