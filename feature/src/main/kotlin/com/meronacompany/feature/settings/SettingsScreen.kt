@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -60,14 +61,13 @@ fun SettingsContent(paddingValues: PaddingValues) {
             .padding(paddingValues)
             .padding(top = 100.dp)
     ) {
-        // 앱 이름
-        Text(
-            text = "BAB FLIX",
-            color = colorScheme.onPrimary,
-            style = BAB_FLIXTheme.typography.textStyleBold30,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+        Image(
+            painter = painterResource(id = com.meronacompany.design.R.drawable.ic_new_logo),  // Assuming the app icon is saved in the res/drawable folder as ic_app_icon
+            contentDescription = "App Icon",
+            modifier = Modifier
+                .size(150.dp)
+                .align(Alignment.CenterHorizontally)
         )
-        Spacer(modifier = Modifier.height(8.dp))
         // 버전
         Text(
             text = "버전 " + context.resources.getString(R.string.APP_VERSION),

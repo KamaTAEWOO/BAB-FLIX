@@ -60,7 +60,7 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize(),
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
-        topBar = { CommonAppBar(stringResource(R.string.toolbar_name)) },
+        topBar = { CommonAppBar() },
         content = { paddingValues ->
             if (route == NavRouteLabel.MOVIE) {
                 MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)

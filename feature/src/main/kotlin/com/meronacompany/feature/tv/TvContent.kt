@@ -108,7 +108,7 @@ fun HomeContentListData(
             .padding(paddingValues)
     ) {
         item {
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(4.dp))
         }
 
         if (tvPairs.isEmpty()) {
@@ -186,6 +186,6 @@ fun TvNameAndScore(tvItem: TvItem) {
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
         Text(text = tvItem.title ?: "", color = colorScheme.onPrimary)
-        Text(text = Util.formatVoteAverage(tvItem.voteAverage ?: 0.0), color = colorScheme.onPrimary)
+        Text(text = Util.formatVoteAverage(tvItem.voteAverage ?: 0.0), color = colorScheme.secondary)
     }
 }

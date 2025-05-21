@@ -115,7 +115,7 @@ fun HomeContentListData(
             .padding(paddingValues)
     ) {
         item {
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(4.dp))
         }
 
         if (moviePairs.isEmpty()) {
@@ -240,7 +240,7 @@ fun MovieNameAndScore(movieItem: MovieItem) {
         Text(text = movieItem.title ?: "", color = colorScheme.onPrimary)
         Text(
             text = Util.formatVoteAverage(movieItem.voteAverage ?: 0.0),
-            color = colorScheme.onPrimary
+            color = colorScheme.secondary
         )
     }
 }
