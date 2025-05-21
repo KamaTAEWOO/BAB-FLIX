@@ -108,7 +108,7 @@ fun HomeContentListData(
             .padding(paddingValues)
     ) {
         item {
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(4.dp))
         }
 
         if (tvPairs.isEmpty()) {
