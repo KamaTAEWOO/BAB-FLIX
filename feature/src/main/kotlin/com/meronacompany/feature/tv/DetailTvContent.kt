@@ -1,5 +1,6 @@
 package com.meronacompany.feature.tv
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,8 +25,11 @@ import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.tv.model.DetailTvModel
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.feature.movie.NotYoutubePlayerVideo
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailTvContent(
     paddingValues: PaddingValues,
@@ -33,48 +37,63 @@ fun DetailTvContent(
     tvId: String?,
     detailUIModel: DetailTvModel?
 ) {
+    val tvVideoKey = homeViewModel.tvVideoKey
+    val tvVideoKeyList = homeViewModel.tvVideoKeyList
+    // Key 값만 데이터 담아줘
+    val youtubeKeyList = MutableStateFlow<List<String>>(
+        tvVideoKeyList.value.map { videoResult ->
+            videoResult.key
+        }
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
             .verticalScroll(rememberScrollState())
     ) {
-        if (homeViewModel.tvVideoKey != tvId) {
-            Timber.d("movieVideoKey: ${homeViewModel.tvVideoKey}")
-            YoutubePlayer(videoId = homeViewModel.tvVideoKey)
-
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = detailUIModel?.title ?: stringResource(R.string.data_error),
-                style = BAB_FLIXTheme.typography.textStyleBold24
-            )
-
-            val details = listOf(
-                stringResource(R.string.creator) to (detailUIModel?.creator ?: stringResource(R.string.data_error)),
-                stringResource(R.string.cast) to (detailUIModel?.cast ?: stringResource(R.string.data_error)),
-                stringResource(R.string.genre) to (detailUIModel?.genre ?: stringResource(R.string.data_error)),
-                stringResource(R.string.original_language) to (detailUIModel?.originalLanguage ?: stringResource(R.string.data_error)),
-                stringResource(R.string.rating) to (detailUIModel?.ratingScore?.toDouble()
-                    ?.let { Util.formatVoteAverage(it) }
-                    ?: stringResource(R.string.data_error))
-            )
-
-            details.forEach { (title, content) ->
-                RowText(title = title, content = content)
-            }
-
-            Text(
-                modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
-                style = BAB_FLIXTheme.typography.textStyleBold18,
-                text = stringResource(R.string.store)
-            )
-
-            Text(
-                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
-                text = detailUIModel?.overview ?: stringResource(R.string.data_error),
-                style = BAB_FLIXTheme.typography.textStyleLight16,
-            )
+        if (tvVideoKey != tvId) {
+            YoutubePlayer(videoId = tvVideoKey, videoIdList = youtubeKeyList)
+        } else {
+            // video 데이터 없음 처리
+            NotYoutubePlayerVideo(tvVideoKey, tvId)
         }
+
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = detailUIModel?.title ?: stringResource(R.string.data_error),
+            style = BAB_FLIXTheme.typography.textStyleBold24
+        )
+
+        val details = listOf(
+            stringResource(R.string.creator) to (detailUIModel?.creator
+                ?: stringResource(R.string.data_error)),
+            stringResource(R.string.cast) to (detailUIModel?.cast
+                ?: stringResource(R.string.data_error)),
+            stringResource(R.string.genre) to (detailUIModel?.genre
+                ?: stringResource(R.string.data_error)),
+            stringResource(R.string.original_language) to (detailUIModel?.originalLanguage
+                ?: stringResource(R.string.data_error)),
+            stringResource(R.string.rating) to (detailUIModel?.ratingScore?.toDouble()
+                ?.let { Util.formatVoteAverage(it) }
+                ?: stringResource(R.string.data_error))
+        )
+
+        details.forEach { (title, content) ->
+            RowText(title = title, content = content)
+        }
+
+        Text(
+            modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp),
+            style = BAB_FLIXTheme.typography.textStyleBold18,
+            text = stringResource(R.string.store)
+        )
+
+        Text(
+            modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+            text = detailUIModel?.overview ?: stringResource(R.string.data_error),
+            style = BAB_FLIXTheme.typography.textStyleLight16,
+        )
     }
 }
 
