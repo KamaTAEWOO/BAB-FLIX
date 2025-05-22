@@ -7,6 +7,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
 import com.meronacompany.common.base.BaseViewModelFactory
+import com.meronacompany.domain.model.VideoResult
 import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,9 @@ class HomeViewModel(
     fun setLoading(isLoading: Boolean) {
         _isLoading.value = isLoading
     }
+
+    val movieVideoKeyList = MutableStateFlow<List<VideoResult>>(emptyList())
+    val tvVideoKeyList = MutableStateFlow<List<VideoResult>>(emptyList())
 
     private val _movieVideoKey = MutableStateFlow("")
     var movieVideoKey: String
@@ -190,6 +194,7 @@ class HomeViewModel(
 //                Timber.d("requestMovieVideo: $it")
                 if (it.results.isNotEmpty()) {
                     movieVideoKey = it.results[0].key
+                    movieVideoKeyList.value = it.results
 //                    sendAction(HomeEvent.MovieVideoEvent(it))
                 } else {
                     sendAction(HomeEvent.ErrorEvent("No video found"))
@@ -210,6 +215,7 @@ class HomeViewModel(
                 if (it.results.isNotEmpty()) {
 //                    sendAction(HomeEvent.TvVideoEvent(it))
                     tvVideoKey = it.results[0].key
+                    tvVideoKeyList.value = it.results
                 } else {
                     sendAction(HomeEvent.ErrorEvent("No video found"))
                 }

@@ -1,5 +1,6 @@
 package com.meronacompany.feature.movie
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,8 +31,12 @@ import com.meronacompany.domain.model.ResponseMovieCertificationData
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.design.R
+import com.meronacompany.domain.model.VideoResult
 import com.meronacompany.feature.movie.model.DetailMovieModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.mapNotNull
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailMovieContent(
     paddingValues: PaddingValues,
@@ -40,6 +45,13 @@ fun DetailMovieContent(
     detailUIModel: DetailMovieModel?
 ) {
     val movieVideoKey = homeViewModel.movieVideoKey
+    val movieVideoKeyList = homeViewModel.movieVideoKeyList
+    // Key 값만 데이터 담아줘
+    val youtubeKeyList = MutableStateFlow<List<String>>(
+        movieVideoKeyList.value.map { videoResult ->
+            videoResult.key
+        }
+    )
 
     Column(
         modifier = Modifier
@@ -48,7 +60,7 @@ fun DetailMovieContent(
             .verticalScroll(rememberScrollState()) // Enable scrolling
     ) {
         if (movieVideoKey != movieId) {
-            YoutubePlayer(videoId = movieVideoKey)
+            YoutubePlayer(videoId = movieVideoKey, videoIdList = youtubeKeyList)
         } else {
             // video 데이터 없음 처리
             NotYoutubePlayerVideo(movieVideoKey, movieId)
@@ -99,7 +111,7 @@ fun DetailMovieContent(
 }
 
 @Composable
-private fun NotYoutubePlayerVideo(movieVideoKey: String, movieId: String?) {
+fun NotYoutubePlayerVideo(movieVideoKey: String, movieId: String?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -107,7 +119,7 @@ private fun NotYoutubePlayerVideo(movieVideoKey: String, movieId: String?) {
         contentAlignment = Alignment.Center
     ) {
         if (movieVideoKey != movieId) {
-            YoutubePlayer(videoId = movieVideoKey)
+            YoutubePlayer(videoId = movieVideoKey, videoIdList = MutableStateFlow(emptyList()))
         } else {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val width = size.width
