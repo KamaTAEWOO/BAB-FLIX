@@ -77,6 +77,7 @@ fun MovieContent(
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
                 listStates = listStates,
+                homeViewModel = homeViewModel,
                 onMovieClick = { movieId ->
                     onNavigateToDetail(movieId, route)
                 }
@@ -91,6 +92,7 @@ fun HomeContentListData(
     pageNumber: Int,
     paddingValues: PaddingValues,
     listStates: MutableMap<Int, LazyListState>,
+    homeViewModel: HomeViewModel,
     onMovieClick: (Int) -> Unit
 ) {
     val scrollState = listStates.getOrPut(pageNumber) {
@@ -127,10 +129,12 @@ fun HomeContentListData(
                         .fillMaxWidth(),
                     color = colorScheme.onPrimary
                 )
+
                 if (shouldTrigger) {
                     LaunchedEffect(Unit) {
                         delay(1000)
                         shouldTrigger = false
+                        homeViewModel.requestPopularMovies(pageNumber) // ← 재요청
                     }
                 }
             }
