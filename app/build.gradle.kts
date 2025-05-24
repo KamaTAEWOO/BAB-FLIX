@@ -80,3 +80,16 @@ tasks.configureEach {
         enabled = false
     }
 }
+
+tasks.register("buildReleaseApk") {
+    group = "build"
+    description = "Builds the release APK"
+
+    dependsOn("assembleRelease")
+
+    doLast {
+        println("Release APK has been assembled.")
+        val apkPath = "${buildDir}/outputs/apk/release/app-release.apk"
+        println("APK path: $apkPath")
+    }
+}

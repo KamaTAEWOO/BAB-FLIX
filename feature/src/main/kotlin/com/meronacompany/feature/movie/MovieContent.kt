@@ -51,6 +51,10 @@ fun MovieContent(
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
+    LaunchedEffect(Unit) {
+        homeViewModel.requestPopularMovies(0)
+    }
+
     val pagerState = rememberPagerState(
         initialPage = homeViewModel.moviePagerIndex.value,
         pageCount = { pageCount }
@@ -107,7 +111,6 @@ fun HomeContentListData(
     }
 
     val moviePairs = filteredMovies.chunked(2)
-    var shouldTrigger by remember { mutableStateOf(true) }
 
     LazyColumn(
         state = scrollState,
@@ -120,7 +123,7 @@ fun HomeContentListData(
             Spacer(Modifier.height(4.dp))
         }
 
-        if (moviePairs.isEmpty()) {
+        if (homeState?.allPopularMoviesData?.get(pageNumber).isNullOrEmpty()) {
             item {
                 Text(
                     text = "데이터를 불러오는 중...",
@@ -129,14 +132,6 @@ fun HomeContentListData(
                         .fillMaxWidth(),
                     color = colorScheme.onPrimary
                 )
-
-                if (shouldTrigger) {
-                    LaunchedEffect(Unit) {
-                        delay(1000)
-                        shouldTrigger = false
-                        homeViewModel.requestPopularMovies(pageNumber) // ← 재요청
-                    }
-                }
             }
         } else {
             items(moviePairs) { moviePair ->
@@ -246,5 +241,11 @@ fun MovieNameAndScore(movieItem: MovieItem) {
             text = Util.formatVoteAverage(movieItem.voteAverage ?: 0.0),
             color = colorScheme.secondary
         )
+    }
+}
+
+fun refreshMovieContent(homeViewModel: HomeViewModel, pageCount: Int) {
+    for (page in 0 until pageCount) {
+        homeViewModel.requestPopularMovies(page)
     }
 }
