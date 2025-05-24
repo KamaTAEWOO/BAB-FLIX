@@ -1,5 +1,8 @@
 package com.meronacompany.data.repository
 
+import android.content.Context
+import androidx.core.content.edit
+import com.meronacompany.core.local.PreferenceManager
 import com.meronacompany.core.network.service.HomeService
 import com.meronacompany.domain.model.ResponseGenreData
 import com.meronacompany.domain.model.ResponseMovieCertificationData
@@ -15,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class HomeRepositoryImpl(
+    private val context: Context,
     private val homeService: HomeService
 ) : HomeRepository {
 
@@ -68,6 +72,14 @@ class HomeRepositoryImpl(
 
     override fun requestTvCredits(tvId: Int): Flow<ResponseMovieCreditsData> = flow {
         emit(homeService.requestTvCredits(tvId = tvId).toModel())
+    }
+
+    override fun getApiCallCount(): Flow<Int> = flow {
+        emit(PreferenceManager.getApiCallCount(context))
+    }
+
+    override fun incrementApiCallCount() {
+        PreferenceManager.incrementAPICallCount(context)
     }
 
 }

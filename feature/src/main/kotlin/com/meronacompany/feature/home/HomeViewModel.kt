@@ -1,5 +1,6 @@
 package com.meronacompany.feature.home
 
+import android.content.Context
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -299,9 +300,9 @@ class HomeViewModel(
     }
 
     companion object {
-        fun provideFactory(): ViewModelProvider.Factory {
+        fun provideFactory(context: Context): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {
-                HomeViewModel(BaseInjection.homeRepository)
+                HomeViewModel(BaseInjection.provideHomeRepository(context))
             }
         }
     }
