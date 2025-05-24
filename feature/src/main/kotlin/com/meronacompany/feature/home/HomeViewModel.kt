@@ -341,9 +341,10 @@ class HomeViewModel(
     }
 
     private fun checkApiCallCount(): Boolean {
+        // Test code
+        true // TODO : 삭제하기
         val count = homeRepository.getApiCallCount()
-        Timber.d("taewoo - API call count: $count")
-        return if (count > 220) {
+        return if (count > 700) {
             Timber.d("taewoo - API call limit exceeded")
             sendAction(HomeEvent.ErrorEvent("API call limit exceeded"))
             false

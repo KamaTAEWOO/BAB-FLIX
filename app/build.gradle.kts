@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":design"))
     implementation(project(":feature"))
     implementation(project(":common"))
+    implementation(project(":core"))
 
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0") // Added OSS Licenses dependency
 

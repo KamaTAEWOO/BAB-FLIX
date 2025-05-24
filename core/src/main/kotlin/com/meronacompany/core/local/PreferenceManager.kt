@@ -50,6 +50,18 @@ object PreferenceManager {
         return calendar.timeInMillis
     }
 
+    // 2분마다 카운트를 초기화하는 메서드
+//    fun checkAndResetApiCallCountIfNeeded(context: Context) {
+//        val lastResetDate = getLastResetDate(context)
+//        val now = System.currentTimeMillis()
+//        val twoMinutesAgo = now - 2 * 60 * 1000 // 2 minutes in milliseconds
+//        if (lastResetDate < twoMinutesAgo) {
+//            clearApiCallCount(context)
+//            updateLastResetDate(context, now)
+//        }
+//    }
+
+    // 하루 카운트
     fun checkAndResetApiCallCountIfNeeded(context: Context) {
         val lastResetDate = getLastResetDate(context)
         val todayMidnight = getTodayMidnightTimestamp()

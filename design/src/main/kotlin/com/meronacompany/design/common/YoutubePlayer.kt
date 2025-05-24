@@ -54,18 +54,18 @@ fun YoutubePlayer(
             // Initialize the player when the view is created
             youTubePlayerView.addYouTubePlayerListener(object : YouTubePlayerListener {
                 override fun onApiChange(youTubePlayer: YouTubePlayer) {
-                    Timber.d("taewoo - onApiChange")
+                    Timber.d("onApiChange")
                 }
 
                 override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-                    Timber.d("taewoo - onCurrentSecond")
+                    Timber.d("onCurrentSecond")
                 }
 
                 override fun onError(
                     youTubePlayer: YouTubePlayer,
                     error: PlayerConstants.PlayerError
                 ) {
-                    Timber.e("taewoo - onError: $error")
+                    Timber.e("onError: $error")
                     val currentIndex = videoIdList.value.indexOfFirst { it == lastVideoId }
                     val nextIndex = currentIndex + 1
                     if (nextIndex in videoIdList.value.indices) {
@@ -81,14 +81,14 @@ fun YoutubePlayer(
                     youTubePlayer: YouTubePlayer,
                     playbackQuality: PlayerConstants.PlaybackQuality
                 ) {
-                    Timber.d("taewoo - onPlaybackQualityChange")
+                    Timber.d("onPlaybackQualityChange")
                 }
 
                 override fun onPlaybackRateChange(
                     youTubePlayer: YouTubePlayer,
                     playbackRate: PlayerConstants.PlaybackRate
                 ) {
-                    Timber.d("taewoo - onPlaybackRateChange")
+                    Timber.d("onPlaybackRateChange")
                 }
 
                 override fun onReady(youTubePlayer: YouTubePlayer) {
@@ -99,22 +99,22 @@ fun YoutubePlayer(
                     youTubePlayer: YouTubePlayer,
                     state: PlayerConstants.PlayerState
                 ) {
-                    Timber.d("taewoo - onStateChange: $state")
+                    Timber.d("onStateChange: $state")
                 }
 
                 override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
-                    Timber.d("taewoo - onVideoDuration")
+                    Timber.d("onVideoDuration")
                 }
 
                 override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
-                    Timber.d("taewoo - onVideoId")
+                    Timber.d("onVideoId")
                 }
 
                 override fun onVideoLoadedFraction(
                     youTubePlayer: YouTubePlayer,
                     loadedFraction: Float
                 ) {
-                    Timber.d("taewoo - onVideoLoadedFraction")
+                    Timber.d("onVideoLoadedFraction")
                 }
             })
 

@@ -89,10 +89,7 @@ class HomeRepositoryImpl(
 
     override fun getApiCallCount(): Int = PreferenceManager.getApiCallCount(context)
 
-    // api count 함수
     private fun plusCount() {
-        val count = PreferenceManager.getApiCallCount(context)
-        Timber.d("taewoo - Retrofit 생성 시 API 호출 횟수: $count")
         PreferenceManager.incrementAPICallCount(context)
     }
 }
