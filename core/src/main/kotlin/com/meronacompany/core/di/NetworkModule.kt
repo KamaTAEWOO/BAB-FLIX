@@ -1,5 +1,6 @@
 package com.meronacompany.core.di
 
+import android.content.Context
 import com.google.gson.GsonBuilder
 import com.meronacompany.core.BuildConfig
 import com.meronacompany.core.network.interceptor.HeaderInterceptor
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkModule {
 
     // Retrofit 생성
-    fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(context: Context): Retrofit {
         // HttpLoggingInterceptor 설정
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY // 요청/응답 본문을 로그로 출력

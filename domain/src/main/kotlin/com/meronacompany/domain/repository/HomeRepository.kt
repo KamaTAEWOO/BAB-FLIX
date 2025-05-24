@@ -39,7 +39,5 @@ interface HomeRepository {
 
     fun requestTvCredits(tvId: Int): Flow<ResponseMovieCreditsData>
 
-    fun getApiCallCount(): Flow<Int>
-
-    fun incrementApiCallCount()
+    fun getApiCallCount(): Int
 }

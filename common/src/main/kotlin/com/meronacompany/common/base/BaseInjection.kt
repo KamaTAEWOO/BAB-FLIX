@@ -7,17 +7,12 @@ import com.meronacompany.data.repository.HomeRepositoryImpl
 import com.meronacompany.domain.repository.HomeRepository
 
 object BaseInjection {
-
-    // HomeService 인터페이스 생성
-    private val homeService: HomeService by lazy {
-        provideRetrofit().create(HomeService::class.java)
+    private fun createHomeService(context: Context): HomeService {
+        return provideRetrofit(context).create(HomeService::class.java)
     }
 
-    // HomeRepositoryImpl 생성
-    // 호출 시 context를 넘겨야 하는 방식으로 변경
-    // 사용 예: BaseInjection.provideHomeRepository(context)
     fun provideHomeRepository(context: Context): HomeRepository {
-        return HomeRepositoryImpl(context, homeService)
+        return HomeRepositoryImpl(context, createHomeService(context))
     }
 
     // 다른 서비스와 저장소도 동일한 방식으로 생성

@@ -13,8 +13,10 @@ import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class HomeViewModel(
@@ -106,197 +108,248 @@ class HomeViewModel(
     }
 
     fun requestIsApiKey() {
-        homeRepository.requestIsApiKey()
-            .onEach {
-                Timber.d("requestIsApiKey: $it")
-            }
-            .catch {
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestIsApiKey()
+                .onEach {
+                    Timber.d("requestIsApiKey: $it")
+                }
+                .catch {
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestPopularMovies(pageCount: Int = 1) {
-        homeRepository.requestPopularMovies(pageNumber = pageCount)
-            .onEach {
-                sendAction(HomeEvent.PopularMoviesEvent(it))
-                if (it.results.isEmpty()) {
-                    requestPopularMovies()
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestPopularMovies(pageNumber = pageCount)
+                .onEach {
+                    sendAction(HomeEvent.PopularMoviesEvent(it))
+                    if (it.results.isEmpty()) {
+                        requestPopularMovies()
+                    }
                 }
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestPopularTVs(pageNumber: Int = 1) {
-        homeRepository.requestPopularTVs(pageNumber = pageNumber)
-            .onEach {
-//                Timber.d("requestPopularTVs: $it")
-                sendAction(HomeEvent.PopularTVsEvent(it))
-                if (it.results.isEmpty()) {
-                    requestPopularTVs()
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestPopularTVs(pageNumber = pageNumber)
+                .onEach {
+//                    Timber.d("requestPopularTVs: $it")
+                    sendAction(HomeEvent.PopularTVsEvent(it))
+                    if (it.results.isEmpty()) {
+                        requestPopularTVs()
+                    }
                 }
-            }
-            .catch {
-                Timber.e(it)
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+                .catch {
+                    Timber.e(it)
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestWatchProviders(movieId: Int) {
-        homeRepository.requestWatchProviders(movieId)
-            .onEach {
-                Timber.d("requestWatchProviders: $it")
-            }
-            .catch {
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestWatchProviders(movieId)
+                .onEach {
+                    Timber.d("requestWatchProviders: $it")
+                }
+                .catch {
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestMovieGenres() {
-        homeRepository.requestMovieGenres()
-            .onEach {
-                sendAction(HomeEvent.GenresMoviesEvent(it))
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestMovieGenres()
+                .onEach {
+                    sendAction(HomeEvent.GenresMoviesEvent(it))
+                }
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestTVGenres() {
-        homeRepository.requestTVGenres()
-            .onEach {
-                Timber.d("requestTVGenres: $it")
-                sendAction(HomeEvent.GenresTVsEvent(it))
-            }
-            .catch {
-                Timber.e(it)
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestTVGenres()
+                .onEach {
+                    Timber.d("requestTVGenres: $it")
+                    sendAction(HomeEvent.GenresTVsEvent(it))
+                }
+                .catch {
+                    Timber.e(it)
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestMovieVideo(id: Int) {
-        homeRepository.requestMovieVideo(id)
-            .onEach {
-//                Timber.d("requestMovieVideo: $it")
-                if (it.results.isNotEmpty()) {
-                    movieVideoKey = it.results[0].key
-                    movieVideoKeyList.value = it.results
-//                    sendAction(HomeEvent.MovieVideoEvent(it))
-                } else {
-                    sendAction(HomeEvent.ErrorEvent("No video found"))
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestMovieVideo(id)
+                .onEach {
+//                    Timber.d("requestMovieVideo: $it")
+                    if (it.results.isNotEmpty()) {
+                        movieVideoKey = it.results[0].key
+                        movieVideoKeyList.value = it.results
+//                        sendAction(HomeEvent.MovieVideoEvent(it))
+                    } else {
+                        sendAction(HomeEvent.ErrorEvent("No video found"))
+                    }
                 }
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestTvVideo(id: Int) {
-        homeRepository.requestTvVideo(id)
-            .onEach {
-                Timber.d("requestTvVideo: $it")
-                if (it.results.isNotEmpty()) {
-//                    sendAction(HomeEvent.TvVideoEvent(it))
-                    tvVideoKey = it.results[0].key
-                    tvVideoKeyList.value = it.results
-                } else {
-                    sendAction(HomeEvent.ErrorEvent("No video found"))
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestTvVideo(id)
+                .onEach {
+                    Timber.d("requestTvVideo: $it")
+                    if (it.results.isNotEmpty()) {
+//                        sendAction(HomeEvent.TvVideoEvent(it))
+                        tvVideoKey = it.results[0].key
+                        tvVideoKeyList.value = it.results
+                    } else {
+                        sendAction(HomeEvent.ErrorEvent("No video found"))
+                    }
                 }
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestMovieDetail(movieId: Int) {
-        homeRepository.requestMovieDetail(movieId)
-            .onEach {
-                Timber.d("requestMovieDetail: $it")
-                sendAction(HomeEvent.MovieDetailEvent(it))
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestMovieDetail(movieId)
+                .onEach {
+                    Timber.d("requestMovieDetail: $it")
+                    sendAction(HomeEvent.MovieDetailEvent(it))
+                }
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestTvDetail(tvId: Int) {
-        homeRepository.requestTvDetail(tvId)
-            .onEach {
-                Timber.d("requestTvDetail: $it")
-                sendAction(HomeEvent.TvDetailEvent(it))
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestTvDetail(tvId)
+                .onEach {
+                    Timber.d("requestTvDetail: $it")
+                    sendAction(HomeEvent.TvDetailEvent(it))
+                }
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestMovieCertification(movieId: Int) {
-        homeRepository.requestMovieCertification(movieId)
-            .onEach {
-                Timber.d("requestMovieCertification: $it")
-                sendAction(HomeEvent.MovieCertificationEvent(it))
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestMovieCertification(movieId)
+                .onEach {
+                    Timber.d("requestMovieCertification: $it")
+                    sendAction(HomeEvent.MovieCertificationEvent(it))
+                }
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestMovieCredits(movieId: Int) {
-        homeRepository.requestMovieCredits(movieId)
-            .onEach {
-                Timber.d("requestMovieCredits: $it")
-                sendAction(HomeEvent.MovieCreditsEvent(it))
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestMovieCredits(movieId)
+                .onEach {
+                    Timber.d("requestMovieCredits: $it")
+                    sendAction(HomeEvent.MovieCreditsEvent(it))
+                }
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     fun requestTvCredits(tvId: Int) {
-        homeRepository.requestTvCredits(tvId)
-            .onEach {
-                Timber.d("requestTvCredits: $it")
-                sendAction(HomeEvent.MovieCreditsEvent(it))
-            }
-            .catch {
-                sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
-                Timber.e(it)
-                FirebaseCrashlytics.getInstance().recordException(it)
-            }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            if (!checkApiCallCount()) return@launch
+            homeRepository.requestTvCredits(tvId)
+                .onEach {
+                    Timber.d("requestTvCredits: $it")
+                    sendAction(HomeEvent.MovieCreditsEvent(it))
+                }
+                .catch {
+                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    Timber.e(it)
+                    FirebaseCrashlytics.getInstance().recordException(it)
+                }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    private fun checkApiCallCount(): Boolean {
+        val count = homeRepository.getApiCallCount()
+        Timber.d("taewoo - API call count: $count")
+        return if (count > 220) {
+            Timber.d("taewoo - API call limit exceeded")
+            sendAction(HomeEvent.ErrorEvent("API call limit exceeded"))
+            false
+        } else {
+            true
+        }
     }
 
     companion object {
