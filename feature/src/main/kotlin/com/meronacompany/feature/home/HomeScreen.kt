@@ -67,7 +67,7 @@ fun HomeScreen(
             } else {
                 TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
             }
-            PageFloatingButton(currentPage.value, paddingValues)
+            //PageFloatingButton(currentPage.value, paddingValues)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )

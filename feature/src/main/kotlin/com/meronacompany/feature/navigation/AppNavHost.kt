@@ -3,6 +3,7 @@ package com.meronacompany.feature.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,7 +20,8 @@ import com.meronacompany.feature.splash.SplashScreen
 fun AppNavHost(
     navHostController: NavHostController = rememberNavController()
 ) {
-    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory())
+    val context = LocalContext.current
+    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory(context))
 
     NavHost(
         navController = navHostController,
