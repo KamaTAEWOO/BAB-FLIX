@@ -25,7 +25,7 @@ fun AppNavHost(
 
     NavHost(
         navController = navHostController,
-        startDestination = NavRouteLabel.SPLASH,
+        startDestination = NavRouteLabel.MOVIE,
         modifier = Modifier.fillMaxSize(),
         route = NavRouteLabel.MAIN
     ) {
