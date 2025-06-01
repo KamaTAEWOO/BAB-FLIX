@@ -72,7 +72,7 @@ fun SettingsContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(4.dp))
-        val remaining = homeViewModel.apiLimit - homeViewModel.apiUsageCount
+        val remaining = (homeViewModel.apiLimit - homeViewModel.apiUsageCount).coerceAtLeast(0)
         Text(
             text = "API 잔여 횟수: ${remaining}회 (총 ${homeViewModel.apiLimit}회)",
             color = colorScheme.onPrimary,

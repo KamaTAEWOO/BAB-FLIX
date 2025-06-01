@@ -13,7 +13,6 @@ import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
-    val apiLimit: Int = 700
+    val apiLimit: Int = 100
     var apiUsageCount: Int = 0
 
     private val _isLoading = MutableStateFlow(false)

@@ -70,6 +70,7 @@ fun TvContent(
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
                 listStates = listStates,
+                homeViewModel = homeViewModel,
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
                     onNavigateToDetail(tvId, route)
@@ -85,6 +86,7 @@ fun HomeContentListData(
     pageNumber: Int,
     paddingValues: PaddingValues,
     listStates: MutableMap<Int, LazyListState>,
+    homeViewModel: HomeViewModel,
     onTvClick: (Int) -> Unit
 ) {
     val scrollState = listStates.getOrPut(pageNumber) {
@@ -98,7 +100,6 @@ fun HomeContentListData(
     }
 
     val tvPairs = filteredTVs.chunked(2)
-    var shouldTrigger by remember { mutableStateOf(true) }
 
     LazyColumn(
         state = scrollState,
@@ -111,21 +112,16 @@ fun HomeContentListData(
             Spacer(Modifier.height(4.dp))
         }
 
-        if (tvPairs.isEmpty()) {
+        if (homeState?.allPopularMoviesData?.get(pageNumber).isNullOrEmpty()) {
             item {
+                val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
                 Text(
-                    text = "데이터를 불러오는 중...",
+                    text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(),
                     color = colorScheme.onPrimary
                 )
-                if (shouldTrigger) {
-                    LaunchedEffect(Unit) {
-                        delay(1000)
-                        shouldTrigger = false
-                    }
-                }
             }
         } else {
             items(tvPairs) { tvPair ->

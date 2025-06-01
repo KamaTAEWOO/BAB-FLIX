@@ -125,8 +125,9 @@ fun HomeContentListData(
 
         if (homeState?.allPopularMoviesData?.get(pageNumber).isNullOrEmpty()) {
             item {
+                val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
                 Text(
-                    text = "데이터를 불러오는 중...",
+                    text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(),
