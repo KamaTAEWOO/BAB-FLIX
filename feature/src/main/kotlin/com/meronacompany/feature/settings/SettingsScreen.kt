@@ -6,6 +6,7 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -111,17 +112,29 @@ fun SettingsContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            text = "This app uses the TMDB API but is not endorsed or certified by TMDB.",
-            style = BAB_FLIXTheme.typography.textStyleBold20,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            softWrap = false,
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .basicMarquee()
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = com.meronacompany.design.R.drawable.ic_tmdb_logo),
+                contentDescription = "TMDB Logo",
+                modifier = Modifier
+                    .size(70.dp)
+                    .padding(end = 8.dp)
+            )
+            Text(
+                text = "이 앱은 TMDB 및 TMDB API를 사용하지만 TMDB의 인증이나 승인을 받은 것은 아닙니다.",
+                style = BAB_FLIXTheme.typography.textStyleBold20,
+                maxLines = 1,
+                overflow = TextOverflow.Visible,
+                softWrap = false,
+                modifier = Modifier
+                    .weight(1f)
+                    .basicMarquee()
+            )
+        }
     }
 }
