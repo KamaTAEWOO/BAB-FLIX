@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
@@ -45,6 +46,24 @@ fun DetailTvContent(
             videoResult.key
         }
     )
+
+    // API 사용량 제한 체크
+    if (homeViewModel.apiUsageCount >= homeViewModel.apiLimit) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "API 호출 횟수를 초과했습니다.",
+                style = BAB_FLIXTheme.typography.textStyleBold18,
+                color = Color.White
+            )
+        }
+        return
+    }
 
     Column(
         modifier = Modifier
@@ -76,7 +95,7 @@ fun DetailTvContent(
                 ?: stringResource(R.string.data_error)),
             stringResource(R.string.rating) to (detailUIModel?.ratingScore?.toDouble()
                 ?.let { Util.formatVoteAverage(it) }
-                ?: stringResource(R.string.data_error))
+                 ?: stringResource(R.string.data_error))
         )
 
         details.forEach { (title, content) ->

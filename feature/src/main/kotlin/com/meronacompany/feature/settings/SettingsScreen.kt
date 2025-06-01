@@ -2,9 +2,7 @@ package com.meronacompany.feature.settings
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,10 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -46,13 +42,14 @@ import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 @Composable
 fun SettingsScreen(navHostController: NavHostController, homeViewModel: HomeViewModel) {
     Scaffold(topBar = {}, content = { paddingValues ->
-        SettingsContent(paddingValues)
+        SettingsContent(paddingValues, homeViewModel)
     }, bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) })
 }
 
 @Composable
-fun SettingsContent(paddingValues: PaddingValues) {
+fun SettingsContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
     val context = LocalContext.current
+    homeViewModel.checkApiCallCount()
 
     Column(
         modifier = Modifier
@@ -76,9 +73,9 @@ fun SettingsContent(paddingValues: PaddingValues) {
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(4.dp))
-        // 최신 버전입니다.
+        val remaining = (homeViewModel.apiLimit - homeViewModel.apiUsageCount).coerceAtLeast(0)
         Text(
-            text = "최신 버전입니다.",
+            text = "API 잔여 횟수: ${remaining}회 (총 ${homeViewModel.apiLimit}회)",
             color = colorScheme.onPrimary,
             style = BAB_FLIXTheme.typography.textStyleLight18,
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -115,17 +112,29 @@ fun SettingsContent(paddingValues: PaddingValues) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Text(
-            text = "This app uses the TMDB API but is not endorsed or certified by TMDB.",
-            style = BAB_FLIXTheme.typography.textStyleBold20,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            softWrap = false,
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .basicMarquee()
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = com.meronacompany.design.R.drawable.ic_tmdb_logo),
+                contentDescription = "TMDB Logo",
+                modifier = Modifier
+                    .size(70.dp)
+                    .padding(end = 8.dp)
+            )
+            Text(
+                text = "이 앱은 TMDB 및 TMDB API를 사용하지만 TMDB의 인증이나 승인을 받은 것은 아닙니다.",
+                style = BAB_FLIXTheme.typography.textStyleBold20,
+                maxLines = 1,
+                overflow = TextOverflow.Visible,
+                softWrap = false,
+                modifier = Modifier
+                    .weight(1f)
+                    .basicMarquee()
+            )
+        }
     }
 }

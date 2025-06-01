@@ -53,6 +53,24 @@ fun DetailMovieContent(
         }
     )
 
+    // API 사용량 제한 체크
+    if (homeViewModel.apiUsageCount >= homeViewModel.apiLimit) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "API 호출 횟수를 초과했습니다.",
+                style = BAB_FLIXTheme.typography.textStyleBold18,
+                color = Color.White
+            )
+        }
+        return
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

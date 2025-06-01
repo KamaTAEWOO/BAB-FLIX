@@ -13,7 +13,6 @@ import com.meronacompany.domain.repository.HomeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,6 +23,8 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
+    val apiLimit: Int = 700
+    var apiUsageCount: Int = 0
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -340,11 +341,12 @@ class HomeViewModel(
         }
     }
 
-    private fun checkApiCallCount(): Boolean {
+    fun checkApiCallCount(): Boolean {
         // Test code
         true // TODO : 삭제하기
         val count = homeRepository.getApiCallCount()
-        return if (count > 700) {
+        apiUsageCount = count
+        return if (count > apiLimit) {
             Timber.d("taewoo - API call limit exceeded")
             sendAction(HomeEvent.ErrorEvent("API call limit exceeded"))
             false
