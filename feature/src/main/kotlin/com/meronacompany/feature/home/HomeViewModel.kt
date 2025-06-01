@@ -23,7 +23,7 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
-    val apiLimit: Int = 100
+    val apiLimit: Int = 700
     var apiUsageCount: Int = 0
 
     private val _isLoading = MutableStateFlow(false)
@@ -342,8 +342,8 @@ class HomeViewModel(
     }
 
     fun checkApiCallCount(): Boolean {
-//        // Test code
-//        true // TODO : 삭제하기
+        // Test code
+        true // TODO : 삭제하기
         val count = homeRepository.getApiCallCount()
         apiUsageCount = count
         return if (count > apiLimit) {
