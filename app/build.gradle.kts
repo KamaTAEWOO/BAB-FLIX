@@ -94,3 +94,34 @@ tasks.register("buildReleaseApk") {
         println("APK path: $apkPath")
     }
 }
+
+tasks.register("signReleaseApk") {
+    group = "build"
+    description = "Signs the unsigned release APK manually"
+
+    val unsignedApkPath = "${buildDir}/outputs/apk/release/app-release-unsigned.apk"
+    val signedApkPath = "${buildDir}/outputs/apk/release/app-release-signed.apk"
+    val keystorePath = System.getProperty("user.home") + "/Desktop/bab_key"
+    val keystorePassword = "123456"
+    val keyAlias = "bab_key"
+    val keyPassword = "123456"
+
+    doLast {
+        println("Signing APK...")
+        exec {
+            commandLine(
+                "jarsigner",
+                "-verbose",
+                "-sigalg", "SHA1withRSA",
+                "-digestalg", "SHA-1",
+                "-keystore", keystorePath,
+                "-storepass", keystorePassword,
+                "-keypass", keyPassword,
+                "-signedjar", signedApkPath,
+                unsignedApkPath,
+                keyAlias
+            )
+        }
+        println("Signed APK path: $signedApkPath")
+    }
+}

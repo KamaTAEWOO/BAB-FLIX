@@ -21,7 +21,7 @@ if (hasLibraryPlugin || hasApplicationPlugin) {
         }
 
         buildTypes {
-            all {
+            configureEach {
                 resValue("string", "APP_VERSION", defaultConfig.versionName)
                 resValue("string", "APP_VERSION_CODE", defaultConfig.versionCode.toString())
             }
