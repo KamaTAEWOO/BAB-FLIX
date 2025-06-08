@@ -95,33 +95,49 @@ tasks.register("buildReleaseApk") {
     }
 }
 
-tasks.register("signReleaseApk") {
-    group = "build"
-    description = "Signs the unsigned release APK manually"
+android.applicationVariants.all {
+    if (buildType.name == "release") {
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            if (outputImpl.outputFileName.endsWith(".apk")) {
+                outputImpl.outputFileName = "BABFLIX-v${versionName}(${versionCode}).apk"
+            }
+            if (outputImpl.outputFileName.endsWith(".aab")) {
+                outputImpl.outputFileName = "BABFLIX-v${versionName}(${versionCode}).aab"
+            }
+        }
+    }
+}
 
-    val unsignedApkPath = "${buildDir}/outputs/apk/release/app-release-unsigned.apk"
-    val signedApkPath = "${buildDir}/outputs/apk/release/app-release-signed.apk"
-    val keystorePath = System.getProperty("user.home") + "/Desktop/bab_key"
-    val keystorePassword = "123456"
-    val keyAlias = "bab_key"
-    val keyPassword = "123456"
+// Rename AAB after bundleRelease finishes, but only if the task exists
+afterEvaluate {
+    tasks.findByName("bundleRelease")?.doLast {
+        val bundleDir = File(buildDir, "outputs/bundle/release")
+        val originalFile = File(bundleDir, "app-release.aab")
+        val renamedFile = File(
+            bundleDir,
+            "BABFLIX-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode}).aab"
+        )
+
+        if (originalFile.exists()) {
+            originalFile.renameTo(renamedFile)
+            println("Renamed AAB to: ${renamedFile.absolutePath}")
+        } else {
+            println("Original AAB not found: ${originalFile.absolutePath}")
+        }
+    }
+}
+
+tasks.register("buildAllReleaseArtifacts") {
+    group = "build"
+    description = "Builds both release APK and AAB"
+
+    dependsOn("assembleRelease")
+    dependsOn("bundleRelease")
 
     doLast {
-        println("Signing APK...")
-        exec {
-            commandLine(
-                "jarsigner",
-                "-verbose",
-                "-sigalg", "SHA1withRSA",
-                "-digestalg", "SHA-1",
-                "-keystore", keystorePath,
-                "-storepass", keystorePassword,
-                "-keypass", keyPassword,
-                "-signedjar", signedApkPath,
-                unsignedApkPath,
-                keyAlias
-            )
-        }
-        println("Signed APK path: $signedApkPath")
+        println("Release APK and AAB have been assembled.")
+        println("APK path: ${buildDir}/outputs/apk/release/BABFLIX-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode}).apk")
+        println("AAB path: ${buildDir}/outputs/bundle/release/BABFLIX-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode}).aab")
     }
 }
