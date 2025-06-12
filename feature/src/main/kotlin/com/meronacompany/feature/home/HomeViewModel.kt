@@ -126,11 +126,11 @@ class HomeViewModel(
     fun requestPopularMovies(pageCount: Int = 1) {
         viewModelScope.launch {
             if (!checkApiCallCount()) return@launch
-            homeRepository.requestPopularMovies(pageNumber = pageCount)
+            homeRepository.requestPopularMovies(pageNumber = if(pageCount > 1) pageCount else 1)
                 .onEach {
                     sendAction(HomeEvent.PopularMoviesEvent(it))
                     if (it.results.isEmpty()) {
-                        requestPopularMovies()
+                        requestPopularMovies(pageCount)
                     }
                 }
                 .catch {
@@ -145,10 +145,12 @@ class HomeViewModel(
     fun requestPopularTVs(pageNumber: Int = 1) {
         viewModelScope.launch {
             if (!checkApiCallCount()) return@launch
+            _isLoading.value = true
             homeRepository.requestPopularTVs(pageNumber = pageNumber)
                 .onEach {
 //                    Timber.d("requestPopularTVs: $it")
                     sendAction(HomeEvent.PopularTVsEvent(it))
+                    _isLoading.value = false
                     if (it.results.isEmpty()) {
                         requestPopularTVs()
                     }
@@ -157,6 +159,7 @@ class HomeViewModel(
                     Timber.e(it)
                     sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
                     FirebaseCrashlytics.getInstance().recordException(it)
+                    _isLoading.value = false
                 }
                 .launchIn(viewModelScope)
         }
