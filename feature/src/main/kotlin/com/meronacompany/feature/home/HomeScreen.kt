@@ -2,24 +2,23 @@ package com.meronacompany.feature.home
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.meronacompany.design.common.CommonAppBar
@@ -28,7 +27,7 @@ import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import com.meronacompany.feature.tv.TvContent
 import com.meronacompany.design.R
-import com.meronacompany.design.theme.BAB_FLIXTheme
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(
@@ -37,22 +36,26 @@ fun HomeScreen(
     navHostController: NavHostController,
     onNavigateToDetail: (Int, String) -> Unit
 ) {
-    LaunchedEffect("Unit") {
-//        homeViewModel.requestWatchProviders() // ott
-//        homeViewModel.requestMovieGenres() // movie 장르
-//        homeViewModel.requestTVGenres() // tv 장르
-    }
-
     val moviePagerIndex by homeViewModel.moviePagerIndex.collectAsState()
     val tvPagerIndex by homeViewModel.tvPagerIndex.collectAsState()
+    Timber.d("HomeScreen: moviePagerIndex = $moviePagerIndex, tvPagerIndex = $tvPagerIndex")
 
-    val currentPage = remember(route) {
-        derivedStateOf {
-            if (route == NavRouteLabel.MOVIE) {
-                moviePagerIndex + 1
-            } else {
-                tvPagerIndex + 1
-            }
+    val isLoading by homeViewModel.isLoading.collectAsState()
+    var showContent by remember { mutableStateOf(false) }
+    val homeUiState by homeViewModel.uiState.collectAsState()
+
+    // 최초 진입 시 데이터 요청
+    LaunchedEffect(Unit) {
+        if (homeUiState.allPopularMoviesData.isEmpty()) {
+            Timber.d("HomeScreen LaunchedEffect: Initial data request")
+            homeViewModel.requestPopularMovies(1)
+        }
+    }
+
+    // 로딩 종료 후 콘텐츠 표시
+    LaunchedEffect(isLoading, homeUiState.allPopularMoviesData) {
+        if (!isLoading && homeUiState.allPopularMoviesData.isNotEmpty()) {
+            showContent = true
         }
     }
 
@@ -62,41 +65,33 @@ fun HomeScreen(
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar() },
         content = { paddingValues ->
-            if (route == NavRouteLabel.MOVIE) {
-                MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+            Timber.d("HomeScreen: showContent = $showContent")
+            if (showContent) {
+                if (route == NavRouteLabel.MOVIE) {
+                    MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+                } else {
+                    TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+                }
             } else {
-                TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+                Box(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                ) {
+                    val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
+                    Text(
+                        text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        color = colorScheme.onPrimary
+                    )
+                }
+                Timber.d("HomeScreen: showContent = $showContent")
             }
-            //PageFloatingButton(currentPage.value, paddingValues)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
-}
-
-/*
-* 추후 다른 추가를 위해 FloatingActionButton을 사용
-* */
-@Composable
-fun PageFloatingButton(currentPage: Int, paddingValues: PaddingValues) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(end = 15.dp, bottom = 15.dp)
-    ) {
-        FloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd),
-            onClick = { /* 클릭 동작 없으면 비워둬도 됨 */ },
-            containerColor = Color.DarkGray,
-            contentColor = Color.White
-        ) {
-            Text(
-                text = currentPage.toString(),
-                style = BAB_FLIXTheme.typography.textStyleBold30,
-                color = Color.White
-            )
-        }
-    }
 }
 
 // image 데이터 없을 때 x 표시

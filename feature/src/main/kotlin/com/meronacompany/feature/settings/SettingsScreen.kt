@@ -67,7 +67,7 @@ fun SettingsContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
         )
         // 버전
         Text(
-            text = "버전 " + context.resources.getString(R.string.APP_VERSION),
+            text = "버전 " + context.resources.getString(R.string.APP_VERSION) + "." + context.resources.getString(R.string.APP_VERSION_CODE),
             color = colorScheme.onPrimary,
             style = BAB_FLIXTheme.typography.textStyleLight18,
             modifier = Modifier.align(Alignment.CenterHorizontally)

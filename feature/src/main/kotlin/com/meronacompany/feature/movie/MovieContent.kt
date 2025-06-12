@@ -51,10 +51,6 @@ fun MovieContent(
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
-    LaunchedEffect(Unit) {
-        homeViewModel.requestPopularMovies(0)
-    }
-
     val pagerState = rememberPagerState(
         initialPage = homeViewModel.moviePagerIndex.value,
         pageCount = { pageCount }

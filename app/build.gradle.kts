@@ -94,3 +94,50 @@ tasks.register("buildReleaseApk") {
         println("APK path: $apkPath")
     }
 }
+
+android.applicationVariants.all {
+    if (buildType.name == "release") {
+        outputs.all {
+            val outputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            if (outputImpl.outputFileName.endsWith(".apk")) {
+                outputImpl.outputFileName = "BABFLIX-v${versionName}(${versionCode}).apk"
+            }
+            if (outputImpl.outputFileName.endsWith(".aab")) {
+                outputImpl.outputFileName = "BABFLIX-v${versionName}(${versionCode}).aab"
+            }
+        }
+    }
+}
+
+// Rename AAB after bundleRelease finishes, but only if the task exists
+afterEvaluate {
+    tasks.findByName("bundleRelease")?.doLast {
+        val bundleDir = File(buildDir, "outputs/bundle/release")
+        val originalFile = File(bundleDir, "app-release.aab")
+        val renamedFile = File(
+            bundleDir,
+            "BABFLIX-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode}).aab"
+        )
+
+        if (originalFile.exists()) {
+            originalFile.renameTo(renamedFile)
+            println("Renamed AAB to: ${renamedFile.absolutePath}")
+        } else {
+            println("Original AAB not found: ${originalFile.absolutePath}")
+        }
+    }
+}
+
+tasks.register("buildAllReleaseArtifacts") {
+    group = "build"
+    description = "Builds both release APK and AAB"
+
+    dependsOn("assembleRelease")
+    dependsOn("bundleRelease")
+
+    doLast {
+        println("Release APK and AAB have been assembled.")
+        println("APK path: ${buildDir}/outputs/apk/release/BABFLIX-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode}).apk")
+        println("AAB path: ${buildDir}/outputs/bundle/release/BABFLIX-v${android.defaultConfig.versionName}(${android.defaultConfig.versionCode}).aab")
+    }
+}
