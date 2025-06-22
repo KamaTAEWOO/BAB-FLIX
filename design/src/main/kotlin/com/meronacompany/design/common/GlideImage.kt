@@ -71,11 +71,13 @@ fun CommonGlideImage(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
+            val density = LocalContext.current.resources.displayMetrics.density
+            val bitmapWidthDp = imageBitmap?.width?.div(density)?.dp ?: 130.dp
+            val bitmapHeightDp = imageBitmap?.height?.div(density)?.dp ?: 187.dp
             Image(
                 painter = painterResource(id = R.drawable.ic_no_poster),
                 contentDescription = "No image background",
-                modifier = Modifier
-                    .size(130.dp, 187.dp)
+                modifier = Modifier.size(bitmapWidthDp, bitmapHeightDp)
             )
         }
         imageBitmap?.let { bitmap ->

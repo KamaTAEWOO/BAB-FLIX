@@ -224,7 +224,7 @@ fun MoviePoster(posterPath: String) {
             )
         }
     } else {
-        CommonGlideImage(path = posterPath)
+         CommonGlideImage(path = posterPath)
     }
 }
 
