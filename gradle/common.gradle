@@ -10,7 +10,7 @@ if (hasLibraryPlugin || hasApplicationPlugin) {
             //noinspection OldTargetApi
             targetSdk = 35
             // 코드 수정 시 버전 관리
-            versionCode = 6
+            versionCode = 9
             // version 관리 - Major.Minor.Patch 순
             // Major+ : 하위 호환 불가한 변경 존재
             // Minor+ : 하위 호환 가능한 기능 추가
