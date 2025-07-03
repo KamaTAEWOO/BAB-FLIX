@@ -34,7 +34,7 @@ import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun TvContent(
+fun tvContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
