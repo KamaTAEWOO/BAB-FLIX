@@ -39,7 +39,7 @@ fun TvContent(
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
     route: String
-) {
+): LazyListState {
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
@@ -58,6 +58,7 @@ fun TvContent(
         homeViewModel.setTvPagerIndex(pagerState.currentPage)
     }
 
+    var scrollState: LazyListState? = null
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -65,11 +66,13 @@ fun TvContent(
             if (page == pageCount - 1) {
                 pageCount++
             }
+            val currentScrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
+            scrollState = currentScrollState
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
-                listStates = listStates,
+                scrollState = currentScrollState,
                 homeViewModel = homeViewModel,
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
@@ -78,6 +81,8 @@ fun TvContent(
             )
         }
     }
+    // return the current scrollState (never null after composition)
+    return scrollState ?: LazyListState()
 }
 
 @Composable
@@ -85,13 +90,10 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
-    listStates: MutableMap<Int, LazyListState>,
+    scrollState: LazyListState,
     homeViewModel: HomeViewModel,
     onTvClick: (Int) -> Unit
 ) {
-    val scrollState = listStates.getOrPut(pageNumber) {
-        LazyListState()
-    }
 
     var filteredTVs = homeState?.allPopularTVsData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
