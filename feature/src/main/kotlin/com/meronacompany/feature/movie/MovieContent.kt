@@ -1,5 +1,4 @@
 import android.annotation.SuppressLint
-import android.provider.CalendarContract
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,10 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
-import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
@@ -110,6 +107,12 @@ fun HomeContentListData(
     }
 
     val moviePairs = filteredMovies.chunked(2)
+
+    // Scroll to item when page changes, with frame clock context
+    val currentPage = pageNumber - 1
+    LaunchedEffect(currentPage) {
+        scrollState.animateScrollToItem(index = currentPage)
+    }
 
     LazyColumn(
         state = scrollState,

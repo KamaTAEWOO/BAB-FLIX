@@ -118,7 +118,7 @@ fun HomeContentListData(
             Spacer(Modifier.height(4.dp))
         }
 
-        if (homeState?.allPopularMoviesData?.get(pageNumber).isNullOrEmpty()) {
+        if (homeState?.allPopularTVsData?.get(pageNumber).isNullOrEmpty()) {
             item {
                 val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
                 Text(
