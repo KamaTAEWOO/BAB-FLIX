@@ -58,7 +58,6 @@ fun tvContent(
         homeViewModel.setTvPagerIndex(pagerState.currentPage)
     }
 
-    var scrollState: LazyListState? = null
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -67,7 +66,7 @@ fun tvContent(
                 pageCount++
             }
             val currentScrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
-            scrollState = currentScrollState
+
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
@@ -81,8 +80,8 @@ fun tvContent(
             )
         }
     }
-    // return the current scrollState (never null after composition)
-    return scrollState ?: LazyListState()
+
+    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable

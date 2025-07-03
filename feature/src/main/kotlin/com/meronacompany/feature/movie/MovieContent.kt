@@ -75,7 +75,6 @@ fun movieContent(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
-                listStates = listStates,
                 homeViewModel = homeViewModel,
                 onMovieClick = { movieId ->
                     onNavigateToDetail(movieId, route)
@@ -93,7 +92,6 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
-    listStates: MutableMap<Int, LazyListState>,
     homeViewModel: HomeViewModel,
     onMovieClick: (Int) -> Unit,
     scrollState: LazyListState
