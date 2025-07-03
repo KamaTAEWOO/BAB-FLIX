@@ -1,3 +1,5 @@
+package com.meronacompany.feature.movie
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,16 +42,17 @@ import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.movie.model.MovieItem
+import kotlinx.coroutines.delay
 import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun movieContent(
+fun MovieContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
     route: String
-): LazyListState {
+) {
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
@@ -72,22 +77,18 @@ fun movieContent(
                 pageCount++
             }
 
-            val scrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
-
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
+                listStates = listStates,
                 homeViewModel = homeViewModel,
                 onMovieClick = { movieId ->
                     onNavigateToDetail(movieId, route)
-                },
-                scrollState = scrollState
+                }
             )
         }
     }
-
-    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable
@@ -95,10 +96,14 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
+    listStates: MutableMap<Int, LazyListState>,
     homeViewModel: HomeViewModel,
-    onMovieClick: (Int) -> Unit,
-    scrollState: LazyListState
+    onMovieClick: (Int) -> Unit
 ) {
+    val scrollState = listStates.getOrPut(pageNumber) {
+        LazyListState()
+    }
+
     var filteredMovies = homeState?.allPopularMoviesData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
     // Remove the last item if the number of movies is odd
@@ -107,12 +112,6 @@ fun HomeContentListData(
     }
 
     val moviePairs = filteredMovies.chunked(2)
-
-    // Scroll to item when page changes, with frame clock context
-    val currentPage = pageNumber - 1
-    LaunchedEffect(currentPage) {
-        scrollState.animateScrollToItem(index = currentPage)
-    }
 
     LazyColumn(
         state = scrollState,
@@ -230,7 +229,7 @@ fun MoviePoster(posterPath: String, movieItem: MovieItem) {
             )
         }
     } else {
-         CommonGlideImage(path = posterPath, voteAverage = movieItem.voteAverage)
+        CommonGlideImage(path = posterPath, voteAverage = movieItem.voteAverage)
     }
 }
 

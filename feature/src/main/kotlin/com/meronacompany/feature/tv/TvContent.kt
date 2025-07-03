@@ -39,12 +39,12 @@ import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun tvContent(
+fun TvContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
     route: String
-): LazyListState {
+) {
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
@@ -70,13 +70,11 @@ fun tvContent(
             if (page == pageCount - 1) {
                 pageCount++
             }
-            val currentScrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
-
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
-                scrollState = currentScrollState,
+                listStates = listStates,
                 homeViewModel = homeViewModel,
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
@@ -85,8 +83,6 @@ fun tvContent(
             )
         }
     }
-
-    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable
@@ -94,10 +90,13 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
-    scrollState: LazyListState,
+    listStates: MutableMap<Int, LazyListState>,
     homeViewModel: HomeViewModel,
     onTvClick: (Int) -> Unit
 ) {
+    val scrollState = listStates.getOrPut(pageNumber) {
+        LazyListState()
+    }
 
     var filteredTVs = homeState?.allPopularTVsData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
@@ -118,7 +117,7 @@ fun HomeContentListData(
             Spacer(Modifier.height(4.dp))
         }
 
-        if (homeState?.allPopularTVsData?.get(pageNumber).isNullOrEmpty()) {
+        if (homeState?.allPopularMoviesData?.get(pageNumber).isNullOrEmpty()) {
             item {
                 val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
                 Text(
@@ -202,3 +201,4 @@ fun TvNameAndScore(tvItem: TvItem) {
         }
     }
 }
+

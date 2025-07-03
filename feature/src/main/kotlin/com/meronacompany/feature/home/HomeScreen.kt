@@ -29,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.feature.movie.MovieContent
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
-import com.meronacompany.feature.tv.tvContent
+import com.meronacompany.feature.tv.TvContent
 import kotlinx.coroutines.launch
-import movieContent
 import timber.log.Timber
 
 @Composable
@@ -79,7 +79,7 @@ fun HomeScreen(
                 paddingValues = paddingValues,
                 onNavigateToDetail = onNavigateToDetail
             )
-            PageFloatingButton(paddingValues, lazyListState)
+            // PageFloatingButton(paddingValues, lazyListState)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
@@ -127,10 +127,10 @@ fun homeScreenContent(
 ): LazyListState {
     Timber.d("HomeScreen: showContent = $showContent")
     if (showContent) {
-        return if (route == NavRouteLabel.MOVIE) {
-            movieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+        if (route == NavRouteLabel.MOVIE) {
+            MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
         } else {
-            tvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+            TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
         }
     } else {
         Box(
