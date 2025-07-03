@@ -14,11 +14,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,15 +27,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.meronacompany.design.common.CommonAppBar
 import com.meronacompany.design.R
-import com.meronacompany.feature.movie.MovieContent
+import com.meronacompany.design.common.CommonAppBar
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
-import com.meronacompany.feature.tv.TvContent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.meronacompany.feature.tv.tvContent
 import kotlinx.coroutines.launch
+import movieContent
 import timber.log.Timber
 
 @Composable
@@ -74,14 +72,14 @@ fun HomeScreen(
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar() },
         content = { paddingValues ->
-            val a = HomeScreenContent(
+            val lazyListState = homeScreenContent(
                 showContent = showContent,
                 route = route,
                 homeViewModel = homeViewModel,
                 paddingValues = paddingValues,
                 onNavigateToDetail = onNavigateToDetail
             )
-            PageFloatingButton(paddingValues, a)
+            PageFloatingButton(paddingValues, lazyListState)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
@@ -120,7 +118,7 @@ fun PageFloatingButton(
 }
 
 @Composable
-fun HomeScreenContent(
+fun homeScreenContent(
     showContent: Boolean,
     route: String,
     homeViewModel: HomeViewModel,
@@ -130,9 +128,9 @@ fun HomeScreenContent(
     Timber.d("HomeScreen: showContent = $showContent")
     if (showContent) {
         return if (route == NavRouteLabel.MOVIE) {
-            MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+            movieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
         } else {
-            TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+            tvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
         }
     } else {
         Box(

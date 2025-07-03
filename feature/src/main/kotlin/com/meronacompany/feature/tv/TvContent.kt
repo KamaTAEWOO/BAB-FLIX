@@ -34,7 +34,7 @@ import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun TvContent(
+fun tvContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
@@ -58,7 +58,6 @@ fun TvContent(
         homeViewModel.setTvPagerIndex(pagerState.currentPage)
     }
 
-    var scrollState: LazyListState? = null
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -67,7 +66,7 @@ fun TvContent(
                 pageCount++
             }
             val currentScrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
-            scrollState = currentScrollState
+
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
@@ -81,8 +80,8 @@ fun TvContent(
             )
         }
     }
-    // return the current scrollState (never null after composition)
-    return scrollState ?: LazyListState()
+
+    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable
