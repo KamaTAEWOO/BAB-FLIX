@@ -2,14 +2,19 @@ package com.meronacompany.feature.home
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,14 +24,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.design.R
 import com.meronacompany.feature.movie.MovieContent
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import com.meronacompany.feature.tv.TvContent
-import com.meronacompany.design.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -65,33 +74,84 @@ fun HomeScreen(
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar() },
         content = { paddingValues ->
-            Timber.d("HomeScreen: showContent = $showContent")
-            if (showContent) {
-                if (route == NavRouteLabel.MOVIE) {
-                    MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
-                } else {
-                    TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxSize()
-                ) {
-                    val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
-                    Text(
-                        text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-                        color = colorScheme.onPrimary
-                    )
-                }
-                Timber.d("HomeScreen: showContent = $showContent")
-            }
+            val a = HomeScreenContent(
+                showContent = showContent,
+                route = route,
+                homeViewModel = homeViewModel,
+                paddingValues = paddingValues,
+                onNavigateToDetail = onNavigateToDetail
+            )
+            PageFloatingButton(paddingValues, a)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
+}
+
+@Composable
+fun PageFloatingButton(
+    paddingValues: PaddingValues,
+    listState: LazyListState
+) {
+    val coroutineScope = rememberCoroutineScope()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+            .padding(end = 15.dp, bottom = 15.dp)
+    ) {
+        FloatingActionButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onClick = {
+                // 위로 스크롤 이동
+                coroutineScope.launch {
+                    listState.animateScrollToItem(0)
+                }
+            },
+            containerColor = Color.DarkGray,
+            contentColor = Color.White
+        ) {
+            Icon(
+                modifier = Modifier.padding(bottom = 5.dp),
+                painter = painterResource(id = R.drawable.ic_up_arrow),
+                contentDescription = "Up Arrow"
+            )
+        }
+    }
+}
+
+@Composable
+fun HomeScreenContent(
+    showContent: Boolean,
+    route: String,
+    homeViewModel: HomeViewModel,
+    paddingValues: PaddingValues,
+    onNavigateToDetail: (Int, String) -> Unit
+): LazyListState {
+    Timber.d("HomeScreen: showContent = $showContent")
+    if (showContent) {
+        return if (route == NavRouteLabel.MOVIE) {
+            MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+        } else {
+            TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
+            val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
+            Text(
+                text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                color = colorScheme.onPrimary
+            )
+        }
+        Timber.d("HomeScreen: showContent = $showContent")
+    }
+    return remember { LazyListState() }
 }
 
 // image 데이터 없을 때 x 표시
@@ -102,15 +162,27 @@ fun ImageError(
     strokeWidth: Float = 8f
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        Canvas(modifier = Modifier.align(Alignment.Center).then(modifier)) {
+        Canvas(modifier = Modifier
+            .align(Alignment.Center)
+            .then(modifier)) {
             val size = size.minDimension
             val startOffset1 = Offset(0f, 0f)
             val endOffset1 = Offset(size, size)
             val startOffset2 = Offset(size, 0f)
             val endOffset2 = Offset(0f, size)
 
-            drawLine(color = color, start = startOffset1, end = endOffset1, strokeWidth = strokeWidth)
-            drawLine(color = color, start = startOffset2, end = endOffset2, strokeWidth = strokeWidth)
+            drawLine(
+                color = color,
+                start = startOffset1,
+                end = endOffset1,
+                strokeWidth = strokeWidth
+            )
+            drawLine(
+                color = color,
+                start = startOffset2,
+                end = endOffset2,
+                strokeWidth = strokeWidth
+            )
         }
     }
 }

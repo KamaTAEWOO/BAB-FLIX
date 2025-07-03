@@ -47,7 +47,7 @@ fun MovieContent(
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
     route: String
-) {
+): LazyListState {
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
@@ -72,6 +72,8 @@ fun MovieContent(
                 pageCount++
             }
 
+            val scrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
+
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
@@ -80,10 +82,13 @@ fun MovieContent(
                 homeViewModel = homeViewModel,
                 onMovieClick = { movieId ->
                     onNavigateToDetail(movieId, route)
-                }
+                },
+                scrollState = scrollState
             )
         }
     }
+
+    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable
@@ -93,12 +98,9 @@ fun HomeContentListData(
     paddingValues: PaddingValues,
     listStates: MutableMap<Int, LazyListState>,
     homeViewModel: HomeViewModel,
-    onMovieClick: (Int) -> Unit
+    onMovieClick: (Int) -> Unit,
+    scrollState: LazyListState
 ) {
-    val scrollState = listStates.getOrPut(pageNumber) {
-        LazyListState()
-    }
-
     var filteredMovies = homeState?.allPopularMoviesData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
     // Remove the last item if the number of movies is odd
