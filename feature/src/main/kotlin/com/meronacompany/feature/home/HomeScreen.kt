@@ -29,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonAppBar
-import com.meronacompany.feature.movie.movieContent
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 import com.meronacompany.feature.tv.tvContent
 import kotlinx.coroutines.launch
+import movieContent
 import timber.log.Timber
 
 @Composable
