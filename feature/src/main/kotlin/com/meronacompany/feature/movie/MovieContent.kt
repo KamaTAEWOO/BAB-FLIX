@@ -201,14 +201,14 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
     ) {
         Spacer(modifier = Modifier.height(4.dp))
 
-        MoviePoster(posterPath = movieItem.posterPath ?: "")
+        MoviePoster(posterPath = movieItem.posterPath ?: "", movieItem = movieItem)
         MovieNameAndScore(movieItem = movieItem)
         Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
 @Composable
-fun MoviePoster(posterPath: String) {
+fun MoviePoster(posterPath: String, movieItem: MovieItem) {
     Timber.d("Poster Path: $posterPath") // 1bhIezUxvLM9r66yIf1i6EDVJ6R.jpg
     if (posterPath.isEmpty()) {
         // image placeholder
@@ -227,7 +227,7 @@ fun MoviePoster(posterPath: String) {
             )
         }
     } else {
-         CommonGlideImage(path = posterPath)
+         CommonGlideImage(path = posterPath, voteAverage = movieItem.voteAverage)
     }
 }
 

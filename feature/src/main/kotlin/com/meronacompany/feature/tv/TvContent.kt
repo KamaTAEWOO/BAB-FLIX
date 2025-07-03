@@ -167,19 +167,19 @@ fun TvData(tvItem: TvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
             .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(4.dp))
-        TvPoster(posterPath = tvItem.posterPath ?: "")
+        TvPoster(posterPath = tvItem.posterPath ?: "", tvItem = tvItem)
         TvNameAndScore(tvItem = tvItem)
         Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
 @Composable
-fun TvPoster(posterPath: String) {
+fun TvPoster(posterPath: String, tvItem: TvItem) {
     if (posterPath.isEmpty()) {
         ImageError()
         return
     }
-    CommonGlideImage(path = posterPath)
+    CommonGlideImage(path = posterPath, voteAverage = tvItem.voteAverage)
 }
 
 @Composable
