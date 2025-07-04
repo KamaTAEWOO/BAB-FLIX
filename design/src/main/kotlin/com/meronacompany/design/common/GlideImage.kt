@@ -3,10 +3,16 @@ package com.meronacompany.design.common
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
@@ -33,7 +40,8 @@ fun CommonGlideImage(
     @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     alignment: Alignment = Alignment.Center,
-    loading: @Composable (() -> Unit)? = { CircularProgressIndicator(modifier = Modifier.size(20.dp)) }, // TODO : 로딩 인디케이터
+    loading: @Composable (() -> Unit)? = { CircularProgressIndicator(modifier = Modifier.size(20.dp)) },
+    voteAverage: Double? = 0.0
 ) {
     val context = LocalContext.current
     var imageBitmap by remember { mutableStateOf<android.graphics.Bitmap?>(null) }
@@ -95,5 +103,34 @@ fun CommonGlideImage(
                 )
             }
         }
+
+        voteAverage?.let {
+            VoteAverageTag(it, modifier = Modifier.align(Alignment.TopStart))
+        }
+    }
+}
+
+@Composable
+private fun VoteAverageTag(voteAverage: Double, modifier: Modifier = Modifier) {
+    val (label, backgroundColor, textColor) = when {
+        voteAverage >= 9.0 -> Triple("BEST", MaterialTheme.colorScheme.outlineVariant, Color.Black)
+        voteAverage >= 7.5 -> Triple("HOT", MaterialTheme.colorScheme.surfaceVariant, Color.White)
+        else -> null
+    } ?: return
+
+    Box(
+        modifier = modifier
+            .offset(x = 28.dp, y = 6.dp)
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(bottomEnd = 8.dp)
+            )
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = label,
+            color = textColor,
+            style = MaterialTheme.typography.labelSmall
+        )
     }
 }

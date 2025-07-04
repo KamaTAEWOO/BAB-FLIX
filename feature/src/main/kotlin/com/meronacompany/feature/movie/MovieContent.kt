@@ -1,5 +1,6 @@
+package com.meronacompany.feature.movie
+
 import android.annotation.SuppressLint
-import android.provider.CalendarContract
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,30 +28,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
-import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.movie.model.MovieItem
+import kotlinx.coroutines.delay
 import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun movieContent(
+fun MovieContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
     route: String
-): LazyListState {
+) {
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
@@ -75,22 +77,18 @@ fun movieContent(
                 pageCount++
             }
 
-            val scrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
-
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
+                listStates = listStates,
                 homeViewModel = homeViewModel,
                 onMovieClick = { movieId ->
                     onNavigateToDetail(movieId, route)
-                },
-                scrollState = scrollState
+                }
             )
         }
     }
-
-    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable
@@ -98,10 +96,14 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
+    listStates: MutableMap<Int, LazyListState>,
     homeViewModel: HomeViewModel,
-    onMovieClick: (Int) -> Unit,
-    scrollState: LazyListState
+    onMovieClick: (Int) -> Unit
 ) {
+    val scrollState = listStates.getOrPut(pageNumber) {
+        LazyListState()
+    }
+
     var filteredMovies = homeState?.allPopularMoviesData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
     // Remove the last item if the number of movies is odd
@@ -201,14 +203,14 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
     ) {
         Spacer(modifier = Modifier.height(4.dp))
 
-        MoviePoster(posterPath = movieItem.posterPath ?: "")
+        MoviePoster(posterPath = movieItem.posterPath ?: "", movieItem = movieItem)
         MovieNameAndScore(movieItem = movieItem)
         Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
 @Composable
-fun MoviePoster(posterPath: String) {
+fun MoviePoster(posterPath: String, movieItem: MovieItem) {
     Timber.d("Poster Path: $posterPath") // 1bhIezUxvLM9r66yIf1i6EDVJ6R.jpg
     if (posterPath.isEmpty()) {
         // image placeholder
@@ -227,7 +229,7 @@ fun MoviePoster(posterPath: String) {
             )
         }
     } else {
-         CommonGlideImage(path = posterPath)
+        CommonGlideImage(path = posterPath, voteAverage = movieItem.voteAverage)
     }
 }
 

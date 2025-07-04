@@ -29,11 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.feature.movie.MovieContent
 import com.meronacompany.feature.navigation.NavRouteLabel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
-import com.meronacompany.feature.tv.tvContent
+import com.meronacompany.feature.tv.TvContent
 import kotlinx.coroutines.launch
-import movieContent
 import timber.log.Timber
 
 @Composable
@@ -72,14 +72,14 @@ fun HomeScreen(
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar() },
         content = { paddingValues ->
-            val lazyListState = homeScreenContent(
+            homeScreenContent(
                 showContent = showContent,
                 route = route,
                 homeViewModel = homeViewModel,
                 paddingValues = paddingValues,
                 onNavigateToDetail = onNavigateToDetail
             )
-            PageFloatingButton(paddingValues, lazyListState)
+             PageFloatingButton(paddingValues, homeViewModel, route)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
@@ -88,7 +88,8 @@ fun HomeScreen(
 @Composable
 fun PageFloatingButton(
     paddingValues: PaddingValues,
-    listState: LazyListState
+    homeViewModel: HomeViewModel,
+    route: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     Box(
@@ -102,7 +103,12 @@ fun PageFloatingButton(
             onClick = {
                 // 위로 스크롤 이동
                 coroutineScope.launch {
-                    listState.animateScrollToItem(0)
+                    val scrollStates = if (route == NavRouteLabel.MOVIE) {
+                        homeViewModel.movieScrollStates
+                    } else {
+                        homeViewModel.tvScrollStates
+                    }
+                    scrollStates.values.forEach { it.animateScrollToItem(0) }
                 }
             },
             containerColor = Color.DarkGray,
@@ -127,10 +133,10 @@ fun homeScreenContent(
 ): LazyListState {
     Timber.d("HomeScreen: showContent = $showContent")
     if (showContent) {
-        return if (route == NavRouteLabel.MOVIE) {
-            movieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+        if (route == NavRouteLabel.MOVIE) {
+            MovieContent(homeViewModel, paddingValues, onNavigateToDetail, route)
         } else {
-            tvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
+            TvContent(homeViewModel, paddingValues, onNavigateToDetail, route)
         }
     } else {
         Box(

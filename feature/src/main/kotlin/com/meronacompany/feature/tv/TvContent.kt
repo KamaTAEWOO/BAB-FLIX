@@ -10,6 +10,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +23,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.CommonGlideImage
@@ -34,12 +39,12 @@ import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun tvContent(
+fun TvContent(
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit,
     route: String
-): LazyListState {
+) {
     val homeState = homeViewModel.uiState.value
     var pageCount by rememberSaveable { mutableIntStateOf(1) } // 초기 페이지 수
 
@@ -65,13 +70,11 @@ fun tvContent(
             if (page == pageCount - 1) {
                 pageCount++
             }
-            val currentScrollState = listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
-
             HomeContentListData(
                 homeState = homeState,
                 pageNumber = page + 1,
                 paddingValues = paddingValues,
-                scrollState = currentScrollState,
+                listStates = listStates,
                 homeViewModel = homeViewModel,
                 onTvClick = { tvId ->
                     Timber.d("tvId: $tvId")
@@ -80,8 +83,6 @@ fun tvContent(
             )
         }
     }
-
-    return listStates.getOrPut(pagerState.currentPage + 1) { LazyListState() }
 }
 
 @Composable
@@ -89,10 +90,13 @@ fun HomeContentListData(
     homeState: HomeState?,
     pageNumber: Int,
     paddingValues: PaddingValues,
-    scrollState: LazyListState,
+    listStates: MutableMap<Int, LazyListState>,
     homeViewModel: HomeViewModel,
     onTvClick: (Int) -> Unit
 ) {
+    val scrollState = listStates.getOrPut(pageNumber) {
+        LazyListState()
+    }
 
     var filteredTVs = homeState?.allPopularTVsData?.get(pageNumber)?.filter { !it.poster_path.isNullOrBlank() } ?: emptyList()
 
@@ -162,19 +166,19 @@ fun TvData(tvItem: TvItem, modifier: Modifier, onClick: (Int) -> Unit = {}) {
             .then(modifier)
     ) {
         Spacer(modifier = Modifier.height(4.dp))
-        TvPoster(posterPath = tvItem.posterPath ?: "")
+        TvPoster(posterPath = tvItem.posterPath ?: "", tvItem = tvItem)
         TvNameAndScore(tvItem = tvItem)
         Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
 @Composable
-fun TvPoster(posterPath: String) {
+fun TvPoster(posterPath: String, tvItem: TvItem) {
     if (posterPath.isEmpty()) {
         ImageError()
         return
     }
-    CommonGlideImage(path = posterPath)
+    CommonGlideImage(path = posterPath, voteAverage = tvItem.voteAverage)
 }
 
 @Composable
@@ -183,6 +187,18 @@ fun TvNameAndScore(tvItem: TvItem) {
         modifier = Modifier.padding(horizontal = 30.dp)
     ) {
         Text(text = tvItem.title ?: "", color = colorScheme.onPrimary)
-        Text(text = Util.formatVoteAverage(tvItem.voteAverage ?: 0.0), color = colorScheme.secondary)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "rating",
+                tint = Color(0xFFFFCA28),
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = Util.formatVoteAverage(tvItem.voteAverage ?: 0.0),
+                color = colorScheme.secondary
+            )
+        }
     }
 }
+

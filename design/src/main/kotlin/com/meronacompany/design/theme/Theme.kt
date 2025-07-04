@@ -18,7 +18,10 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = OnPrimaryDarkColor,
     secondary = SecondaryDarkColor,
     tertiary = TertiaryDarkColor,
-    background = BackgroundDarkColor
+    background = BackgroundDarkColor,
+    // 카테고리: surfaceVariant, outlineVariant
+    surfaceVariant = surfaceVariantDarkColor, // 카테고리 인기
+    outlineVariant = outLineVariantDarkColor // 카테고리 BEST
 )
 
 private val LightColorScheme = lightColorScheme(
