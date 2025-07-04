@@ -33,6 +33,9 @@ v2User = "2.21.3"
 youtube-player = "12.1.1"
 chromecastSender = "0.30"
 
+# Play Core app update
+playAppUpdate = "2.1.0"
+
 navigationRuntimeKtx = "2.8.7"
 navigationCompose = "2.8.7"
 uiToolingPreviewAndroid = "1.7.8"
@@ -82,6 +85,8 @@ v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "v2User" }
 youtube-player-core = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "youtube-player" }
 chromecast-sender = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender", version.ref = "chromecastSender" }
 
+# Play Core app update
+play-app-update = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "playAppUpdate" }
 
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -93,5 +98,3 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
-
