@@ -72,14 +72,14 @@ fun HomeScreen(
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar() },
         content = { paddingValues ->
-            val lazyListState = homeScreenContent(
+            homeScreenContent(
                 showContent = showContent,
                 route = route,
                 homeViewModel = homeViewModel,
                 paddingValues = paddingValues,
                 onNavigateToDetail = onNavigateToDetail
             )
-            // PageFloatingButton(paddingValues, lazyListState)
+             PageFloatingButton(paddingValues, homeViewModel, route)
         },
         bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) }
     )
@@ -88,7 +88,8 @@ fun HomeScreen(
 @Composable
 fun PageFloatingButton(
     paddingValues: PaddingValues,
-    listState: LazyListState
+    homeViewModel: HomeViewModel,
+    route: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     Box(
@@ -102,7 +103,12 @@ fun PageFloatingButton(
             onClick = {
                 // 위로 스크롤 이동
                 coroutineScope.launch {
-                    listState.animateScrollToItem(0)
+                    val scrollStates = if (route == NavRouteLabel.MOVIE) {
+                        homeViewModel.movieScrollStates
+                    } else {
+                        homeViewModel.tvScrollStates
+                    }
+                    scrollStates.values.forEach { it.animateScrollToItem(0) }
                 }
             },
             containerColor = Color.DarkGray,
