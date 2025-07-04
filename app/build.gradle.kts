@@ -59,6 +59,8 @@ dependencies {
     implementation(libs.v2.user)
     implementation(libs.firebase.auth.ktx)
 
+    implementation(libs.play.app.update)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
