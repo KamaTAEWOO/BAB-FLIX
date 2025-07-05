@@ -100,6 +100,10 @@ fun HomeContentListData(
     homeViewModel: HomeViewModel,
     onMovieClick: (Int) -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        delay(1000)
+    }
+
     val scrollState = listStates.getOrPut(pageNumber) {
         LazyListState()
     }
@@ -211,7 +215,7 @@ fun MovieData(movieItem: MovieItem, modifier: Modifier, onClick: (Int) -> Unit =
 
 @Composable
 fun MoviePoster(posterPath: String, movieItem: MovieItem) {
-    Timber.d("Poster Path: $posterPath") // 1bhIezUxvLM9r66yIf1i6EDVJ6R.jpg
+//    Timber.d("Poster Path: $posterPath") // 1bhIezUxvLM9r66yIf1i6EDVJ6R.jpg
     if (posterPath.isEmpty()) {
         // image placeholder
         Box(
@@ -255,7 +259,7 @@ fun MovieNameAndScore(movieItem: MovieItem) {
 }
 
 fun refreshMovieContent(homeViewModel: HomeViewModel, pageCount: Int) {
-    for (page in 0 until pageCount) {
+    for (page in 1 until pageCount) {
         homeViewModel.requestPopularMovies(page)
     }
 }
