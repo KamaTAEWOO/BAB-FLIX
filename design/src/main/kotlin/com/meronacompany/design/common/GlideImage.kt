@@ -113,8 +113,8 @@ fun CommonGlideImage(
 @Composable
 private fun VoteAverageTag(voteAverage: Double, modifier: Modifier = Modifier) {
     val (label, backgroundColor, textColor) = when {
-        voteAverage >= 9.0 -> Triple("BEST", MaterialTheme.colorScheme.outlineVariant, Color.Black)
-        voteAverage >= 7.5 -> Triple("HOT", MaterialTheme.colorScheme.surfaceVariant, Color.White)
+        voteAverage >= 9.5 -> Triple("BEST", MaterialTheme.colorScheme.outlineVariant, Color.Black)
+        voteAverage >= 8.5 -> Triple("HOT", MaterialTheme.colorScheme.surfaceVariant, Color.White)
         else -> null
     } ?: return
 

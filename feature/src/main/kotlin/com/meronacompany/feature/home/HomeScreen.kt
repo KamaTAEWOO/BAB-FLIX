@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -72,7 +71,7 @@ fun HomeScreen(
         contentColor = colorScheme.primary,
         topBar = { CommonAppBar() },
         content = { paddingValues ->
-            homeScreenContent(
+            HomeScreenContent(
                 showContent = showContent,
                 route = route,
                 homeViewModel = homeViewModel,
@@ -124,13 +123,13 @@ fun PageFloatingButton(
 }
 
 @Composable
-fun homeScreenContent(
+fun HomeScreenContent(
     showContent: Boolean,
     route: String,
     homeViewModel: HomeViewModel,
     paddingValues: PaddingValues,
     onNavigateToDetail: (Int, String) -> Unit
-): LazyListState {
+) {
     Timber.d("HomeScreen: showContent = $showContent")
     if (showContent) {
         if (route == NavRouteLabel.MOVIE) {
@@ -155,7 +154,6 @@ fun homeScreenContent(
         }
         Timber.d("HomeScreen: showContent = $showContent")
     }
-    return remember { LazyListState() }
 }
 
 // image 데이터 없을 때 x 표시
