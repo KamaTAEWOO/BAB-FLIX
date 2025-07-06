@@ -78,7 +78,7 @@ fun DetailMovieContent(
             .verticalScroll(rememberScrollState()) // Enable scrolling
     ) {
         if (movieVideoKey != movieId) {
-            YoutubePlayer(videoId = movieVideoKey, videoIdList = youtubeKeyList)
+            YoutubePlayer(videoIdList = youtubeKeyList)
         } else {
             // video 데이터 없음 처리
             NotYoutubePlayerVideo(movieVideoKey, movieId)
@@ -137,7 +137,7 @@ fun NotYoutubePlayerVideo(movieVideoKey: String, movieId: String?) {
         contentAlignment = Alignment.Center
     ) {
         if (movieVideoKey != movieId) {
-            YoutubePlayer(videoId = movieVideoKey, videoIdList = MutableStateFlow(emptyList()))
+            YoutubePlayer(videoIdList = MutableStateFlow(emptyList()))
         } else {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val width = size.width
