@@ -1,5 +1,6 @@
 package com.meronacompany.design.common
 
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.viewinterop.AndroidView
+import com.google.firebase.FirebaseException
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
@@ -20,23 +22,18 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun YoutubePlayer(
-    videoId: String,
     videoIdList: MutableStateFlow<List<String>>
 ) {
-    val scope = rememberCoroutineScope()
     var lastVideoId by remember { mutableStateOf("") }
-    var debounceJob by remember { mutableStateOf<Job?>(null) }
 
-    LaunchedEffect(videoId) {
-        if (videoId.isNotEmpty()) {
-            debounceJob?.cancel()
-            debounceJob = scope.launch {
-                delay(100)
-                lastVideoId = videoId
-                Timber.d("YoutubePlayer - Applied videoId after debounce: $lastVideoId")
-            }
+    LaunchedEffect(videoIdList.value) {
+        val filteredList = videoIdList.value
+        if (filteredList.isNotEmpty()) {
+            lastVideoId = filteredList.first()
+            Timber.d("YoutubePlayer - Initialized lastVideoId with: $lastVideoId")
         }
     }
 
@@ -45,20 +42,19 @@ fun YoutubePlayer(
     Timber.d("YoutubePlayer - videoId: $lastVideoId")
     AndroidView(
         factory = { context ->
-            val youTubePlayerView = YouTubePlayerView(context)
-            youTubePlayerView.layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-
-            // Initialize the player when the view is created
-            youTubePlayerView.addYouTubePlayerListener(object : YouTubePlayerListener {
+            val youTubePlayerView = YouTubePlayerView(context).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                enableAutomaticInitialization = false
+                initialize(object : YouTubePlayerListener {
                 override fun onApiChange(youTubePlayer: YouTubePlayer) {
                     Timber.d("onApiChange")
                 }
 
                 override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-                    Timber.d("onCurrentSecond")
+//                    Timber.d("onCurrentSecond")
                 }
 
                 override fun onError(
@@ -92,7 +88,7 @@ fun YoutubePlayer(
                 }
 
                 override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.cueVideo(lastVideoId, 0f)
+                    youTubePlayer.loadVideo(lastVideoId, 0f) // 자동 재생
                 }
 
                 override fun onStateChange(
@@ -103,7 +99,7 @@ fun YoutubePlayer(
                 }
 
                 override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
-                    Timber.d("onVideoDuration")
+//                    Timber.d("onVideoDuration")
                 }
 
                 override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {
@@ -114,10 +110,10 @@ fun YoutubePlayer(
                     youTubePlayer: YouTubePlayer,
                     loadedFraction: Float
                 ) {
-                    Timber.d("onVideoLoadedFraction")
+//                    Timber.d("onVideoLoadedFraction")
                 }
             })
-
+            }
             youTubePlayerView
         },
         update = { playerView ->

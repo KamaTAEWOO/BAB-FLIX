@@ -29,9 +29,9 @@ glide = "4.12.0"
 accompanistSystemuicontroller = "0.30.1"
 
 # youtube player
-v2User = "2.21.3"
-youtube-player = "12.1.1"
-chromecastSender = "0.30"
+v2User = "2.21.4"
+youtube-player = "12.1.2"
+chromecastSender = "0.31"
 
 # Play Core app update
 playAppUpdate = "2.1.0"

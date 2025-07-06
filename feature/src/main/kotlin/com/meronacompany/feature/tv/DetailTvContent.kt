@@ -72,7 +72,7 @@ fun DetailTvContent(
             .verticalScroll(rememberScrollState())
     ) {
         if (tvVideoKey != tvId) {
-            YoutubePlayer(videoId = tvVideoKey, videoIdList = youtubeKeyList)
+            YoutubePlayer(videoIdList = youtubeKeyList)
         } else {
             // video 데이터 없음 처리
             NotYoutubePlayerVideo(tvVideoKey, tvId)
