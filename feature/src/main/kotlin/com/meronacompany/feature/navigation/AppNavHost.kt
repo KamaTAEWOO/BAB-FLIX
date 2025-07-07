@@ -13,7 +13,9 @@ import com.meronacompany.feature.auth.AuthScreen
 import com.meronacompany.feature.detail.DetailScreen
 import com.meronacompany.feature.home.HomeScreen
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.feature.settings.LanguageScreen
 import com.meronacompany.feature.settings.SettingsScreen
+import com.meronacompany.feature.settings.VersionScreen
 import com.meronacompany.feature.splash.SplashScreen
 
 @Composable
@@ -92,8 +94,36 @@ fun AppNavHost(
 
         // Settings
         composable(route = NavRouteLabel.SETTINGS) {
-            SettingsScreen(navHostController, homeViewModel)
+            SettingsScreen(
+                navHostController,
+                homeViewModel,
+                onNavigateToLanguage = {
+                    navHostController.navigate(NavRouteLabel.LANGUAGE) {
+                        popUpTo(NavRouteLabel.SETTINGS) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateToVersion = {
+                    navHostController.navigate(NavRouteLabel.VERSION) {
+                        popUpTo(NavRouteLabel.SETTINGS) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
+
+        // Language
+        composable(route = NavRouteLabel.LANGUAGE) {
+            LanguageScreen(homeViewModel)
+        }
+
+        // Version
+        composable(route = NavRouteLabel.VERSION) {
+            VersionScreen(homeViewModel)
+        }
+
     }
 
 }

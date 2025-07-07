@@ -22,4 +22,10 @@ object NavRouteLabel {
 
     // settings
     const val SETTINGS = "settings"
+
+    // version
+    const val VERSION = "version"
+
+    // language
+    const val LANGUAGE = "language"
 }

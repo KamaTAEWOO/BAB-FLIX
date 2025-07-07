@@ -345,8 +345,6 @@ class HomeViewModel(
     }
 
     fun checkApiCallCount(): Boolean {
-        // Test code
-        true // TODO : 삭제하기
         val count = homeRepository.getApiCallCount()
         apiUsageCount = count
         return if (count > apiLimit) {
