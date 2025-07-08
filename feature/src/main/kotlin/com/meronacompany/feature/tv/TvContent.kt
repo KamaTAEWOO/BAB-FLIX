@@ -3,10 +3,18 @@ package com.meronacompany.feature.tv
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -19,23 +27,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
 import com.meronacompany.design.common.CommonGlideImage
-import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.home.ImageError
 import com.meronacompany.feature.tv.model.TvItem
-import kotlinx.coroutines.delay
 import timber.log.Timber
+import com.meronacompany.design.R
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -121,7 +127,7 @@ fun HomeContentListData(
             item {
                 val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
                 Text(
-                    text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
+                    text = if (isApiLimitExceeded) stringResource(R.string.api_limit_exceeded) else stringResource(R.string.loading_data),
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(),

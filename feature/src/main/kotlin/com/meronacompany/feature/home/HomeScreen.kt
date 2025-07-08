@@ -145,14 +145,16 @@ fun HomeScreenContent(
         ) {
             val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
             Text(
-                text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
+                text = if (isApiLimitExceeded)
+                    androidx.compose.ui.res.stringResource(id = R.string.api_limit_exceeded)
+                else
+                    androidx.compose.ui.res.stringResource(id = R.string.loading_data),
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
                 color = colorScheme.onPrimary
             )
         }
-        Timber.d("HomeScreen: showContent = $showContent")
     }
 }
 

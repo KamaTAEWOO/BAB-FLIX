@@ -19,11 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.meronacompany.design.common.CommonAppBarWithBackIcon
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.design.R
 
 /**
  * 오픈 소스 라이브러리
@@ -36,7 +38,7 @@ fun LanguageScreen(homeViewModel: HomeViewModel, onNavigateBack: () -> Unit) {
     Scaffold(
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
-        topBar = { CommonAppBarWithBackIcon("언어 설정", onNavigateBack) },
+        topBar = { CommonAppBarWithBackIcon(title = stringResource(id = R.string.language_setting), onNavigateBack) },
         content = { paddingValues ->
             LanguageContent(paddingValues, homeViewModel)
         },
@@ -55,11 +57,11 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
         ) {
-            LanguageRow(title = "한국어") {
+            LanguageRow(title = stringResource(id = R.string.language_ko)) {
 
             }
 
-            LanguageRow(title = "영어") {
+            LanguageRow(title = stringResource(id = R.string.language_en)) {
 
             }
         }
@@ -82,7 +84,7 @@ fun LanguageRow(title: String, onClick: () -> Unit) {
             modifier = Modifier.weight(1f)
         )
         Image(
-            painter = painterResource(id = com.meronacompany.design.R.drawable.ic_arrow_right),
+            painter = painterResource(id = R.drawable.ic_arrow_right),
             contentDescription = "Chevron Right",
             modifier = Modifier.size(35.dp)
         )

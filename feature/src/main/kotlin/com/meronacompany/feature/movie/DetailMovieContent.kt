@@ -63,7 +63,7 @@ fun DetailMovieContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "API 호출 횟수를 초과했습니다.",
+                text = stringResource(R.string.api_limit_exceeded),
                 style = BAB_FLIXTheme.typography.textStyleBold18,
                 color = Color.White
             )
@@ -86,7 +86,7 @@ fun DetailMovieContent(
 
         Text(
             modifier = Modifier.padding(16.dp),
-            text = detailUIModel?.title ?: "No title",
+            text = detailUIModel?.title ?: stringResource(R.string.data_error),
             style = BAB_FLIXTheme.typography.textStyleBold24
         )
 
@@ -97,13 +97,11 @@ fun DetailMovieContent(
             stringResource(R.string.genre) to (detailUIModel?.genre ?: stringResource(R.string.data_error)),
             stringResource(R.string.release_date) to (detailUIModel?.releaseDate ?: stringResource(R.string.data_error)),
             stringResource(R.string.watch_rating) to (
-                    if(detailUIModel?.rating == "All") {
-                        "${detailUIModel.rating} 관람가"
-                    } else if (detailUIModel?.rating == "등급 정보 없음") {
-                        "등급 정보 없음"
-                    } else {
-                        "${detailUIModel?.rating}세 관람가"
-                    }),
+                when (detailUIModel?.rating) {
+                    "All" -> stringResource(R.string.viewing_grade, detailUIModel.rating)
+                    "등급 정보 없음", stringResource(R.string.no_certification_info) -> stringResource(R.string.no_certification_info)
+                    else -> stringResource(R.string.age_rating_se, detailUIModel?.rating ?: "")
+                }),
             stringResource(R.string.original_language) to (detailUIModel?.originalLanguage ?: stringResource(R.string.data_error)),
             stringResource(R.string.rating) to (detailUIModel?.ratingScore?.toDouble()
                 ?.let { Util.formatVoteAverage(it) }

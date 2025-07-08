@@ -28,22 +28,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.meronacompany.core.utility.Util
+import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonGlideImage
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeState
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.movie.model.MovieItem
 import kotlinx.coroutines.delay
-import timber.log.Timber
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -132,7 +131,10 @@ fun HomeContentListData(
             item {
                 val isApiLimitExceeded = homeViewModel.apiUsageCount >= homeViewModel.apiLimit
                 Text(
-                    text = if (isApiLimitExceeded) "API 호출 횟수를 초과했습니다." else "데이터를 불러오는 중...",
+                    text = if (isApiLimitExceeded)
+                        stringResource(R.string.api_limit_exceeded)
+                    else
+                        stringResource(R.string.loading_data),
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth(),
