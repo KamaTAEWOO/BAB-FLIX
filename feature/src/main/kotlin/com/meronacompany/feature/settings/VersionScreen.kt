@@ -58,7 +58,7 @@ fun VersionContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
                     R.string.APP_VERSION_CODE
                 ),
                 color = Color.White,
-                style = BAB_FLIXTheme.typography.textStyleLight18,
+                style = BAB_FLIXTheme.typography.textStyleBold20,
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -67,7 +67,7 @@ fun VersionContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
             Text(
                 text = "API 잔여 횟수: ${remaining}회 (총 ${homeViewModel.apiLimit}회)",
                 color = Color.White,
-                style = BAB_FLIXTheme.typography.textStyleLight18,
+                style = BAB_FLIXTheme.typography.textStyleBold20,
             )
         }
     }
