@@ -40,4 +40,6 @@ interface HomeRepository {
     fun requestTvCredits(tvId: Int): Flow<ResponseMovieCreditsData>
 
     fun getApiCallCount(): Int
+
+    fun setLanguage(language: String)
 }

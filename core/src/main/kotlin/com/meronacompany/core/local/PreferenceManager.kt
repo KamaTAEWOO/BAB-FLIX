@@ -1,11 +1,13 @@
 package com.meronacompany.core.local
 
 import android.content.Context
+import androidx.core.content.edit
 
 object PreferenceManager {
     private const val PREF_NAME = "app_pref"
     private const val KEY_API_CALL_COUNT = "api_call_count"
     private const val KEY_LAST_RESET_DATE = "last_reset_date"
+    private const val KEY_LANGUAGE = "language"
 
     fun getApiCallCount(context: Context): Int {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -75,5 +77,19 @@ object PreferenceManager {
     fun clearApiCallCount(context: Context) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         prefs.edit().remove(KEY_API_CALL_COUNT).apply()
+    }
+
+    // 언어 설정을 저장하는 메서드
+    fun setLanguage(context: Context, language: String) {
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .edit {
+                putString(KEY_LANGUAGE, language)
+            }
+    }
+
+    // 언어 설정을 가져오는 메서드
+    fun getLanguage(context: Context): String? {
+        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_LANGUAGE, "ko-KR")
     }
 }

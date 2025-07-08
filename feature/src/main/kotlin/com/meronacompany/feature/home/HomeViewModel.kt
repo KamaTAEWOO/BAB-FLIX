@@ -358,6 +358,10 @@ class HomeViewModel(
         }
     }
 
+    fun setLanguage(language: String) {
+        homeRepository.setLanguage(language)
+    }
+
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {

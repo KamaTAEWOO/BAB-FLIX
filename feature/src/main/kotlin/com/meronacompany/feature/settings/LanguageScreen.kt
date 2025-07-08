@@ -61,6 +61,7 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
                 .padding(horizontal = 24.dp)
         ) {
             LanguageRow(title = stringResource(id = R.string.language_ko)) {
+                homeViewModel.setLanguage("ko-KR")
                 android.widget.Toast.makeText(
                     context,
                     context.getString(R.string.language_changed, context.getString(R.string.language_ko)),
@@ -69,6 +70,7 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
             }
 
             LanguageRow(title = stringResource(id = R.string.language_en)) {
+                homeViewModel.setLanguage("en-US")
                 android.widget.Toast.makeText(
                     context,
                     context.getString(R.string.language_changed, context.getString(R.string.language_en)),
