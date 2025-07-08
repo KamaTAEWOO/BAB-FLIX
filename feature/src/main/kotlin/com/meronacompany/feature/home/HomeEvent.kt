@@ -32,4 +32,6 @@ sealed class HomeEvent : BaseEvent {
 
     // error
     data class ErrorEvent(val errorMessage: String) : HomeEvent()
+
+    data object ResetEvent : HomeEvent()
 }

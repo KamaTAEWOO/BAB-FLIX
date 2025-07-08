@@ -107,6 +107,9 @@ class HomeViewModel(
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
             is HomeEvent.MovieCertificationEvent -> currentState.copy(movieCertification = event.movieCertification)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
+            HomeEvent.ResetEvent -> {
+                HomeState() // Reset the state to initial state
+            }
         }
     }
 
@@ -360,8 +363,12 @@ class HomeViewModel(
 
     fun setLanguage(language: String) {
         homeRepository.setLanguage(language)
-    }
 
+        sendAction(HomeEvent.ResetEvent)
+
+        requestPopularMovies() // 언어 반영된 인기 영화 다시 요청
+        requestPopularTVs()    // 언어 반영된 인기 TV 다시 요청
+    }
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {
