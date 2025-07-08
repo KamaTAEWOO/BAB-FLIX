@@ -1,6 +1,7 @@
 package com.meronacompany.feature.home
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
 import com.meronacompany.common.base.BaseViewModelFactory
+import com.meronacompany.core.utility.Locales
 import com.meronacompany.domain.model.VideoResult
 import com.meronacompany.domain.repository.HomeRepository
 import com.meronacompany.design.R
@@ -363,12 +365,35 @@ class HomeViewModel(
 
     fun setLanguage(language: String) {
         homeRepository.setLanguage(language)
+        updateLocaleResources(context, language)
+
+        val msg = context.getString(R.string.language_changed, if (language == Locales.KO_KR) "한국어" else "English")
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
         sendAction(HomeEvent.ResetEvent)
 
         requestPopularMovies() // 언어 반영된 인기 영화 다시 요청
         requestPopularTVs()    // 언어 반영된 인기 TV 다시 요청
     }
+
+    /**
+     * Updates the application's resources and locale to match the specified language.
+     */
+    fun updateLocaleResources(context: Context, language: String) {
+        val currentLanguage = if (language == Locales.KO_KR) {
+            "ko"
+        } else {
+            "en"
+        }
+
+        val locale = java.util.Locale(currentLanguage)
+        java.util.Locale.setDefault(locale)
+        val resources = context.resources
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {

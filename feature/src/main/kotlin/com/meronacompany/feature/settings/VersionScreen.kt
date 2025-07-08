@@ -15,11 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.design.R
 import com.meronacompany.design.common.CommonAppBarWithBackIcon
 import com.meronacompany.design.theme.BAB_FLIXTheme
-import com.meronacompany.feature.R
 import com.meronacompany.feature.home.HomeViewModel
 
 /**
@@ -33,7 +33,7 @@ fun VersionScreen(homeViewModel: HomeViewModel, onNavigateBack: () -> Unit) {
     Scaffold(
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
-        topBar = { CommonAppBarWithBackIcon("버전", onNavigateBack) },
+        topBar = { CommonAppBarWithBackIcon(stringResource(R.string.version), onNavigateBack) },
         content = { paddingValues ->
             VersionContent(paddingValues, homeViewModel)
         },
@@ -54,7 +54,7 @@ fun VersionContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "버전 " + context.resources.getString(R.string.APP_VERSION) + "." + context.resources.getString(
+                text = "${stringResource(R.string.version)} " + context.resources.getString(R.string.APP_VERSION) + "." + context.resources.getString(
                     R.string.APP_VERSION_CODE
                 ),
                 color = Color.White,
@@ -63,9 +63,13 @@ fun VersionContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            val remaining = (homeViewModel.apiLimit - homeViewModel.apiUsageCount).coerceAtLeast(0)
+            val text = context.getString(
+                R.string.api_remaining_count,
+                homeViewModel.apiLimit - homeViewModel.apiUsageCount,
+                homeViewModel.apiLimit
+            )
             Text(
-                text = "API 잔여 횟수: ${remaining}회 (총 ${homeViewModel.apiLimit}회)",
+                text = text,
                 color = Color.White,
                 style = BAB_FLIXTheme.typography.textStyleBold20,
             )

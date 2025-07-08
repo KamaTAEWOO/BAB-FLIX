@@ -36,6 +36,7 @@
     <string name="version">버전</string>
     <string name="language_setting">언어 설정</string>
     <string name="language_changed"> %1$s로 변경되었습니다.</string>
+    <string name="api_remaining_count">API 잔여 횟수: %1$d회 (총 %2$d회)</string>
 
 <!--    Home-->
     <string name="api_limit_exceeded">API 호출 횟수를 초과했습니다.</string>

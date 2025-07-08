@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -35,19 +33,27 @@ import com.meronacompany.design.R
  */
 
 @Composable
-fun LanguageScreen(homeViewModel: HomeViewModel, onNavigateBack: () -> Unit) {
+fun LanguageScreen(
+    homeViewModel: HomeViewModel,
+    onNavigateBack: () -> Unit,
+    onSelfLanguage: () -> Unit
+) {
     Scaffold(
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
         topBar = { CommonAppBarWithBackIcon(title = stringResource(id = R.string.language_setting), onNavigateBack) },
         content = { paddingValues ->
-            LanguageContent(paddingValues, homeViewModel)
+            LanguageContent(paddingValues, homeViewModel, onSelfLanguage)
         },
         bottomBar = { })
 }
 
 @Composable
-fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
+fun LanguageContent(
+    paddingValues: PaddingValues,
+    homeViewModel: HomeViewModel,
+    onSelfLanguage: () -> Unit
+) {
     val context = LocalContext.current
 
     Box(
@@ -67,6 +73,7 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
                     context.getString(R.string.language_changed, context.getString(R.string.language_ko)),
                     android.widget.Toast.LENGTH_SHORT
                 ).show()
+                onSelfLanguage()
             }
 
             LanguageRow(title = stringResource(id = R.string.language_en)) {
@@ -76,6 +83,7 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
                     context.getString(R.string.language_changed, context.getString(R.string.language_en)),
                     android.widget.Toast.LENGTH_SHORT
                 ).show()
+                onSelfLanguage()
             }
         }
     }

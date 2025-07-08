@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.meronacompany.core.local.PreferenceManager
 import com.meronacompany.feature.auth.AuthScreen
 import com.meronacompany.feature.detail.DetailScreen
 import com.meronacompany.feature.home.HomeScreen
@@ -24,6 +25,8 @@ fun AppNavHost(
 ) {
     val context = LocalContext.current
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory(context))
+    // 언어에 따른 update
+    PreferenceManager.getLanguage(context)?.let { homeViewModel.updateLocaleResources(context, it) }
 
     NavHost(
         navController = navHostController,
@@ -120,6 +123,13 @@ fun AppNavHost(
                 homeViewModel,
                 onNavigateBack = {
                     navHostController.popBackStack()
+                },
+                onSelfLanguage = {
+                    navHostController.navigate(NavRouteLabel.LANGUAGE) {
+                        popUpTo(NavRouteLabel.LANGUAGE) {
+                            inclusive = true
+                        }
+                    }
                 })
         }
 
