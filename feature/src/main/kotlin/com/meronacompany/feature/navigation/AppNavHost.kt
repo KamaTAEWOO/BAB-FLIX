@@ -116,12 +116,20 @@ fun AppNavHost(
 
         // Language
         composable(route = NavRouteLabel.LANGUAGE) {
-            LanguageScreen(homeViewModel)
+            LanguageScreen(
+                homeViewModel,
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                })
         }
 
         // Version
         composable(route = NavRouteLabel.VERSION) {
-            VersionScreen(homeViewModel)
+            VersionScreen(
+                homeViewModel,
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                })
         }
 
     }

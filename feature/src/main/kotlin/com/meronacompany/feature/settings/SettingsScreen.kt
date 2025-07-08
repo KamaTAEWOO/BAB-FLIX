@@ -71,7 +71,7 @@ fun SettingsContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 24.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 

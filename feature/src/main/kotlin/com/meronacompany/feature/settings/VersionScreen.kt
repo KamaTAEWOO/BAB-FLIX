@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.design.common.CommonAppBarWithBackIcon
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.R
 import com.meronacompany.feature.home.HomeViewModel
@@ -29,11 +29,11 @@ import com.meronacompany.feature.home.HomeViewModel
  */
 
 @Composable
-fun VersionScreen(homeViewModel: HomeViewModel) {
+fun VersionScreen(homeViewModel: HomeViewModel, onNavigateBack: () -> Unit) {
     Scaffold(
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
-        topBar = { CommonAppBar() },
+        topBar = { CommonAppBarWithBackIcon("버전", onNavigateBack) },
         content = { paddingValues ->
             VersionContent(paddingValues, homeViewModel)
         },

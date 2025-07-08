@@ -1,7 +1,6 @@
 package com.meronacompany.feature.settings
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,9 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.meronacompany.design.common.CommonAppBar
+import com.meronacompany.design.common.CommonAppBarWithBackIcon
 import com.meronacompany.design.theme.BAB_FLIXTheme
 import com.meronacompany.feature.home.HomeViewModel
 
@@ -34,11 +32,11 @@ import com.meronacompany.feature.home.HomeViewModel
  */
 
 @Composable
-fun LanguageScreen(homeViewModel: HomeViewModel) {
+fun LanguageScreen(homeViewModel: HomeViewModel, onNavigateBack: () -> Unit) {
     Scaffold(
         containerColor = colorScheme.primary,
         contentColor = colorScheme.primary,
-        topBar = { CommonAppBar() },
+        topBar = { CommonAppBarWithBackIcon("언어 설정", onNavigateBack) },
         content = { paddingValues ->
             LanguageContent(paddingValues, homeViewModel)
         },
@@ -55,10 +53,8 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 24.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-
             LanguageRow(title = "한국어") {
 
             }
