@@ -109,6 +109,7 @@ fun SettingsContent(
             Text(
                 text = "이 앱은 TMDB 및 TMDB API를 사용하지만 TMDB의 인증이나 승인을 받은 것은 아닙니다.",
                 style = BAB_FLIXTheme.typography.textStyleBold20,
+                color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Visible,
                 softWrap = false,
