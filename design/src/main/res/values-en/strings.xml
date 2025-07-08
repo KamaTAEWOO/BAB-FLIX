@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">BAB_FLIX</string>
+
+    <string name="toolbar_name">BabFlix</string>
+
+    <string name="loading">Loading…</string>
+
+    <!--    네비게이션-->
+    <string name="movie">Movie</string>
+    <string name="tv">TV Shows</string>
+    <string name="settings">Settings</string>
+
+    <!--    상세 화면-->
+    <string name="creator">Creator</string>
+    <string name="cast">Cast</string>
+    <string name="genre">Genre</string>
+    <string name="original_language">Original Language</string>
+    <string name="rating">Rating</string>
+    <string name="director">Director</string>
+    <string name="release_date">Release Date</string>
+    <string name="duration">Duration</string>
+    <string name="watch_rating">Viewing Rating</string>
+    <string name="store">Overview</string>
+    <string name="np_certification">No rating information</string>
+    <string name="data_error">No data available.</string>
+    <string name="no_certification_info">No rating information</string>
+    <string name="viewing_grade">%1$s Rated</string>
+    <string name="age_rating_se">%1$s+ Rated</string>
+
+    <!--    설정-->
+    <string name="tmdb_api_notice">This app uses TMDB and the TMDB API but is not endorsed or certified by TMDB.</string>
+    <string name="language">Language Settings</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_en">English</string>
+    <string name="open_source_license">Open Source Licenses</string>
+    <string name="version">Version</string>
+    <string name="language_setting">Language Settings</string>
+    <string name="language_changed">Changed to %1$s.</string>
+    <string name="api_remaining_count">API Remaining: %1$d (out of %2$d)</string>
+
+    <!--    Home-->
+    <string name="api_limit_exceeded">API request limit exceeded.</string>
+    <string name="loading_data">Loading data…</string>
+    <string name="unknown_error">An unknown error has occurred.</string>
+</resources>

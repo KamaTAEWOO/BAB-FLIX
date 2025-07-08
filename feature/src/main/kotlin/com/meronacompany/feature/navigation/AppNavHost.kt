@@ -9,11 +9,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.meronacompany.core.local.PreferenceManager
 import com.meronacompany.feature.auth.AuthScreen
 import com.meronacompany.feature.detail.DetailScreen
 import com.meronacompany.feature.home.HomeScreen
 import com.meronacompany.feature.home.HomeViewModel
+import com.meronacompany.feature.settings.LanguageScreen
 import com.meronacompany.feature.settings.SettingsScreen
+import com.meronacompany.feature.settings.VersionScreen
 import com.meronacompany.feature.splash.SplashScreen
 
 @Composable
@@ -22,6 +25,8 @@ fun AppNavHost(
 ) {
     val context = LocalContext.current
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory(context))
+    // 언어에 따른 update
+    PreferenceManager.getLanguage(context)?.let { homeViewModel.updateLocaleResources(context, it) }
 
     NavHost(
         navController = navHostController,
@@ -92,8 +97,51 @@ fun AppNavHost(
 
         // Settings
         composable(route = NavRouteLabel.SETTINGS) {
-            SettingsScreen(navHostController, homeViewModel)
+            SettingsScreen(
+                navHostController,
+                homeViewModel,
+                onNavigateToLanguage = {
+                    navHostController.navigate(NavRouteLabel.LANGUAGE) {
+                        popUpTo(NavRouteLabel.SETTINGS) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateToVersion = {
+                    navHostController.navigate(NavRouteLabel.VERSION) {
+                        popUpTo(NavRouteLabel.SETTINGS) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
+
+        // Language
+        composable(route = NavRouteLabel.LANGUAGE) {
+            LanguageScreen(
+                homeViewModel,
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                },
+                onSelfLanguage = {
+                    navHostController.navigate(NavRouteLabel.LANGUAGE) {
+                        popUpTo(NavRouteLabel.LANGUAGE) {
+                            inclusive = true
+                        }
+                    }
+                })
+        }
+
+        // Version
+        composable(route = NavRouteLabel.VERSION) {
+            VersionScreen(
+                homeViewModel,
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                })
+        }
+
     }
 
 }

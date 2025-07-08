@@ -3,6 +3,7 @@ package com.meronacompany.feature.settings
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,23 +14,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.meronacompany.design.common.CommonAppBar
 import com.meronacompany.design.theme.BAB_FLIXTheme
-import com.meronacompany.feature.R
+import com.meronacompany.design.R
 import com.meronacompany.feature.home.HomeViewModel
 import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
 
@@ -40,94 +41,77 @@ import com.meronacompany.feature.navigation.bottom.BottomNavigationScreen
  */
 
 @Composable
-fun SettingsScreen(navHostController: NavHostController, homeViewModel: HomeViewModel) {
-    Scaffold(topBar = {}, content = { paddingValues ->
-        SettingsContent(paddingValues, homeViewModel)
-    }, bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) })
+fun SettingsScreen(
+    navHostController: NavHostController,
+    homeViewModel: HomeViewModel,
+    onNavigateToLanguage: () -> Unit,
+    onNavigateToVersion: () -> Unit
+) {
+    Scaffold(
+        containerColor = colorScheme.primary,
+        contentColor = colorScheme.primary,
+        topBar = { CommonAppBar() },
+        content = { paddingValues ->
+            SettingsContent(paddingValues, homeViewModel, onNavigateToLanguage, onNavigateToVersion)
+        },
+        bottomBar = { BottomNavigationScreen(navHostController, homeViewModel) })
 }
 
 @Composable
-fun SettingsContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
+fun SettingsContent(
+    paddingValues: PaddingValues,
+    homeViewModel: HomeViewModel,
+    onNavigateToLanguage: () -> Unit,
+    onNavigateToVersion: () -> Unit
+) {
     val context = LocalContext.current
-    homeViewModel.checkApiCallCount()
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .wrapContentSize(Alignment.TopCenter)
             .padding(paddingValues)
-            .padding(top = 100.dp)
     ) {
-        Image(
-            painter = painterResource(id = com.meronacompany.design.R.drawable.ic_new_logo),  // Assuming the app icon is saved in the res/drawable folder as ic_app_icon
-            contentDescription = "App Icon",
+        Column(
             modifier = Modifier
-                .size(150.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-        // 버전
-        Text(
-            text = "버전 " + context.resources.getString(R.string.APP_VERSION) + "." + context.resources.getString(R.string.APP_VERSION_CODE),
-            color = colorScheme.onPrimary,
-            style = BAB_FLIXTheme.typography.textStyleLight18,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        val remaining = (homeViewModel.apiLimit - homeViewModel.apiUsageCount).coerceAtLeast(0)
-        Text(
-            text = "API 잔여 횟수: ${remaining}회 (총 ${homeViewModel.apiLimit}회)",
-            color = colorScheme.onPrimary,
-            style = BAB_FLIXTheme.typography.textStyleLight18,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.weight(1f))  // 빈 공간을 채워 하단으로 밀기
-
-        // 오픈 소스 라이브러리 Button
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .padding(horizontal = 24.dp)
         ) {
-            Button(
-                onClick = {
-                    val intent = Intent(context, OssLicensesMenuActivity::class.java).apply {
-                        putExtra("title", "오픈 소스 라이선스")
-                    }
-                    context.startActivity(intent)
-                },
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorScheme.tertiary,
-                    contentColor = colorScheme.onPrimary
-                )
-            ) {
-                Text(
-                    text = "오픈 소스 라이브러리",
-                    style = BAB_FLIXTheme.typography.textStyleBold18
-                )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SettingRow(title = stringResource(id = R.string.language)) {
+                onNavigateToLanguage()
+            }
+
+            SettingRow(title = stringResource(id = R.string.open_source_license)) {
+                val intent = Intent(context, OssLicensesMenuActivity::class.java).apply {
+                    putExtra("title", context.getString(R.string.open_source_license))
+                }
+                context.startActivity(intent)
+            }
+
+            SettingRow(title = stringResource(id = R.string.version)) {
+                onNavigateToVersion()
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
-
+        // Fixed TMDB Attribution at Bottom
         Row(
             modifier = Modifier
+                .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = com.meronacompany.design.R.drawable.ic_tmdb_logo),
+                painter = painterResource(id = R.drawable.ic_tmdb_logo),
                 contentDescription = "TMDB Logo",
                 modifier = Modifier
                     .size(70.dp)
                     .padding(end = 8.dp)
             )
             Text(
-                text = "이 앱은 TMDB 및 TMDB API를 사용하지만 TMDB의 인증이나 승인을 받은 것은 아닙니다.",
+                text = stringResource(id = R.string.tmdb_api_notice),
                 style = BAB_FLIXTheme.typography.textStyleBold20,
+                color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Visible,
                 softWrap = false,
@@ -136,5 +120,28 @@ fun SettingsContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
                     .basicMarquee()
             )
         }
+    }
+}
+
+@Composable
+fun SettingRow(title: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp)
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = BAB_FLIXTheme.typography.textStyleLight18,
+            color = Color.White,
+            modifier = Modifier.weight(1f)
+        )
+        Image(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = "Chevron Right",
+            modifier = Modifier.size(35.dp)
+        )
     }
 }

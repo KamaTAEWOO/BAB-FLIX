@@ -57,7 +57,7 @@ fun DetailTvContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "API 호출 횟수를 초과했습니다.",
+                text = stringResource(R.string.api_limit_exceeded),
                 style = BAB_FLIXTheme.typography.textStyleBold18,
                 color = Color.White
             )

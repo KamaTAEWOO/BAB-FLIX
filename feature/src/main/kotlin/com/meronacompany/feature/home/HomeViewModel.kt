@@ -1,6 +1,7 @@
 package com.meronacompany.feature.home
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -8,8 +9,10 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.meronacompany.common.base.BaseInjection
 import com.meronacompany.common.base.BaseViewModel
 import com.meronacompany.common.base.BaseViewModelFactory
+import com.meronacompany.core.utility.Locales
 import com.meronacompany.domain.model.VideoResult
 import com.meronacompany.domain.repository.HomeRepository
+import com.meronacompany.design.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -19,7 +22,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class HomeViewModel(
-    private val homeRepository: HomeRepository
+    private val homeRepository: HomeRepository,
+    private val context: Context
 ) : BaseViewModel<HomeState, HomeEvent>(
     initialState = HomeState()
 ) {
@@ -105,6 +109,9 @@ class HomeViewModel(
             is HomeEvent.MovieCreditsEvent -> currentState.copy(movieCredits = event.movieCredits)
             is HomeEvent.MovieCertificationEvent -> currentState.copy(movieCertification = event.movieCertification)
             is HomeEvent.ErrorEvent -> currentState.copy(errorMessage = event.errorMessage)
+            HomeEvent.ResetEvent -> {
+                HomeState() // Reset the state to initial state
+            }
         }
     }
 
@@ -134,7 +141,7 @@ class HomeViewModel(
                     }
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -157,7 +164,7 @@ class HomeViewModel(
                 }
                 .catch {
                     Timber.e(it)
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     FirebaseCrashlytics.getInstance().recordException(it)
                     _isLoading.value = false
                 }
@@ -188,7 +195,7 @@ class HomeViewModel(
                     sendAction(HomeEvent.GenresMoviesEvent(it))
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -206,7 +213,7 @@ class HomeViewModel(
                 }
                 .catch {
                     Timber.e(it)
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
                 .launchIn(viewModelScope)
@@ -224,11 +231,11 @@ class HomeViewModel(
                         movieVideoKeyList.value = it.results
 //                        sendAction(HomeEvent.MovieVideoEvent(it))
                     } else {
-                        sendAction(HomeEvent.ErrorEvent("No video found"))
+                        sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     }
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -247,11 +254,11 @@ class HomeViewModel(
                         tvVideoKey = it.results[0].key
                         tvVideoKeyList.value = it.results
                     } else {
-                        sendAction(HomeEvent.ErrorEvent("No video found"))
+                        sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     }
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -268,7 +275,7 @@ class HomeViewModel(
                     sendAction(HomeEvent.MovieDetailEvent(it))
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -285,7 +292,7 @@ class HomeViewModel(
                     sendAction(HomeEvent.TvDetailEvent(it))
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -302,7 +309,7 @@ class HomeViewModel(
                     sendAction(HomeEvent.MovieCertificationEvent(it))
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -319,7 +326,7 @@ class HomeViewModel(
                     sendAction(HomeEvent.MovieCreditsEvent(it))
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -336,7 +343,7 @@ class HomeViewModel(
                     sendAction(HomeEvent.MovieCreditsEvent(it))
                 }
                 .catch {
-                    sendAction(HomeEvent.ErrorEvent(it.message ?: "Unknown error"))
+                    sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
                     Timber.e(it)
                     FirebaseCrashlytics.getInstance().recordException(it)
                 }
@@ -345,23 +352,52 @@ class HomeViewModel(
     }
 
     fun checkApiCallCount(): Boolean {
-        // Test code
-        true // TODO : 삭제하기
         val count = homeRepository.getApiCallCount()
         apiUsageCount = count
         return if (count > apiLimit) {
             Timber.d("taewoo - API call limit exceeded")
-            sendAction(HomeEvent.ErrorEvent("API call limit exceeded"))
+            sendAction(HomeEvent.ErrorEvent(context.getString(R.string.unknown_error)))
             false
         } else {
             true
         }
     }
 
+    fun setLanguage(language: String) {
+        homeRepository.setLanguage(language)
+        updateLocaleResources(context, language)
+
+        val msg = context.getString(R.string.language_changed, if (language == Locales.KO_KR) "한국어" else "English")
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+
+        sendAction(HomeEvent.ResetEvent)
+
+        requestPopularMovies() // 언어 반영된 인기 영화 다시 요청
+        requestPopularTVs()    // 언어 반영된 인기 TV 다시 요청
+    }
+
+    /**
+     * Updates the application's resources and locale to match the specified language.
+     */
+    fun updateLocaleResources(context: Context, language: String) {
+        val currentLanguage = if (language == Locales.KO_KR) {
+            "ko"
+        } else {
+            "en"
+        }
+
+        val locale = java.util.Locale(currentLanguage)
+        java.util.Locale.setDefault(locale)
+        val resources = context.resources
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {
-                HomeViewModel(BaseInjection.provideHomeRepository(context))
+                HomeViewModel(BaseInjection.provideHomeRepository(context), context)
             }
         }
     }
