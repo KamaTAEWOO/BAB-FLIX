@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +48,8 @@ fun LanguageScreen(homeViewModel: HomeViewModel, onNavigateBack: () -> Unit) {
 
 @Composable
 fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,11 +61,19 @@ fun LanguageContent(paddingValues: PaddingValues, homeViewModel: HomeViewModel) 
                 .padding(horizontal = 24.dp)
         ) {
             LanguageRow(title = stringResource(id = R.string.language_ko)) {
-
+                android.widget.Toast.makeText(
+                    context,
+                    context.getString(R.string.language_changed, context.getString(R.string.language_ko)),
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
             }
 
             LanguageRow(title = stringResource(id = R.string.language_en)) {
-
+                android.widget.Toast.makeText(
+                    context,
+                    context.getString(R.string.language_changed, context.getString(R.string.language_en)),
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
