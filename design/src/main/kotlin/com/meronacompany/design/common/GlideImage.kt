@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -74,38 +73,40 @@ fun CommonGlideImage(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            val density = LocalContext.current.resources.displayMetrics.density
-            val bitmapWidthDp = imageBitmap?.width?.div(density)?.dp ?: 130.dp
-            val bitmapHeightDp = imageBitmap?.height?.div(density)?.dp ?: 187.dp
-            Image(
-                painter = painterResource(id = R.drawable.ic_no_poster),
-                contentDescription = "No image background",
-                modifier = Modifier.size(bitmapWidthDp, bitmapHeightDp)
-            )
-        }
         imageBitmap?.let { bitmap ->
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
+                val bitmapWidthDp = 130.dp
+                val bitmapHeightDp = 187.dp
                 Image(
                     painter = BitmapPainter(bitmap.asImageBitmap()),
                     contentDescription = contentDescription,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.size(bitmapWidthDp, bitmapHeightDp),
                     contentScale = contentScale,
                     alignment = alignment
                 )
             }
+        } ?: Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            val bitmapWidthDp = 130.dp
+            val bitmapHeightDp = 187.dp
+            Image(
+                painter = painterResource(id = R.drawable.ic_no_poster),
+                contentDescription = "No image background",
+                modifier = Modifier.size(bitmapWidthDp, bitmapHeightDp)
+            )
         }
 
         voteAverage?.let {
-            VoteAverageTag(it, modifier = Modifier.align(Alignment.TopStart))
+            VoteAverageTag(it, modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 4.dp, top = 4.dp))
         }
     }
 }
@@ -120,7 +121,6 @@ private fun VoteAverageTag(voteAverage: Double, modifier: Modifier = Modifier) {
 
     Box(
         modifier = modifier
-            .offset(x = 28.dp, y = 6.dp)
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(bottomEnd = 8.dp)
