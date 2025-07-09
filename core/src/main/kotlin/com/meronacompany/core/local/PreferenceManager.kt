@@ -2,6 +2,7 @@ package com.meronacompany.core.local
 
 import android.content.Context
 import androidx.core.content.edit
+import timber.log.Timber
 
 object PreferenceManager {
     private const val PREF_NAME = "app_pref"
@@ -88,8 +89,20 @@ object PreferenceManager {
     }
 
     // 언어 설정을 가져오는 메서드
-    fun getLanguage(context: Context): String? {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-            .getString(KEY_LANGUAGE, "ko-KR")
+    fun getLanguage(context: Context): String {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val savedLanguage = prefs.getString(KEY_LANGUAGE, "")
+
+        return if (savedLanguage.isNullOrEmpty()) {
+            val deviceLanguage = when (val locale = context.resources.configuration.locales[0]) {
+                null -> "ko" // fallback
+                else -> locale.toLanguageTag()
+            }
+
+            prefs.edit { putString(KEY_LANGUAGE, deviceLanguage) }
+            deviceLanguage
+        } else {
+            savedLanguage
+        }
     }
 }

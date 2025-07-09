@@ -25,8 +25,9 @@ fun AppNavHost(
 ) {
     val context = LocalContext.current
     val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.provideFactory(context))
+    homeViewModel.getLanguage() // 처음을 위해서 사용. 비어있다면, 디바이스 언어 설정을 가져와서 적용해줌.
     // 언어에 따른 update
-    PreferenceManager.getLanguage(context)?.let { homeViewModel.updateLocaleResources(context, it) }
+    PreferenceManager.getLanguage(context).let { homeViewModel.updateLocaleResources(context, it) }
 
     NavHost(
         navController = navHostController,

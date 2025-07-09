@@ -42,4 +42,6 @@ interface HomeRepository {
     fun getApiCallCount(): Int
 
     fun setLanguage(language: String)
+
+    fun getLanguage(): String
 }
