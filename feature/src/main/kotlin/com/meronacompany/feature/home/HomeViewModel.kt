@@ -394,6 +394,10 @@ class HomeViewModel(
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 
+    fun getLanguage(): String {
+        return homeRepository.getLanguage()
+    }
+
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
             return BaseViewModelFactory(HomeViewModel::class) {

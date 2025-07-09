@@ -29,27 +29,27 @@ class HomeRepositoryImpl(
     }
 
     override fun requestPopularMovies(pageNumber: Int): Flow<ResponsePopularMovieData> = flow {
-        emit(homeService.requestPopularMovies(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, page = pageNumber).toModel())
+        emit(homeService.requestPopularMovies(language = PreferenceManager.getLanguage(context), page = pageNumber).toModel())
         plusCount()
     }
 
     override fun requestPopularTVs(pageNumber: Int): Flow<ResponsePopularTvData> = flow {
-        emit(homeService.requestPopularTVs(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, page = pageNumber).toModel())
+        emit(homeService.requestPopularTVs(language = PreferenceManager.getLanguage(context), page = pageNumber).toModel())
         plusCount()
     }
 
     override fun requestWatchProviders(movieId: Int): Flow<ResponseWatchProvidersData> = flow {
-        emit(homeService.requestWatchProviders(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, movieId = movieId).toModel())
+        emit(homeService.requestWatchProviders(language = PreferenceManager.getLanguage(context), movieId = movieId).toModel())
         plusCount()
     }
 
     override fun requestMovieGenres(): Flow<ResponseGenreData> = flow {
-        emit(homeService.requestMovieGenres(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, ).toModel())
+        emit(homeService.requestMovieGenres(language = PreferenceManager.getLanguage(context), ).toModel())
         plusCount()
     }
 
     override fun requestTVGenres(): Flow<ResponseGenreData> = flow {
-        emit(homeService.requestTVGenres(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, ).toModel())
+        emit(homeService.requestTVGenres(language = PreferenceManager.getLanguage(context), ).toModel())
         plusCount()
     }
 
@@ -64,12 +64,12 @@ class HomeRepositoryImpl(
     }
 
     override fun requestMovieDetail(movieId: Int): Flow<ResponseMovieDetailData> = flow {
-        emit(homeService.requestMovieDetail(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, movieId = movieId).toModel())
+        emit(homeService.requestMovieDetail(language = PreferenceManager.getLanguage(context), movieId = movieId).toModel())
         plusCount()
     }
 
     override fun requestTvDetail(tvId: Int): Flow<ResponseTvDetailData> = flow {
-        emit(homeService.requestTvDetail(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, tvId = tvId).toModel())
+        emit(homeService.requestTvDetail(language = PreferenceManager.getLanguage(context), tvId = tvId).toModel())
         plusCount()
     }
 
@@ -79,12 +79,12 @@ class HomeRepositoryImpl(
     }
 
     override fun requestMovieCredits(movieId: Int): Flow<ResponseMovieCreditsData> = flow {
-        emit(homeService.requestMovieCredits(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, movieId = movieId).toModel())
+        emit(homeService.requestMovieCredits(language = PreferenceManager.getLanguage(context), movieId = movieId).toModel())
         plusCount()
     }
 
     override fun requestTvCredits(tvId: Int): Flow<ResponseMovieCreditsData> = flow {
-        emit(homeService.requestTvCredits(language = PreferenceManager.getLanguage(context) ?: Locales.KO_KR, tvId = tvId).toModel())
+        emit(homeService.requestTvCredits(language = PreferenceManager.getLanguage(context), tvId = tvId).toModel())
         plusCount()
     }
 
@@ -94,6 +94,8 @@ class HomeRepositoryImpl(
         PreferenceManager.setLanguage(context, language)
         Timber.d("Language set to: $language")
     }
+
+    override fun getLanguage(): String = PreferenceManager.getLanguage(context)
 
     private fun plusCount() {
         PreferenceManager.incrementAPICallCount(context)
