@@ -10,12 +10,12 @@ if (hasLibraryPlugin || hasApplicationPlugin) {
             //noinspection OldTargetApi
             targetSdk = 35
             // 코드 수정 시 버전 관리
-            versionCode = 11
+            versionCode = 12
             // version 관리 - Major.Minor.Patch 순
             // Major+ : 하위 호환 불가한 변경 존재 - 컨셉이나 앱이 지향하는 기본 디자인이 변경된 경우
             // Minor+ : 하위 호환 가능한 기능 추가 - 기능 추가, 기능 삭제 및 사양 등이 변경된 경우
             // Patch+ : 버그 수정 - 버그 수정, 디자인 수정 등
-            versionName = "1.7.1"
+            versionName = "1.8.0"
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
